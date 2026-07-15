@@ -82,3 +82,15 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: "Failed to update quote" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+    await quotes.delete(id);
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json({ error: "Failed to delete quote" }, { status: 500 });
+  }
+}
