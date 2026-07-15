@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getVehicles } from "@/lib/vehicles.server";
 
-export default async function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://the86connect.com";
 
   // Static pages
