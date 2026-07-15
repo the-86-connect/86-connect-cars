@@ -91,13 +91,14 @@ export function VehicleForm({ initialData }: { initialData?: Partial<VehicleData
   const initImages = initialData?.images ?? [];
   const initExportDocs = initialData?.exportDocs ?? [];
 
-  const [form, setForm] = useState<VehicleData>(initialData ?? {
+  const defaults: VehicleData = {
     brand: "", model: "", year: new Date().getFullYear(), price: 0,
     fuel: "Petrol", bodyType: "SUV", transmission: "Automatic",
     condition: "New", availability: "In Stock", image: "", badge: "",
     engine: "", description: "", features: [], colors: [], fobPrice: 0,
     portOfLoading: "", handDrive: "LHD", shippingEstimate: "",
-  });
+  };
+  const [form, setForm] = useState<VehicleData>({ ...defaults, ...initialData });
   const [specs, setSpecs] = useState<VehicleSpecs>(initSpecs);
   const [featuresText, setFeaturesText] = useState((initialData?.features || []).join("\n"));
   const [colorsText, setColorsText] = useState((initialData?.colors || []).join(", "));
