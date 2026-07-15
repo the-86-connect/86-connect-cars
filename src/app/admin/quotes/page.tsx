@@ -149,6 +149,7 @@ export default function AdminQuotes() {
                         </div>
                         <div className="flex items-center gap-2 mt-0.5">
                           <p className="text-[11px] text-gray-500">{q.email as string}</p>
+                          <span className="text-[11px] font-medium text-gray-700">{String(q.vehicleBrand)} {String(q.model)}</span>
                           <span className="text-[10px] text-gray-300">{new Date(q.createdAt as string).toLocaleDateString()}</span>
                         </div>
                       </div>
@@ -175,6 +176,13 @@ export default function AdminQuotes() {
                         className="rounded-lg border border-red-100 px-2 py-1.5 text-[11px] font-medium text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors"
                       >
                         <Trash2 className="h-3 w-3" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => downloadDocx(generateDocxHtml(q), `quote-${id}.doc`)}
+                        className="rounded-lg border border-[#e6f4f8] px-2 py-1.5 text-[11px] font-medium text-[#087ea4] hover:bg-[#f0f9fc] hover:border-[#b8e4f0] transition-colors"
+                      >
+                        <Download className="h-3 w-3" />
                       </button>
                     </div>
                   </div>
