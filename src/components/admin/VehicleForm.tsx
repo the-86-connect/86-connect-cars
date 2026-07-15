@@ -84,7 +84,7 @@ function parseSpecs(raw: unknown): VehicleSpecs {
   };
 }
 
-export function VehicleForm({ initialData }: { initialData?: VehicleData }) {
+export function VehicleForm({ initialData }: { initialData?: Partial<VehicleData> }) {
   const router = useRouter();
 
   const initSpecs = parseSpecs(initialData?.specs);
