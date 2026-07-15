@@ -129,86 +129,82 @@ export default function AdminQuotes() {
             const deliveryStatus = (q.deliveryStatus as string) || "pending";
             const images = (q.referenceImages as string[]) ?? [];
             return (
-              <div key={id} className="rounded-xl bg-white border border-gray-200 shadow-sm">
+              <div key={id} className="rounded-lg bg-white border border-gray-200 shadow-sm hover:shadow transition-shadow">
                 {/* Top row — always visible */}
-                <div className="p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
+                <div className="px-4 py-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap mb-1">
                         <h3 className="text-sm font-semibold text-gray-900">{q.name as string}</h3>
-                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[q.status as string] || ""}`}>
+                        <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${STATUS_COLORS[q.status as string] || ""}`}>
                           {q.status as string}
                         </span>
-                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${DELIVERY_COLORS[deliveryStatus] || ""}`}>
+                        <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${DELIVERY_COLORS[deliveryStatus] || ""}`}>
                           {DELIVERY_LABELS[deliveryStatus] || deliveryStatus}
                         </span>
                         {q.userId ? (
-                          <span className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
-                            Registered
-                          </span>
+                          <span className="rounded-full bg-indigo-50 px-1.5 py-px text-[10px] font-medium text-indigo-700">Registered</span>
                         ) : (
-                          <span className="rounded-full bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-500">
-                            Guest
-                          </span>
+                          <span className="rounded-full bg-gray-50 px-1.5 py-px text-[10px] font-medium text-gray-400">Guest</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mb-2">
-                        {q.email as string} • {q.whatsapp as string} • {q.country as string}
+                      <p className="text-[11px] text-gray-500 truncate">
+                        {q.email as string} <span className="mx-1 text-gray-300">·</span> {q.whatsapp as string} <span className="mx-1 text-gray-300">·</span> {q.country as string}
                       </p>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Vehicle: <span className="font-medium text-gray-700">{String(q.vehicleBrand)} {String(q.model)}</span>
-                        {q.budget ? <span> • Budget: {String(q.budget)}</span> : null}
+                      <p className="text-[11px] text-gray-500 truncate">
+                        <span className="font-medium text-gray-700">{String(q.vehicleBrand)} {String(q.model)}</span>
+                        {q.budget ? <span className="ml-1.5 text-gray-400">{String(q.budget)}</span> : null}
                       </p>
                       {q.message ? (
-                        <p className="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 mt-2">{String(q.message)}</p>
+                        <p className="text-[11px] text-gray-500 mt-1 truncate max-w-full">{String(q.message)}</p>
                       ) : null}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
                         onClick={() => setViewId(id)}
-                        className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-1"
+                        className="rounded-md border border-gray-200 px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-1"
                       >
-                        <FileText className="h-3.5 w-3.5" />
+                        <FileText className="h-3 w-3" />
                         View
                       </button>
                       <button
                         type="button"
                         onClick={() => setExpandedId(isExpanded ? null : id)}
-                        className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                        className="rounded-md border border-gray-200 px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300"
                       >
                         {isExpanded ? "Hide" : "Manage"}
                       </button>
                       <button
                         type="button"
                         onClick={() => setDeleteId(id)}
-                        className="rounded-lg border border-red-200 px-2.5 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
+                        className="rounded-md border border-red-100 px-2 py-1 text-[11px] font-medium text-red-500 hover:bg-red-50 hover:border-red-200"
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        <Trash2 className="h-3 w-3" />
                       </button>
                     </div>
                   </div>
-                  <p className="text-[10px] text-gray-400 mt-2">
+                  <p className="text-[10px] text-gray-300 mt-1.5">
                     {new Date(q.createdAt as string).toLocaleString()}
                   </p>
                 </div>
 
                 {/* Expanded panel — quote status + delivery status controls */}
                 {isExpanded && (
-                  <div className="border-t border-gray-100 bg-gray-50/50 p-5">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="border-t border-gray-100 bg-gray-50/50 px-4 py-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
-                        <label className="block text-xs font-semibold text-gray-600 mb-2">Quote Status</label>
-                        <div className="flex flex-wrap gap-1.5">
+                        <label className="block text-[10px] font-semibold text-gray-400 mb-1.5">Quote Status</label>
+                        <div className="flex flex-wrap gap-1">
                           {QUOTE_STATUSES.map((s) => (
                             <button
                               key={s}
                               type="button"
                               onClick={() => updateField(id, "status", s)}
-                              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                              className={`rounded-full px-2 py-1 text-[10px] font-medium transition-all ${
                                 q.status === s
                                   ? `${STATUS_COLORS[s]} ring-2 ring-offset-1`
-                                  : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+                                  : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50"
                               }`}
                             >
                               {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -216,19 +212,18 @@ export default function AdminQuotes() {
                           ))}
                         </div>
                       </div>
-
                       <div>
-                        <label className="block text-xs font-semibold text-gray-600 mb-2">Delivery Tracking</label>
-                        <div className="flex flex-wrap gap-1.5">
+                        <label className="block text-[10px] font-semibold text-gray-400 mb-1.5">Delivery Tracking</label>
+                        <div className="flex flex-wrap gap-1">
                           {DELIVERY_STATUSES.map((s) => (
                             <button
                               key={s}
                               type="button"
                               onClick={() => updateField(id, "deliveryStatus", s)}
-                              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                              className={`rounded-full px-2 py-1 text-[10px] font-medium transition-all ${
                                 deliveryStatus === s
                                   ? `${DELIVERY_COLORS[s]} ring-2 ring-offset-1`
-                                  : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+                                  : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50"
                               }`}
                             >
                               {DELIVERY_LABELS[s]}
