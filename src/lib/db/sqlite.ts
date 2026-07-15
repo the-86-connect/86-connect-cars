@@ -29,7 +29,7 @@ export async function getSqliteDb(): Promise<Database> {
     // resolves the WASM to a wrong path (e.g. D:\ROOT\node_modules\...)
     // in API route contexts, causing ENOENT on every fresh route compile.
     const SQL = await initSqlJs({
-      locateFile: (file) => path.join(process.cwd(), "node_modules", "sql.js", "dist", file),
+      locateFile: (file: string) => path.join(process.cwd(), "node_modules", "sql.js", "dist", file),
     });
 
     // Load existing DB or create new one

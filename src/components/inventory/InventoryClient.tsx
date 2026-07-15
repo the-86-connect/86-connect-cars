@@ -726,6 +726,14 @@ function FilterSidebarContent({
   hasActiveFilters,
   resetFilters,
   isMobile = false,
+  brands,
+  logoMap,
+  fuels,
+  priceMin,
+  priceMax,
+  drivetrains,
+  transmissions,
+  colors,
 }: {
   brand: string;
   setBrand: (v: string) => void;
@@ -748,6 +756,14 @@ function FilterSidebarContent({
   hasActiveFilters: boolean;
   resetFilters: () => void;
   isMobile?: boolean;
+  brands: string[];
+  logoMap: Record<string, string>;
+  fuels: string[];
+  priceMin: number;
+  priceMax: number;
+  drivetrains: string[];
+  transmissions: string[];
+  colors: string[];
 }) {
   return (
     <div className={cn("flex flex-col", isMobile ? "gap-5" : "gap-3")}>
@@ -771,9 +787,9 @@ function FilterSidebarContent({
 
       {/* Brand — grid on mobile, pills on desktop */}
       {isMobile ? (
-        <BrandGrid options={BRANDS} value={brand} onChange={setBrand} logoMap={mergedLogoMap} />
+        <BrandGrid options={brands} value={brand} onChange={setBrand} logoMap={logoMap} />
       ) : (
-        <BrandPills options={BRANDS} value={brand} onChange={setBrand} logoMap={mergedLogoMap} />
+        <BrandPills options={brands} value={brand} onChange={setBrand} logoMap={logoMap} />
       )}
 
       {/* Quick filter chips on mobile */}
@@ -781,7 +797,7 @@ function FilterSidebarContent({
         <>
           <QuickFilterChips
             label="Fuel Type"
-            options={FUELS}
+            options={fuels}
             value={fuel}
             onChange={setFuel}
           />
@@ -812,8 +828,8 @@ function FilterSidebarContent({
         </div>
         <input
           type="range"
-          min={PRICE_MIN}
-          max={PRICE_MAX}
+          min={priceMin}
+          max={priceMax}
           step={100}
           value={maxPrice}
           onChange={(e) => setMaxPrice(Number(e.target.value))}
@@ -821,8 +837,8 @@ function FilterSidebarContent({
           aria-label="Maximum price"
         />
         <div className="flex items-center justify-between text-[10px] font-medium text-[var(--text-muted)]">
-          <span>{formatPrice(PRICE_MIN)}</span>
-          <span>{formatPrice(PRICE_MAX)}</span>
+          <span>{formatPrice(priceMin)}</span>
+          <span>{formatPrice(priceMax)}</span>
         </div>
       </div>
 
@@ -831,7 +847,7 @@ function FilterSidebarContent({
         <>
           <FilterDropdown
             label="Fuel"
-            options={FUELS}
+            options={fuels}
             value={fuel}
             onChange={setFuel}
           />
@@ -851,13 +867,13 @@ function FilterSidebarContent({
       />
       <FilterDropdown
         label="Drivetrain"
-        options={DRIVETRAINS}
+        options={drivetrains}
         value={drivetrain}
         onChange={setDrivetrain}
       />
       <FilterDropdown
         label="Transmission"
-        options={TRANSMISSIONS}
+        options={transmissions}
         value={transmission}
         onChange={setTransmission}
       />
@@ -870,7 +886,7 @@ function FilterSidebarContent({
       {!isMobile && (
         <FilterDropdown
           label="Color"
-          options={COLORS}
+          options={colors}
           value={color}
           onChange={setColor}
         />
@@ -902,12 +918,12 @@ export function InventoryClient({
   // ── Derived filter options (from live DB data) ──
   const BRANDS = useMemo(() => ["All", ...new Set(vehicles.map((v) => v.brand).sort())], [vehicles]);
   const FUELS = useMemo(() => ["All", ...new Set(vehicles.map((v) => v.fuel))], [vehicles]);
-  const DRIVETRAINS = useMemo(() => ["All", ...new Set(vehicles.map((v) => v.specs?.drivetrain).filter(Boolean))], [vehicles]);
-  const TRANSMISSIONS = useMemo(() => ["All", ...new Set(vehicles.map((v) => v.transmission))], [vehicles]);
-  const COLORS = useMemo(() => ["All", ...new Set(vehicles.flatMap((v) => v.colors ?? []))], [vehicles]);
+  const drivetrains = useMemo(() => ["All", ...new Set(vehicles.map((v) => v.specs?.drivetrain).filter(Boolean))], [vehicles]);
+  const transmissions = useMemo(() => ["All", ...new Set(vehicles.map((v) => v.transmission))], [vehicles]);
+  const colors = useMemo(() => ["All", ...new Set(vehicles.flatMap((v) => v.colors ?? []))], [vehicles]);
   const PRICES = useMemo(() => vehicles.map((v) => v.price), [vehicles]);
-  const PRICE_MIN = PRICES.length ? Math.min(...PRICES) : 0;
-  const PRICE_MAX = PRICES.length ? Math.max(...PRICES) : 100000;
+  const priceMin = PRICES.length ? Math.min(...PRICES) : 0;
+  const priceMax = PRICES.length ? Math.max(...PRICES) : 100000;
 
   // Read initial state from URL
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
@@ -926,7 +942,7 @@ export function InventoryClient({
   const [seats, setSeats] = useState(searchParams.get("seats") ?? "All");
   const [color, setColor] = useState(searchParams.get("color") ?? "All");
   const [maxPrice, setMaxPrice] = useState(
-    Number(searchParams.get("price")) || PRICE_MAX,
+    Number(searchParams.get("price")) || priceMax,
   );
   const [sortBy, setSortBy] = useState<SortOption>(
     (searchParams.get("sort") as SortOption) ?? "newest",
@@ -1100,7 +1116,7 @@ export function InventoryClient({
     setTransmission(f.transmission ?? "All");
     setSeats(f.seats ?? "All");
     setColor(f.color ?? "All");
-    setMaxPrice(Number(f.maxPrice) || PRICE_MAX);
+    setMaxPrice(Number(f.maxPrice) || priceMax);
     setSortBy((f.sortBy as SortOption) ?? "newest");
   };
 
@@ -1126,7 +1142,7 @@ export function InventoryClient({
     if (transmission !== "All") params.set("transmission", transmission);
     if (seats !== "All") params.set("seats", seats);
     if (color !== "All") params.set("color", color);
-    if (maxPrice < PRICE_MAX) params.set("price", String(maxPrice));
+    if (maxPrice < priceMax) params.set("price", String(maxPrice));
     if (sortBy !== "newest") params.set("sort", sortBy);
     const qs = params.toString();
     router.replace(`${pathname}${qs ? `?${qs}` : ""}`, { scroll: false });
@@ -1211,7 +1227,7 @@ export function InventoryClient({
     transmission !== "All",
     seats !== "All",
     color !== "All",
-    maxPrice < PRICE_MAX,
+    maxPrice < priceMax,
   ].filter(Boolean).length;
 
   const hasActiveFilters = activeFilterCount > 0 || query.trim() !== "";
@@ -1226,7 +1242,7 @@ export function InventoryClient({
     setTransmission("All");
     setSeats("All");
     setColor("All");
-    setMaxPrice(PRICE_MAX);
+    setMaxPrice(priceMax);
     setSortBy("newest");
     setCurrentPage(1);
   };
@@ -1282,10 +1298,10 @@ export function InventoryClient({
     });
   if (color !== "All")
     activeChips.push({ label: color, onRemove: () => setColor("All") });
-  if (maxPrice < PRICE_MAX)
+  if (maxPrice < priceMax)
     activeChips.push({
       label: `≤ ${formatPrice(maxPrice)}`,
-      onRemove: () => setMaxPrice(PRICE_MAX),
+      onRemove: () => setMaxPrice(priceMax),
     });
 
   return (
@@ -1531,8 +1547,8 @@ export function InventoryClient({
                   </span>
                   <input
                     type="range"
-                    min={PRICE_MIN}
-                    max={PRICE_MAX}
+                    min={priceMin}
+                    max={priceMax}
                     step={100}
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(Number(e.target.value))}
@@ -1565,14 +1581,14 @@ export function InventoryClient({
                 />
                 <FilterDropdown
                   label="Drivetrain"
-                  options={DRIVETRAINS}
+                  options={drivetrains}
                   value={drivetrain}
                   onChange={setDrivetrain}
                   compact
                 />
                 <FilterDropdown
                   label="Transmission"
-                  options={TRANSMISSIONS}
+                  options={transmissions}
                   value={transmission}
                   onChange={setTransmission}
                   compact
@@ -1586,7 +1602,7 @@ export function InventoryClient({
                 />
                 <FilterDropdown
                   label="Color"
-                  options={COLORS}
+                  options={colors}
                   value={color}
                   onChange={setColor}
                   compact
@@ -1774,6 +1790,14 @@ export function InventoryClient({
                   hasActiveFilters={hasActiveFilters}
                   resetFilters={resetFilters}
                   isMobile
+                  brands={BRANDS}
+                  logoMap={mergedLogoMap}
+                  fuels={FUELS}
+                  priceMin={priceMin}
+                  priceMax={priceMax}
+                  drivetrains={drivetrains}
+                  transmissions={transmissions}
+                  colors={colors}
                 />
               </div>
 
