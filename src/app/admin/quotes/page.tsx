@@ -127,43 +127,37 @@ export default function AdminQuotes() {
             const id = q.id as string;
             const isExpanded = expandedId === id;
             const deliveryStatus = (q.deliveryStatus as string) || "pending";
-            const images = (q.referenceImages as string[]) ?? [];
             return (
-              <div key={id} className="rounded-lg bg-white border border-gray-200 shadow-sm hover:shadow transition-shadow">
-                {/* Top row — always visible */}
-                <div className="px-4 py-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                        <h3 className="text-sm font-semibold text-gray-900">{q.name as string}</h3>
-                        <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${STATUS_COLORS[q.status as string] || ""}`}>
-                          {q.status as string}
-                        </span>
-                        <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${DELIVERY_COLORS[deliveryStatus] || ""}`}>
-                          {DELIVERY_LABELS[deliveryStatus] || deliveryStatus}
-                        </span>
-                        {q.userId ? (
-                          <span className="rounded-full bg-indigo-50 px-1.5 py-px text-[10px] font-medium text-indigo-700">Registered</span>
-                        ) : (
-                          <span className="rounded-full bg-gray-50 px-1.5 py-px text-[10px] font-medium text-gray-400">Guest</span>
-                        )}
+              <div key={id} className="rounded-xl bg-white border border-[#e6f4f8] shadow-sm hover:shadow-md hover:border-[#b8e4f0] transition-all">
+                <div className="px-4 py-2.5">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex-1 min-w-0 flex items-center gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h3 className="text-sm font-semibold text-gray-900">{q.name as string}</h3>
+                          <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${STATUS_COLORS[q.status as string] || ""}`}>
+                            {q.status as string}
+                          </span>
+                          <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${DELIVERY_COLORS[deliveryStatus] || ""}`}>
+                            {DELIVERY_LABELS[deliveryStatus] || deliveryStatus}
+                          </span>
+                          {q.userId ? (
+                            <span className="rounded-full bg-[#e0f0ff] px-1.5 py-px text-[10px] font-medium text-[#087ea4]">Registered</span>
+                          ) : (
+                            <span className="rounded-full bg-gray-50 px-1.5 py-px text-[10px] font-medium text-gray-400">Guest</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <p className="text-[11px] text-gray-500">{q.email as string}</p>
+                          <span className="text-[10px] text-gray-300">{new Date(q.createdAt as string).toLocaleDateString()}</span>
+                        </div>
                       </div>
-                      <p className="text-[11px] text-gray-500 truncate">
-                        {q.email as string} <span className="mx-1 text-gray-300">·</span> {q.whatsapp as string} <span className="mx-1 text-gray-300">·</span> {q.country as string}
-                      </p>
-                      <p className="text-[11px] text-gray-500 truncate">
-                        <span className="font-medium text-gray-700">{String(q.vehicleBrand)} {String(q.model)}</span>
-                        {q.budget ? <span className="ml-1.5 text-gray-400">{String(q.budget)}</span> : null}
-                      </p>
-                      {q.message ? (
-                        <p className="text-[11px] text-gray-500 mt-1 truncate max-w-full">{String(q.message)}</p>
-                      ) : null}
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
                         onClick={() => setViewId(id)}
-                        className="rounded-md border border-gray-200 px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-1"
+                        className="rounded-lg bg-[#087ea4] px-3 py-1.5 text-[11px] font-medium text-white hover:bg-[#149eca] transition-colors flex items-center gap-1"
                       >
                         <FileText className="h-3 w-3" />
                         View
@@ -171,22 +165,19 @@ export default function AdminQuotes() {
                       <button
                         type="button"
                         onClick={() => setExpandedId(isExpanded ? null : id)}
-                        className="rounded-md border border-gray-200 px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300"
+                        className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-[11px] font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors"
                       >
                         {isExpanded ? "Hide" : "Manage"}
                       </button>
                       <button
                         type="button"
                         onClick={() => setDeleteId(id)}
-                        className="rounded-md border border-red-100 px-2 py-1 text-[11px] font-medium text-red-500 hover:bg-red-50 hover:border-red-200"
+                        className="rounded-lg border border-red-100 px-2 py-1.5 text-[11px] font-medium text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
                     </div>
                   </div>
-                  <p className="text-[10px] text-gray-300 mt-1.5">
-                    {new Date(q.createdAt as string).toLocaleString()}
-                  </p>
                 </div>
 
                 {/* Expanded panel — quote status + delivery status controls */}
@@ -243,52 +234,101 @@ export default function AdminQuotes() {
       {/* View modal */}
       {viewId && quote && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setViewId(null)}>
-          <div className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">Quote Details</h2>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => downloadDocx(generateDocxHtml(quote), `quote-${viewId}.doc`)}
-                  className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-medium text-white hover:bg-blue-700 flex items-center gap-1.5"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  Download DOCX
-                </button>
-                <button type="button" onClick={() => setViewId(null)} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <div><span className="text-xs font-medium text-gray-500">Name</span><p className="text-sm font-semibold text-gray-900">{quote.name as string || "—"}</p></div>
-              <div><span className="text-xs font-medium text-gray-500">Email</span><p className="text-sm text-gray-700">{quote.email as string || "—"}</p></div>
-              <div><span className="text-xs font-medium text-gray-500">WhatsApp</span><p className="text-sm text-gray-700">{quote.whatsapp as string || "—"}</p></div>
-              <div><span className="text-xs font-medium text-gray-500">Country</span><p className="text-sm text-gray-700">{quote.country as string || "—"}</p></div>
-              <div><span className="text-xs font-medium text-gray-500">Vehicle Brand</span><p className="text-sm font-semibold text-gray-900">{quote.vehicleBrand as string || "—"}</p></div>
-              <div><span className="text-xs font-medium text-gray-500">Model</span><p className="text-sm text-gray-700">{quote.model as string || "—"}</p></div>
-              <div><span className="text-xs font-medium text-gray-500">Budget</span><p className="text-sm text-gray-700">{quote.budget as string || "—"}</p></div>
-              <div><span className="text-xs font-medium text-gray-500">Date</span><p className="text-sm text-gray-700">{new Date(quote.createdAt as string).toLocaleString()}</p></div>
-            </div>
-
-            <div className="mb-4">
-              <h3 className="text-xs font-medium text-gray-500 mb-1">Message</h3>
-              <p className="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 whitespace-pre-wrap">{quote.message as string || "No message"}</p>
-            </div>
-
-            {(quote.referenceImages as string[])?.length > 0 && (
-              <div>
-                <h3 className="text-xs font-medium text-gray-500 mb-2">Images</h3>
-                <div className="flex flex-wrap gap-2">
-                  {(quote.referenceImages as string[]).map((url, i) => (
-                    <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="block">
-                      <img src={url} alt={`Reference ${i + 1}`} className="h-24 w-24 rounded-lg object-cover border border-gray-200 hover:opacity-80 transition-opacity" />
-                    </a>
-                  ))}
+          <div className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl border border-[#e6f4f8]" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="sticky top-0 bg-gradient-to-r from-[#087ea4] to-[#149eca] px-6 py-4 rounded-t-2xl z-10">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-bold text-white">{quote.name as string}</h2>
+                  <p className="text-[11px] text-white/70">{new Date(quote.createdAt as string).toLocaleString()}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => downloadDocx(generateDocxHtml(quote), `quote-${viewId}.doc`)}
+                    className="rounded-lg bg-white/20 backdrop-blur px-3 py-1.5 text-[11px] font-medium text-white hover:bg-white/30 transition-colors flex items-center gap-1.5"
+                  >
+                    <Download className="h-3 w-3" />
+                    Download
+                  </button>
+                  <button type="button" onClick={() => setViewId(null)} className="rounded-lg p-1.5 text-white/70 hover:bg-white/10 hover:text-white transition-colors">
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
-            )}
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5">
+              {/* Status badges */}
+              <div className="flex items-center gap-2 mb-5">
+                <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_COLORS[quote.status as string] || ""}`}>
+                  {quote.status as string}
+                </span>
+                <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${DELIVERY_COLORS[(quote.deliveryStatus as string) || "pending"] || ""}`}>
+                  {DELIVERY_LABELS[(quote.deliveryStatus as string) || "pending"] || "Pending"}
+                </span>
+                {quote.userId ? (
+                  <span className="rounded-full bg-[#e0f0ff] px-2 py-0.5 text-[11px] font-medium text-[#087ea4]">Registered User</span>
+                ) : (
+                  <span className="rounded-full bg-gray-50 px-2 py-0.5 text-[11px] font-medium text-gray-400">Guest</span>
+                )}
+              </div>
+
+              {/* Details grid */}
+              <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-5">
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Email</span>
+                  <p className="text-sm text-gray-700 mt-0.5">{quote.email as string || "—"}</p>
+                </div>
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">WhatsApp</span>
+                  <p className="text-sm text-gray-700 mt-0.5">{quote.whatsapp as string || "—"}</p>
+                </div>
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Country</span>
+                  <p className="text-sm text-gray-700 mt-0.5">{quote.country as string || "—"}</p>
+                </div>
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Budget</span>
+                  <p className="text-sm text-gray-700 mt-0.5">{quote.budget as string || "—"}</p>
+                </div>
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Vehicle Brand</span>
+                  <p className="text-sm font-semibold text-gray-900 mt-0.5">{quote.vehicleBrand as string || "—"}</p>
+                </div>
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Model</span>
+                  <p className="text-sm text-gray-700 mt-0.5">{quote.model as string || "—"}</p>
+                </div>
+              </div>
+
+              {/* Message */}
+              {quote.message ? (
+                <div className="mb-5">
+                  <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4] mb-2">Message</h3>
+                  <div className="bg-[#f0f9fc] rounded-xl p-4 border border-[#e6f4f8]">
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{quote.message as string}</p>
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Images */}
+              {(quote.referenceImages as string[])?.length > 0 && (
+                <div>
+                  <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4] mb-2">
+                    Images ({(quote.referenceImages as string[]).length})
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(quote.referenceImages as string[]).map((url, i) => (
+                      <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="block">
+                        <img src={url} alt={`Reference ${i + 1}`} className="h-20 w-20 rounded-xl object-cover border-2 border-[#e6f4f8] hover:border-[#087ea4] hover:opacity-90 transition-all" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -296,8 +336,13 @@ export default function AdminQuotes() {
       {/* Delete confirmation modal */}
       {deleteId && deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => !deleteLoading && setDeleteId(null)}>
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-lg font-bold text-gray-900 mb-2">Delete Quote?</h2>
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl border border-[#e6f4f8]" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50">
+                <Trash2 className="h-5 w-5 text-red-500" />
+              </div>
+              <h2 className="text-lg font-bold text-gray-900">Delete Quote?</h2>
+            </div>
             <p className="text-sm text-gray-600 mb-1">
               This will permanently delete the quote from <strong>{deleteTarget.name as string}</strong>.
             </p>
@@ -307,7 +352,7 @@ export default function AdminQuotes() {
                 type="button"
                 onClick={() => setDeleteId(null)}
                 disabled={deleteLoading}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>
@@ -315,7 +360,7 @@ export default function AdminQuotes() {
                 type="button"
                 onClick={() => handleDelete(deleteId)}
                 disabled={deleteLoading}
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 disabled:opacity-50 transition-colors"
               >
                 {deleteLoading ? "Deleting..." : "Delete"}
               </button>
