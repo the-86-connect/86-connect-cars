@@ -19,10 +19,8 @@ import { scrollToId, cn } from "@/lib/utils";
 import { EASE } from "@/lib/motion";
 
 export function Navbar() {
-  // Admin has its own layout — hide the public navbar there.
   const pathname = usePathname();
   const router = useRouter();
-  if (pathname?.startsWith("/admin")) return null;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrollY } = useScroll();
@@ -30,6 +28,9 @@ export function Navbar() {
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 24);
   });
+
+  // Admin has its own layout — hide the public navbar there.
+  if (pathname?.startsWith("/admin")) return null;
 
   // ponytail: anchor links (#home, #faq, …) only exist on the homepage route.
   // On any other route, navigate to /#id so the user lands on the homepage section.
@@ -74,7 +75,7 @@ export function Navbar() {
       >
         <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           {/* Logo */}
-          <a
+          <Link
             href="/#home"
             onClick={(e) => handleNavClick(e, "#home")}
             className="group flex items-center"
@@ -87,7 +88,7 @@ export function Navbar() {
               priority
               className="h-9 w-auto transition-opacity duration-300"
             />
-          </a>
+          </Link>
 
           {/* Desktop nav links */}
           <div className="hidden lg:flex items-center gap-8">

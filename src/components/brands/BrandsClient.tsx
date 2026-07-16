@@ -94,7 +94,10 @@ export function BrandsClient({
 
   // ponytail: reset to first page whenever filter/search changes — otherwise
   // user lands on an out-of-range page after narrowing results.
-  useEffect(() => { setPage(0); }, [filter, search]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(0);
+  }, [filter, search]);
 
   const totalPages = Math.ceil(filteredBrands.length / PAGE_SIZE);
   const safePage = Math.min(page, Math.max(0, totalPages - 1));

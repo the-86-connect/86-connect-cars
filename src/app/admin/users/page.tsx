@@ -32,16 +32,17 @@ export default function AdminUsers() {
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = async () => {
     const res = await fetch("/api/admin/users");
     const data = await res.json();
     setUsers(Array.isArray(data) ? data : []);
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const resetForm = () => {
     setName("");

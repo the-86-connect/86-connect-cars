@@ -1,4 +1,4 @@
-import { getSqliteDb, sqliteQuery, sqliteRun, saveSqliteDb } from "./sqlite";
+import { getSqliteDb, sqliteQuery, sqliteRun } from "./sqlite";
 import type { Database } from "sql.js";
 
 // ── Database abstraction layer ──

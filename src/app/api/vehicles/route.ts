@@ -23,9 +23,9 @@ export async function GET() {
       exportDocs: typeof v.exportDocs === "string" ? JSON.parse(v.exportDocs as string) : v.exportDocs,
     }));
     return NextResponse.json(parsed);
-  } catch (error) {
-    console.error("Vehicles API error:", error);
-    return NextResponse.json({ error: "Failed to fetch vehicles", details: String(error) }, { status: 500 });
+  } catch (e) {
+    console.error("Vehicles API error:", e);
+    return NextResponse.json({ error: "Failed to fetch vehicles", details: String(e) }, { status: 500 });
   }
 }
 
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
     await vehicles.create(data);
     revalidateVehiclePages();
     return NextResponse.json(data, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to create vehicle" }, { status: 500 });
   }
 }

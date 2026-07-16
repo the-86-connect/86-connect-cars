@@ -30,7 +30,7 @@ export async function GET(
       exportDocs: typeof vehicle.exportDocs === "string" ? JSON.parse(vehicle.exportDocs as string) : vehicle.exportDocs,
     };
     return NextResponse.json(parsed);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch vehicle" }, { status: 500 });
   }
 }
@@ -55,7 +55,7 @@ export async function PUT(
     await vehicles.update(id, data);
     revalidateVehiclePages();
     return NextResponse.json({ id, ...data });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to update vehicle" }, { status: 500 });
   }
 }
@@ -69,7 +69,7 @@ export async function DELETE(
     await vehicles.delete(id);
     revalidateVehiclePages();
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to delete vehicle" }, { status: 500 });
   }
 }

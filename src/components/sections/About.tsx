@@ -39,8 +39,8 @@ export function About() {
                   Beijing BridgePath International Consulting Co., Ltd
                 </strong>
                 , a consulting firm incorporated in Beijing, China on November 23, 2023.
-                The term "86Connect" refers to China's international dialing code (+86),
-                symbolizing our role as the direct line connecting the world to China's
+                The term &quot;86Connect&quot; refers to China&apos;s international dialing code (+86),
+                symbolizing our role as the direct line connecting the world to China&apos;s
                 educational and economic opportunities.
               </p>
             </div>
@@ -97,7 +97,7 @@ export function About() {
                   The Number 86
                 </h3>
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                  China's international dialing code (+86) symbolizes our role as the direct line
+                  China&apos;s international dialing code (+86) symbolizes our role as the direct line
                   connecting you to everything China has to offer.
                 </p>
               </div>
@@ -115,9 +115,9 @@ export function About() {
         >
           <blockquote className="glass-card rounded-2xl border-l-4 border-brand-500 p-6 sm:rounded-3xl sm:p-8">
             <p className="text-base italic leading-relaxed text-[var(--text-secondary)] sm:text-lg">
-              "Our mission is to simplify China for the world. Whether you're a student chasing
+              &quot;Our mission is to simplify China for the world. Whether you&apos;re a student chasing
               a world-class education or a business seeking quality manufacturers, we bridge the
-              gap with local expertise, transparent pricing, and relentless support."
+              gap with local expertise, transparent pricing, and relentless support.&quot;
             </p>
             <footer className="mt-4">
               <p className="text-sm font-semibold text-[var(--text-primary)]">

@@ -1,0 +1,265 @@
+Run npm run lint
+
+> 86connect-cars@0.1.0 lint
+> eslint
+
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/admin/brands/page.tsx
+Warning:     4:8   warning  'Link' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+Warning:     5:8   warning  'Image' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+Warning:   186:31  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/admin/quotes/page.tsx
+Warning:   333:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/admin/users/page.tsx
+  36:5  error  Error: Cannot access variable before it is declared
+
+`fetchUsers` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/admin/users/page.tsx:36:5
+  34 |
+  35 |   useEffect(() => {
+> 36 |     fetchUsers();
+     |     ^^^^^^^^^^ `fetchUsers` accessed before it is declared
+  37 |   }, []);
+  38 |
+  39 |   const fetchUsers = async () => {
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/admin/users/page.tsx:39:3
+  37 |   }, []);
+  38 |
+> 39 |   const fetchUsers = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 40 |     const res = await fetch("/api/admin/users");
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 41 |     const data = await res.json();
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 42 |     setUsers(Array.isArray(data) ? data : []);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 43 |     setLoading(false);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 44 |   };
+     | ^^^^^ `fetchUsers` is declared here
+  45 |
+  46 |   const resetForm = () => {
+  47 |     setName("");  react-hooks/immutability
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/admin/vehicles/page.tsx
+Error:   165:56  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+Error:   165:73  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+Warning:   184:47  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/api/brands/[id]/route.ts
+Warning:   17:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+Warning:   56:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/api/gallery/[id]/route.ts
+Warning:   22:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+Warning:   56:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/api/vehicles/[id]/route.ts
+Warning:   33:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+Warning:   58:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+Warning:   72:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/api/vehicles/route.ts
+Warning:   70:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/app/gallery/GalleryClient.tsx
+Warning:   137:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+Warning:   203:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/admin/CrudPage.tsx
+Error:   136:58  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+Error:   136:62  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/admin/GalleryAdmin.tsx
+   40:21  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/admin/GalleryAdmin.tsx:40:21
+  38 |   }, []);
+  39 |
+> 40 |   useEffect(() => { fetchItems(); }, [fetchItems]);
+     |                     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  41 |
+  42 |   const resetForm = () => {
+  43 |     setType("photo");  react-hooks/set-state-in-effect
+Error:   184:58  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react/no-unescaped-entities
+Error:   184:75  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react/no-unescaped-entities
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/brands/BrandsClient.tsx
+   97:21  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/brands/BrandsClient.tsx:97:21
+   95 |   // ponytail: reset to first page whenever filter/search changes — otherwise
+   96 |   // user lands on an out-of-range page after narrowing results.
+>  97 |   useEffect(() => { setPage(0); }, [filter, search]);
+      |                     ^^^^^^^ Avoid calling setState() directly within an effect
+   98 |
+   99 |   const totalPages = Math.ceil(filteredBrands.length / PAGE_SIZE);
+  100 |   const safePage = Math.min(page, Math.max(0, totalPages - 1));  react-hooks/set-state-in-effect
+Warning:   166:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @next/next/no-img-element
+Warning:   311:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/forms/MultiImageUpload.tsx
+Warning:   49:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/forms/QuoteForm.tsx
+  71:27  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/forms/QuoteForm.tsx:71:27
+  69 |   });
+  70 |
+> 71 |   const referenceImages = watch("referenceImages") ?? [];
+     |                           ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  72 |
+  73 |   const onSubmit = async (data: QuoteFormValues) => {
+  74 |     try {  react-hooks/incompatible-library
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/inventory/InventoryClient.tsx
+Warning:     21:3   warning  'MessageCircle' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+Warning:    344:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @next/next/no-img-element
+Warning:    393:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @next/next/no-img-element
+Warning:    515:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @next/next/no-img-element
+  1074:19  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/inventory/InventoryClient.tsx:1074:19
+  1072 |     try {
+  1073 |       const stored = localStorage.getItem(SAVED_KEY);
+> 1074 |       if (stored) setSavedPresets(JSON.parse(stored));
+       |                   ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  1075 |     } catch {
+  1076 |       /* ignore */
+  1077 |     }  react-hooks/set-state-in-effect
+Warning:   1149:6   warning  React Hook useCallback has a missing dependency: 'priceMax'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+Warning:   1207:6   warning  React Hook useMemo has a missing dependency: 'vehicles'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    react-hooks/exhaustive-deps
+  1259:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/inventory/InventoryClient.tsx:1259:5
+  1257 |   // Reset to page 1 when filters change
+  1258 |   useEffect(() => {
+> 1259 |     setCurrentPage(1);
+       |     ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  1260 |   }, [
+  1261 |     query,
+  1262 |     brand,                                                               react-hooks/set-state-in-effect
+Warning:   1524:27  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @next/next/no-img-element
+Warning:   1945:31  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/inventory/VehicleDetailClient.tsx
+Warning:    23:3   warning  'MessageCircle' is defined but never used                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+Warning:    66:10  warning  'FinancingCalculator' is defined but never used                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+Warning:   446:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+Warning:   798:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/layout/Footer.tsx
+Warning:     5:39  warning  'ArrowRight' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+Warning:   116:9   warning  'handleQuoteSubmit' is assigned a value but never used                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+Warning:   140:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/layout/Navbar.tsx
+Error:   26:35  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render                            react-hooks/rules-of-hooks
+Error:   27:35  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render                            react-hooks/rules-of-hooks
+Error:   28:23  error  React Hook "useScroll" is called conditionally. React Hooks must be called in the exact same order in every component render                           react-hooks/rules-of-hooks
+Error:   30:3   error  React Hook "useMotionValueEvent" is called conditionally. React Hooks must be called in the exact same order in every component render                 react-hooks/rules-of-hooks
+Error:   77:11  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/sections/About.tsx
+Error:    42:26  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+Error:    42:36  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+Error:    42:53  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+Error:    43:86  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+Error:   100:24  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+Error:   118:15  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+Error:   118:75  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+Error:   120:85  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/sections/Brands.tsx
+Warning:   67:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/sections/Gallery.tsx
+Warning:   121:23  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+Warning:   203:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/sections/RecentlyViewed.tsx
+Warning:   60:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/sections/Testimonials.tsx
+Warning:   13:7  warning  'rowTwo' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/components/ui/StatBadge.tsx
+Warning:   18:44  warning  'delay' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/hooks/useRecentlyViewed.ts
+  14:19  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/hooks/useRecentlyViewed.ts:14:19
+  12 |     try {
+  13 |       const stored = localStorage.getItem(STORAGE_KEY);
+> 14 |       if (stored) setSlugs(JSON.parse(stored));
+     |                   ^^^^^^^^ Avoid calling setState() directly within an effect
+  15 |     } catch { /* ignore */ }
+  16 |   }, []);
+  17 |  react-hooks/set-state-in-effect
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/hooks/useUserAuth.ts
+  39:20  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/hooks/useUserAuth.ts:39:20
+  37 |
+  38 |   useEffect(() => {
+> 39 |     if (!userId) { setLoading(false); return; }
+     |                    ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  40 |     fetch("/api/user/favorites")
+  41 |       .then((r) => (r.ok ? r.json() : []))
+  42 |       .then((data) => {  react-hooks/set-state-in-effect
+Warning:   89:6   warning  React Hook useCallback has a missing dependency: 'router'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    react-hooks/exhaustive-deps
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/lib/brands.server.ts
+Warning:   9:10  warning  'sqliteQuery' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/runner/work/86-connect-cars/86-connect-cars/src/lib/db/index.ts
+Warning:   1:47  warning  'saveSqliteDb' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 69 problems (26 errors, 43 warnings)
+
+Error: Process completed with exit code 1.

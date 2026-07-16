@@ -11,6 +11,7 @@ export function useRecentlyViewed() {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (stored) setSlugs(JSON.parse(stored));
     } catch { /* ignore */ }
   }, []);

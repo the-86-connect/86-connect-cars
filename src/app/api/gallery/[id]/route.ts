@@ -19,7 +19,7 @@ export async function GET(
       return NextResponse.json({ error: "Gallery item not found" }, { status: 404 });
     }
     return NextResponse.json(item);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch gallery item" }, { status: 500 });
   }
 }
@@ -38,8 +38,8 @@ export async function PUT(
     await gallery.update(id, normalized);
     revalidateGalleryPages();
     return NextResponse.json({ id, ...normalized });
-  } catch (error) {
-    console.error("Gallery API PUT error:", error);
+  } catch (e) {
+    console.error("Gallery API PUT error:", e);
     return NextResponse.json({ error: "Failed to update gallery item" }, { status: 500 });
   }
 }
@@ -53,7 +53,7 @@ export async function DELETE(
     await gallery.delete(id);
     revalidateGalleryPages();
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to delete gallery item" }, { status: 500 });
   }
 }

@@ -6,7 +6,7 @@
 import "server-only";
 import { brands as brandTable } from "@/lib/db";
 import { BRAND_LIST, type BrandCategory } from "@/lib/brands";
-import { sqliteQuery, sqliteRun, getSqliteDb } from "@/lib/db/sqlite";
+import { sqliteRun, getSqliteDb } from "@/lib/db/sqlite";
 
 export interface BrandRow {
   id: string;

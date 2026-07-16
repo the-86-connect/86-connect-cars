@@ -37,7 +37,7 @@ export function GalleryAdmin() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { fetchItems(); }, [fetchItems]);
+  useEffect(() => { fetchItems(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const resetForm = () => {
     setType("photo");
@@ -181,7 +181,7 @@ export function GalleryAdmin() {
       {loading ? (
         <p className="text-gray-500">Loading...</p>
       ) : items.length === 0 ? (
-        <p className="text-gray-500">No items yet. Click "Add Gallery Item" to create one.</p>
+        <p className="text-gray-500">No items yet. Click &quot;Add Gallery Item&quot; to create one.</p>
       ) : (
         <div className="rounded-xl bg-white shadow-sm border border-gray-200 overflow-hidden">
           <table className="w-full text-sm">

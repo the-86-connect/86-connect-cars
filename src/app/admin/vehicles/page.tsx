@@ -162,7 +162,7 @@ export default function AdminVehicles() {
                             {count === 0 ? (
                               <div className="flex items-center justify-center gap-2 py-8 text-sm text-gray-400">
                                 <Car className="h-4 w-4" />
-                                No vehicles yet. Click "Add {brand.name}" to create the first one.
+                                No vehicles yet. Click &quot;Add {brand.name}&quot; to create the first one.
                               </div>
                             ) : (
                               <table className="w-full text-sm">

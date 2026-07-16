@@ -18,7 +18,6 @@ import {
   ShieldCheck,
   ChevronDown,
   ArrowUpDown,
-  MessageCircle,
   Bookmark,
   BookmarkPlus,
   GitCompareArrows,
@@ -1071,6 +1070,7 @@ export function InventoryClient({
   useEffect(() => {
     try {
       const stored = localStorage.getItem(SAVED_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (stored) setSavedPresets(JSON.parse(stored));
     } catch {
       /* ignore */
@@ -1256,6 +1256,7 @@ export function InventoryClient({
 
   // Reset to page 1 when filters change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [
     query,

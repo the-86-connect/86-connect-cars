@@ -15,7 +15,7 @@ interface StatBadgeProps {
   delay?: number;
 }
 
-function AnimatedCounter({ target, suffix, delay }: { target: number; suffix: string; delay: number }) {
+function AnimatedCounter({ target, suffix, delay: _delay }: { target: number; suffix: string; delay: number }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [count, setCount] = useState(0);

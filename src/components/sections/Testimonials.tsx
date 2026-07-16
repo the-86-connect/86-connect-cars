@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 /** Split testimonials into two halves for the opposite-direction rows. */
 const half = Math.ceil(testimonials.length / 2);
 const rowOne = testimonials.slice(0, half);
-const rowTwo = testimonials.slice(half);
 
 function Avatar({ t }: { t: Testimonial }) {
   const [errored, setErrored] = useState(false);

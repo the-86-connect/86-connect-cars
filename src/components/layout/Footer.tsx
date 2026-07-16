@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
-import { Mail, MessageCircle, MapPin, ArrowRight } from "lucide-react";
+import { Mail, MessageCircle, MapPin } from "lucide-react";
 import { scrollToId } from "@/lib/utils";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
@@ -111,11 +111,6 @@ export function Footer() {
   const handleLink = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     scrollToId(id);
-  };
-
-  const handleQuoteSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    scrollToId("contact");
   };
 
   return (
