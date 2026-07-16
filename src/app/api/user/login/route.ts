@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { users } from "@/lib/db";
-import { hashPassword, createUserSessionToken } from "@/lib/auth";
+import { getSupabaseServer } from "@/lib/supabase/server";
 import { rateLimitAuth } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
-  const limited = rateLimitAuth(req);
+  const limited = await rateLimitAuth(req);
   if (limited) return limited;
 
   try {
@@ -13,26 +12,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email and password required" }, { status: 400 });
     }
 
-    const user = await users.findByEmail(email);
-    if (!user) {
+    const supabase = await getSupabaseServer();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const passwordHash = hashPassword(password);
-    if (user.passwordHash !== passwordHash) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-    }
-
-    const token = createUserSessionToken(user.id as string, email);
-    const response = NextResponse.json({ success: true, id: user.id, name: user.name, email });
-    response.cookies.set("user-session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 30 * 24 * 60 * 60,
-      path: "/",
+    return NextResponse.json({
+      success: true,
+      id: data.user.id,
+      name: data.user.user_metadata?.name,
+      email: data.user.email,
     });
-    return response;
   } catch {
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }

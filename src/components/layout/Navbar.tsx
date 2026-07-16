@@ -10,13 +10,14 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { navLinks } from "@/lib/data";
 import { scrollToId, cn } from "@/lib/utils";
 import { EASE } from "@/lib/motion";
+import { useUserAuth } from "@/hooks/useUserAuth";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -24,6 +25,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrollY } = useScroll();
+  const { isLoggedIn } = useUserAuth();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 24);
@@ -117,6 +119,15 @@ export function Navbar() {
           {/* Desktop actions */}
           <div className="hidden lg:flex items-center gap-3">
             <ThemeToggle />
+            {isLoggedIn && (
+              <Link
+                href="/account"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-brand-500"
+                aria-label="My Account"
+              >
+                <User className="h-4 w-4" />
+              </Link>
+            )}
             <MagneticButton>
               <Button
                 variant="primary"
@@ -176,6 +187,15 @@ export function Navbar() {
                       {link.label}
                     </a>
                   ),
+                )}
+                {isLoggedIn && (
+                  <Link
+                    href="/account"
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-xl px-4 py-3 text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
+                  >
+                    My Account
+                  </Link>
                 )}
                 <Button
                   variant="primary"

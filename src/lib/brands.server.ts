@@ -1,12 +1,12 @@
 /**
- * Server-only brand accessors — reads from SQLite via lib/db.
+ * Server-only brand accessors — reads from Supabase PostgreSQL via lib/db.
  * Auto-seeds the brands table from the static BRAND_LIST on first call.
  * Admin can add/edit/delete brands via /admin/brands.
  */
 import "server-only";
 import { brands as brandTable } from "@/lib/db";
 import { BRAND_LIST, type BrandCategory } from "@/lib/brands";
-import { sqliteRun, getSqliteDb } from "@/lib/db/sqlite";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export interface BrandRow {
   id: string;
@@ -31,16 +31,17 @@ export async function ensureSeeded() {
     const existing = await brandTable.count();
     if (existing > 0) return;
     // First call with empty table — seed from static list
-    const db = await getSqliteDb();
+    const supabase = getSupabaseAdmin();
     for (let i = 0; i < BRAND_LIST.length; i++) {
       const b = BRAND_LIST[i];
-      sqliteRun(db, "INSERT INTO brands (id, name, logo, category, sortOrder, active) VALUES (?, ?, ?, ?, ?, 1)", [
-        `brand-${i}`,
-        b.name,
-        b.logoFile,
-        b.category,
-        i,
-      ]);
+      await supabase.from("brands").insert({
+        id: `brand-${i}`,
+        name: b.name,
+        logo: b.logoFile,
+        category: b.category,
+        sort_order: i,
+        active: 1,
+      });
     }
   } catch (err) {
     console.error("Brands auto-seed error:", err);

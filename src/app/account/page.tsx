@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Heart, MessageSquareQuote, LogOut, User, Package, Truck, CheckCircle2, Clock, Ship } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
 
 interface UserData { id: string; name: string; email: string; whatsapp?: string; country?: string; }
 interface Quote {
@@ -94,7 +95,17 @@ export default function AccountPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/user/me").then((r) => r.ok ? r.json() : null),
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        const u = session?.user;
+        if (!u) return null;
+        return {
+          id: u.id,
+          name: (u.user_metadata?.name as string) ?? "",
+          email: u.email ?? "",
+          whatsapp: u.user_metadata?.whatsapp as string | undefined,
+          country: u.user_metadata?.country as string | undefined,
+        };
+      }),
       fetch("/api/user/quotes").then((r) => r.ok ? r.json() : []),
       fetch("/api/user/favorites").then((r) => r.ok ? r.json() : []),
     ]).then(([userData, quotesData, favsData]) => {
@@ -107,7 +118,7 @@ export default function AccountPage() {
   }, [router]);
 
   const handleLogout = async () => {
-    await fetch("/api/user/logout", { method: "POST" });
+    await supabase.auth.signOut();
     router.push("/");
   };
 

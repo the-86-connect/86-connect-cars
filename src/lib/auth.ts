@@ -20,13 +20,17 @@ export function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password).digest("hex");
 }
 
-export function createSessionToken(email: string): string {
-  const payload = JSON.stringify({ email, exp: Date.now() + 7 * 24 * 60 * 60 * 1000 });
+export function verifyPassword(password: string, hash: string): boolean {
+  return hashPassword(password) === hash;
+}
+
+export function createSessionToken(id: string, email: string): string {
+  const payload = JSON.stringify({ id, email, exp: Date.now() + 7 * 24 * 60 * 60 * 1000 });
   const signature = crypto.createHmac("sha256", getSessionSecret()).update(payload).digest("hex");
   return Buffer.from(payload).toString("base64") + "." + signature;
 }
 
-export function verifySessionToken(token: string): { email: string } | null {
+export function verifySessionToken(token: string): { id: string; email: string } | null {
   try {
     const [payloadB64, signature] = token.split(".");
     if (!payloadB64 || !signature) return null;
@@ -35,7 +39,7 @@ export function verifySessionToken(token: string): { email: string } | null {
     if (signature !== expectedSig) return null;
     const data = JSON.parse(payload);
     if (data.exp < Date.now()) return null;
-    return { email: data.email };
+    return { id: data.id, email: data.email };
   } catch {
     return null;
   }

@@ -1,30 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import { admins } from "@/lib/db";
-import { hashPassword, createSessionToken } from "@/lib/auth";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { verifyPassword, createSessionToken } from "@/lib/auth";
 import { rateLimitAuth } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
-  const limited = rateLimitAuth(req);
+  const limited = await rateLimitAuth(req);
   if (limited) return limited;
 
   try {
-    const { email, password } = await req.json();
-    if (!email || !password) {
-      return NextResponse.json({ error: "Email and password required" }, { status: 400 });
+    const { password } = await req.json();
+    if (!password) {
+      return NextResponse.json({ error: "Password required" }, { status: 400 });
     }
 
-    const admin = await admins.findByEmail(email);
-    if (!admin) {
+    const adminClient = getSupabaseAdmin();
+    const { data: admin, error } = await adminClient
+      .from("admins")
+      .select("*")
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !admin) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const passwordHash = hashPassword(password);
-    if (admin.passwordHash !== passwordHash) {
+    if (!verifyPassword(password, admin.password_hash)) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const token = createSessionToken(email);
-    const response = NextResponse.json({ success: true, email, role: admin.role });
+    const token = createSessionToken(admin.id, admin.email);
+    const response = NextResponse.json({ success: true, email: admin.email, role: admin.role });
     response.cookies.set("admin-session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

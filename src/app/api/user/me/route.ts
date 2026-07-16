@@ -1,29 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
-import { verifyUserSessionToken } from "@/lib/auth";
-import { users } from "@/lib/db";
+import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase/server";
 
-export async function GET(req: NextRequest) {
-  const token = req.cookies.get("user-session")?.value;
-  if (!token) {
-    return NextResponse.json({ authenticated: false }, { status: 401 });
-  }
+export async function GET() {
+  const supabase = await getSupabaseServer();
+  const { data, error } = await supabase.auth.getUser();
 
-  const session = verifyUserSessionToken(token);
-  if (!session) {
-    return NextResponse.json({ authenticated: false }, { status: 401 });
-  }
-
-  const user = await users.find(session.userId);
-  if (!user) {
+  if (error || !data.user) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
 
   return NextResponse.json({
     authenticated: true,
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    whatsapp: user.whatsapp,
-    country: user.country,
+    id: data.user.id,
+    name: data.user.user_metadata?.name,
+    email: data.user.email,
+    whatsapp: data.user.user_metadata?.whatsapp,
+    country: data.user.user_metadata?.country,
   });
 }

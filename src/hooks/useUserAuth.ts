@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
 
 interface UserData {
   id: string;
@@ -11,23 +12,41 @@ interface UserData {
   country?: string;
 }
 
+function sessionToUser(session: { user: { id: string; email?: string; user_metadata?: Record<string, unknown> } } | null): UserData | null {
+  if (!session?.user) return null;
+  const u = session.user;
+  return {
+    id: u.id,
+    name: (u.user_metadata?.name as string) ?? "",
+    email: u.email ?? "",
+    whatsapp: u.user_metadata?.whatsapp as string | undefined,
+    country: u.user_metadata?.country as string | undefined,
+  };
+}
+
 export function useUserAuth() {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/user/me")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => { setUser(data?.authenticated ? data : null); setLoading(false); })
-      .catch(() => setLoading(false));
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(sessionToUser(session));
+      setLoading(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(sessionToUser(session));
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const logout = useCallback(async () => {
-    await fetch("/api/user/logout", { method: "POST" });
+    await supabase.auth.signOut();
     setUser(null);
   }, []);
 
-  return { user, loading, logout };
+  return { user, loading, logout, userId: user?.id ?? null, isLoggedIn: !!user };
 }
 
 export function useFavorites(userId: string | null) {

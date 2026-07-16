@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +18,7 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ password }),
       });
 
       const data = await res.json();
@@ -48,18 +47,6 @@ export default function LoginPage() {
           {error && (
             <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
           )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
-              placeholder="admin@86connect.com"
-              required
-            />
-          </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>

@@ -1,122 +1,122 @@
 /**
- * Seed script — imports hardcoded data from data.ts into SQLite.
+ * Seed script — imports hardcoded data from data.ts into Supabase PostgreSQL.
  * Run: npx tsx src/lib/db/seed.ts
+ * Requires NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars.
+ * Set them via: $env:NEXT_PUBLIC_SUPABASE_URL="..."; $env:SUPABASE_SERVICE_ROLE_KEY="..."; npx tsx src/lib/db/seed.ts
  */
-import { getSqliteDb, saveSqliteDb, sqliteQuery, sqliteRun } from "./sqlite";
-import { TABLES } from "./schema";
+import { createClient } from "@supabase/supabase-js";
 
-// Import data from the existing data file
-// We need to use dynamic import for ESM compatibility
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
+
 async function main() {
   console.log("🌱 Seeding database...");
-
-  const db = await getSqliteDb();
-
-  // Create tables
-  for (const [name, sql] of Object.entries(TABLES)) {
-    db.run(sql);
-    console.log(`  ✓ Table: ${name}`);
-  }
 
   // Import vehicles
   const { vehicles } = await import("../data");
   for (const v of vehicles) {
-    const existing = sqliteQuery(db, "SELECT id FROM vehicles WHERE id = ?", [v.id]);
-    if (existing.length > 0) continue;
+    const { data: existing } = await supabase.from("vehicles").select("id").eq("id", v.id);
+    if (existing && existing.length > 0) continue;
 
-    sqliteRun(db, `INSERT INTO vehicles (id, slug, brand, model, year, price, fuel, bodyType, transmission, condition, availability, image, images, badge, engine, description, specs, features, colors, mileage, fobPrice, portOfLoading, handDrive, shippingEstimate, exportDocs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
-      v.id, v.slug, v.brand, v.model, v.year, v.price, v.fuel, v.bodyType, v.transmission,
-      v.condition, v.availability, v.image, JSON.stringify(v.images), v.badge ?? null,
-      v.engine ?? null, v.description, JSON.stringify(v.specs), JSON.stringify(v.features),
-      JSON.stringify(v.colors), v.mileage ?? null, v.fobPrice ?? null,
-      v.portOfLoading ?? null, v.handDrive ?? null, v.shippingEstimate ?? null,
-      JSON.stringify(v.exportDocs ?? []),
-    ]);
+    await supabase.from("vehicles").insert({
+      id: v.id, slug: v.slug, brand: v.brand, model: v.model, year: v.year,
+      price: v.price, fuel: v.fuel, body_type: v.bodyType, transmission: v.transmission,
+      condition: v.condition, availability: v.availability, image: v.image,
+      images: v.images, badge: v.badge ?? null, engine: v.engine ?? null,
+      description: v.description, specs: v.specs, features: v.features,
+      colors: v.colors, mileage: v.mileage ?? null, fob_price: v.fobPrice ?? null,
+      port_of_loading: v.portOfLoading ?? null, hand_drive: v.handDrive ?? null,
+      shipping_estimate: v.shippingEstimate ?? null, export_docs: v.exportDocs ?? [],
+    });
   }
   console.log(`  ✓ Vehicles: ${vehicles.length}`);
 
   // Import testimonials
   const { testimonials } = await import("../data");
   for (const t of testimonials) {
-    const existing = sqliteQuery(db, "SELECT id FROM testimonials WHERE id = ?", [t.id]);
-    if (existing.length > 0) continue;
+    const { data: existing } = await supabase.from("testimonials").select("id").eq("id", t.id);
+    if (existing && existing.length > 0) continue;
 
-    sqliteRun(db, `INSERT INTO testimonials (id, name, role, country, flag, rating, quote, avatar, sortOrder) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
-      t.id, t.name, t.role, t.country, t.flag, t.rating, t.quote, t.avatar, 0,
-    ]);
+    await supabase.from("testimonials").insert({
+      id: t.id, name: t.name, role: t.role, country: t.country, flag: t.flag,
+      rating: t.rating, quote: t.quote, avatar: t.avatar, sort_order: 0,
+    });
   }
   console.log(`  ✓ Testimonials: ${testimonials.length}`);
 
   // Import FAQs
   const { faqs } = await import("../data");
   for (const f of faqs) {
-    const existing = sqliteQuery(db, "SELECT id FROM faqs WHERE id = ?", [f.id]);
-    if (existing.length > 0) continue;
+    const { data: existing } = await supabase.from("faqs").select("id").eq("id", f.id);
+    if (existing && existing.length > 0) continue;
 
-    sqliteRun(db, `INSERT INTO faqs (id, question, answer, sortOrder) VALUES (?, ?, ?, ?)`, [
-      f.id, f.question, f.answer, 0,
-    ]);
+    await supabase.from("faqs").insert({
+      id: f.id, question: f.question, answer: f.answer, sort_order: 0,
+    });
   }
   console.log(`  ✓ FAQs: ${faqs.length}`);
 
   // Import features
   const { features } = await import("../data");
   for (const f of features) {
-    const existing = sqliteQuery(db, "SELECT id FROM features WHERE id = ?", [f.id]);
-    if (existing.length > 0) continue;
+    const { data: existing } = await supabase.from("features").select("id").eq("id", f.id);
+    if (existing && existing.length > 0) continue;
 
-    sqliteRun(db, `INSERT INTO features (id, title, description, icon, sortOrder) VALUES (?, ?, ?, ?, ?)`, [
-      f.id, f.title, f.description, f.icon, 0,
-    ]);
+    await supabase.from("features").insert({
+      id: f.id, title: f.title, description: f.description, icon: f.icon, sort_order: 0,
+    });
   }
   console.log(`  ✓ Features: ${features.length}`);
 
   // Import process steps
   const { processSteps } = await import("../data");
   for (const s of processSteps) {
-    const existing = sqliteQuery(db, "SELECT step FROM process_steps WHERE step = ?", [s.step]);
-    if (existing.length > 0) continue;
+    const { data: existing } = await supabase.from("process_steps").select("step").eq("step", s.step);
+    if (existing && existing.length > 0) continue;
 
-    sqliteRun(db, `INSERT INTO process_steps (step, title, description, icon) VALUES (?, ?, ?, ?)`, [
-      s.step, s.title, s.description, s.icon,
-    ]);
+    await supabase.from("process_steps").insert({
+      step: s.step, title: s.title, description: s.description, icon: s.icon,
+    });
   }
   console.log(`  ✓ Process Steps: ${processSteps.length}`);
 
-  // Create default admin user (password: admin123 — SHA-256 hash)
+  // Create default admin user (password: admin123)
   const crypto = await import("crypto");
   const passwordHash = crypto.createHash("sha256").update("admin123").digest("hex");
-  const adminExists = sqliteQuery(db, "SELECT id FROM admins WHERE email = ?", ["admin@86connect.com"]);
-  if (adminExists.length === 0) {
-    sqliteRun(db, `INSERT INTO admins (id, email, passwordHash, role) VALUES (?, ?, ?, ?)`, [
-      "admin-1", "admin@86connect.com", passwordHash, "superadmin",
-    ]);
+  const { data: adminExists } = await supabase.from("admins").select("id").eq("email", "admin@86connect.com");
+  if (!adminExists || adminExists.length === 0) {
+    await supabase.from("admins").insert({
+      id: "admin-1", email: "admin@86connect.com", password_hash: passwordHash, role: "superadmin",
+    });
     console.log("  ✓ Admin user: admin@86connect.com / admin123");
   }
 
-  // Seed gallery with default items (admin can replace via /admin/gallery)
+  // Seed gallery
   const galleryItems = [
-    { id: "g-1", type: "photo", src: "/vehicles/byd-han.jpg", title: "BYD Han ready for export", sortOrder: 1 },
-    { id: "g-2", type: "photo", src: "/vehicles/rav4.jpg", title: "Toyota RAV4 ready for export", sortOrder: 2 },
-    { id: "g-3", type: "photo", src: "/vehicles/monjaro.jpg", title: "Geely Monjaro ready for export", sortOrder: 3 },
-    { id: "g-4", type: "photo", src: "/vehicles/civic.jpg", title: "Honda Civic ready for export", sortOrder: 4 },
-    { id: "g-5", type: "photo", src: "/vehicles/uni-k.jpg", title: "Changan UNI-K ready for export", sortOrder: 5 },
-    { id: "g-v1", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Vehicle loading at Tianjin Port", sortOrder: 6 },
-    { id: "g-v2", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Container shipping process walkthrough", sortOrder: 7 },
-    { id: "g-v3", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Quality inspection at factory", sortOrder: 8 },
+    { id: "g-1", type: "photo", src: "/vehicles/byd-han.jpg", title: "BYD Han ready for export", sort_order: 1 },
+    { id: "g-2", type: "photo", src: "/vehicles/rav4.jpg", title: "Toyota RAV4 ready for export", sort_order: 2 },
+    { id: "g-3", type: "photo", src: "/vehicles/monjaro.jpg", title: "Geely Monjaro ready for export", sort_order: 3 },
+    { id: "g-4", type: "photo", src: "/vehicles/civic.jpg", title: "Honda Civic ready for export", sort_order: 4 },
+    { id: "g-5", type: "photo", src: "/vehicles/uni-k.jpg", title: "Changan UNI-K ready for export", sort_order: 5 },
+    { id: "g-v1", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Vehicle loading at Tianjin Port", sort_order: 6 },
+    { id: "g-v2", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Container shipping process walkthrough", sort_order: 7 },
+    { id: "g-v3", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Quality inspection at factory", sort_order: 8 },
   ];
   let galleryAdded = 0;
   for (const g of galleryItems) {
-    const existing = sqliteQuery(db, "SELECT id FROM gallery WHERE id = ?", [g.id]);
-    if (existing.length > 0) continue;
-    sqliteRun(db, `INSERT INTO gallery (id, type, src, thumbnail, title, sortOrder, active) VALUES (?, ?, ?, ?, ?, ?, 1)`, [
-      g.id, g.type, g.src, g.thumbnail ?? g.src, g.title, g.sortOrder,
-    ]);
+    const { data: existing } = await supabase.from("gallery").select("id").eq("id", g.id);
+    if (existing && existing.length > 0) continue;
+
+    await supabase.from("gallery").insert({
+      id: g.id, type: g.type, src: g.src, thumbnail: g.thumbnail ?? g.src, title: g.title,
+      sort_order: g.sort_order, active: 1,
+    });
     galleryAdded++;
   }
   if (galleryAdded > 0) console.log(`  ✓ Gallery: ${galleryAdded} items`);
 
-  saveSqliteDb(db);
   console.log("\n✅ Database seeded successfully!");
 }
 
