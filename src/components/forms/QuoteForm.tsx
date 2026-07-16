@@ -51,6 +51,7 @@ export function QuoteForm({
   defaultModel?: string;
 }) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const {
     register,
@@ -71,8 +72,9 @@ export function QuoteForm({
   const referenceImages = watch("referenceImages") ?? [];
 
   const onSubmit = async (data: QuoteFormValues) => {
+    setSubmitError("");
     try {
-      await fetch("/api/quotes", {
+      const res = await fetch("/api/quotes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -87,10 +89,11 @@ export function QuoteForm({
           referenceImages: data.referenceImages ?? [],
         }),
       });
+      if (!res.ok) throw new Error("Submission failed");
+      setSubmitted(true);
     } catch {
-      // Silently fail — form still shows success
+      setSubmitError("Failed to submit your request. Please try again or contact us on WhatsApp.");
     }
-    setSubmitted(true);
   };
 
   return (
@@ -117,7 +120,7 @@ export function QuoteForm({
               Request Submitted!
             </h3>
             <p className="mt-2 max-w-xs text-sm text-[var(--text-secondary)]">
-              Your email app should now be open. Send the prepared message to complete your request.
+              Your quote request has been submitted. We'll contact you within 24 hours via WhatsApp or email.
             </p>
           </motion.div>
         ) : (
@@ -253,6 +256,11 @@ export function QuoteForm({
             </div>
 
             <div className="mt-2 block w-full">
+              {submitError && (
+                <p className="mb-3 rounded-lg bg-red-50 px-4 py-2.5 text-sm text-brand-500">
+                  {submitError}
+                </p>
+              )}
               <Button
                 type="submit"
                 variant="primary"

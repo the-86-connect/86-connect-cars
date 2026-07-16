@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { quotes } from "@/lib/db";
 import { verifyUserSessionToken } from "@/lib/auth";
 import { rateLimitForm } from "@/lib/rate-limit";
+import { sendQuoteConfirmationEmail, sendQuoteNotificationEmail } from "@/lib/email";
 
 export async function GET() {
   try {
@@ -45,7 +46,7 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
 }
 
 export async function POST(req: NextRequest) {
-  const limited = rateLimitForm(req);
+  const limited = await rateLimitForm(req);
   if (limited) return limited;
 
   try {
@@ -62,7 +63,13 @@ export async function POST(req: NextRequest) {
     const data = { id, userId, status: "new", createdAt: new Date().toISOString(), ...body };
     await quotes.create(data);
 
-    forwardToMainAdmin(data);
+    // Fire-and-forget: user confirmation, admin notification, legacy admin forward
+    // Emails/forwards must never fail the quote submission
+    Promise.allSettled([
+      sendQuoteConfirmationEmail(data.email, data).catch((e) => console.error("User email failed:", e)),
+      sendQuoteNotificationEmail(data).catch((e) => console.error("Admin email failed:", e)),
+      forwardToMainAdmin(data).catch((e) => console.error("Admin forward failed:", e)),
+    ]);
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
