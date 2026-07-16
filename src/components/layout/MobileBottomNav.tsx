@@ -39,10 +39,13 @@ export function MobileBottomNav() {
 
   if (pathname?.startsWith("/admin")) return null;
 
-  // ponytail: anchor ids only exist on the homepage route; on other routes,
-  // navigate to /#id so the tab always lands on the right section.
+  // Inventory and Gallery have dedicated pages — always navigate to them.
   const handleTabClick = (id: string) => {
-    if (pathname === "/") {
+    if (id === "inventory") {
+      router.push("/inventory");
+    } else if (id === "gallery") {
+      router.push("/gallery");
+    } else if (pathname === "/") {
       scrollToId(id);
     } else {
       router.push(`/#${id}`);

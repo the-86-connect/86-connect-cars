@@ -25,14 +25,14 @@ const contactInfo: {
   {
     icon: Mail,
     label: "Email Us",
-    value: "hello@86connect.com",
-    href: "mailto:hello@86connect.com",
+    value: "beijingbridgepath@gmail.com",
+    href: "mailto:beijingbridgepath@gmail.com",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+86 138 0000 0000",
-    href: "https://wa.me/8613800000000",
+    value: "+86 176 1153 3296",
+    href: "https://wa.me/8617611533296",
   },
   {
     icon: Globe,

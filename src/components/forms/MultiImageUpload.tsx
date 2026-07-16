@@ -2,41 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { UploadCloud, Loader2, X } from "lucide-react";
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? "";
-const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? "";
-
-async function uploadToCloudinary(file: File, onProgress?: (pct: number) => void): Promise<string> {
-  if (!CLOUD_NAME || !UPLOAD_PRESET) {
-    throw new Error("Cloudinary not configured");
-  }
-  const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", UPLOAD_PRESET);
-
-  return new Promise<string>((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
-    };
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          const data = JSON.parse(xhr.responseText);
-          resolve(data.secure_url as string);
-        } catch {
-          reject(new Error("Invalid response"));
-        }
-      } else {
-        reject(new Error(`Upload failed (${xhr.status})`));
-      }
-    };
-    xhr.onerror = () => reject(new Error("Network error"));
-    xhr.send(formData);
-  });
-}
+import { handleUpload } from "@/lib/cloudinary";
 
 interface Props {
   value: string[];
@@ -58,7 +24,7 @@ export function MultiImageUpload({ value, onChange, maxImages = 3 }: Props) {
     setUploading(true);
     setProgress(0);
     try {
-      const url = await uploadToCloudinary(file, setProgress);
+      const url = await handleUpload(file, setProgress);
       onChange([...value, url]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
@@ -132,13 +98,6 @@ export function MultiImageUpload({ value, onChange, maxImages = 3 }: Props) {
 
       {/* Error message */}
       {error && <p className="text-xs text-red-600">{error}</p>}
-
-      {/* Configuration warning */}
-      {!CLOUD_NAME && (
-        <p className="text-xs text-amber-600">
-          Cloudinary not configured. Add NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME & NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET to .env.local
-        </p>
-      )}
     </div>
   );
 }

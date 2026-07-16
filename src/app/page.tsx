@@ -10,6 +10,7 @@ const RecentlyViewed = dynamic(() => import("@/components/sections/RecentlyViewe
 const Gallery = dynamic(() => import("@/components/sections/Gallery").then(m => ({ default: m.Gallery })));
 const GlobalShipping = dynamic(() => import("@/components/sections/GlobalShipping").then(m => ({ default: m.GlobalShipping })));
 const HowItWorks = dynamic(() => import("@/components/sections/HowItWorks").then(m => ({ default: m.HowItWorks })));
+const About = dynamic(() => import("@/components/sections/About").then(m => ({ default: m.About })));
 const Brands = dynamic(() => import("@/components/sections/Brands").then(m => ({ default: m.Brands })));
 const WhyChooseUs = dynamic(() => import("@/components/sections/WhyChooseUs").then(m => ({ default: m.WhyChooseUs })));
 const Testimonials = dynamic(() => import("@/components/sections/Testimonials").then(m => ({ default: m.Testimonials })));
@@ -34,6 +35,7 @@ export default async function Home() {
       <Gallery />
       <GlobalShipping />
       <HowItWorks />
+      <About />
       <Brands vehicles={vehicles} brands={brands} />
       <WhyChooseUs />
       <Testimonials />

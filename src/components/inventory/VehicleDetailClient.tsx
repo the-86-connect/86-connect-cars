@@ -656,7 +656,7 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
                   <ArrowRight className="h-5 w-5" />
                 </Button>
                 <a
-                  href={`https://wa.me/8613800000000?text=${encodeURIComponent(
+                  href={`https://wa.me/8617611533296?text=${encodeURIComponent(
                     `Hi, I'm interested in the ${vehicle.brand} ${vehicle.model} (${vehicle.year}). Listed: ${formatPrice(vehicle.price)}. View car: ${typeof window !== "undefined" ? window.location.href : ""} Can you provide more details?`,
                   )}`}
                   target="_blank"

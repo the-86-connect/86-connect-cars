@@ -679,7 +679,7 @@ function VehicleCard({
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </span>
             <a
-              href={`https://wa.me/8613800000000?text=${waText}`}
+              href={`https://wa.me/8617611533296?text=${waText}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}

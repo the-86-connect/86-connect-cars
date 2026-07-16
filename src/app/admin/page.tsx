@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Car, MessageSquareQuote, Star, HelpCircle, Users, Tag, Images, ListChecks, FileText, Cloud } from "lucide-react";
+import { isCloudinaryConfigured } from "@/lib/cloudinary";
 
 interface Stats {
   vehicles: number;
@@ -24,9 +25,7 @@ export default function AdminDashboard() {
   const [recentQuotes, setRecentQuotes] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const cloudinaryConfigured = Boolean(
-    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME && process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-  );
+  const cloudinaryConfigured = isCloudinaryConfigured();
 
   useEffect(() => {
     Promise.all([

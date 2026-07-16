@@ -50,7 +50,7 @@ function VehicleCard({
   const onInquiry = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    window.open(`https://wa.me/8613800000000?text=${waText}`, "_blank", "noopener,noreferrer");
+    window.open(`https://wa.me/8617611533296?text=${waText}`, "_blank", "noopener,noreferrer");
   };
 
   return (

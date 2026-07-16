@@ -1,151 +1,133 @@
 "use client";
 
 import { motion } from "motion/react";
-import {
-  Search,
-  ShieldCheck,
-  FileText,
-  Ship,
-  Network,
-  Globe,
-  type LucideIcon,
-} from "lucide-react";
+import { Building2, Globe, Phone } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import {
-  slideInLeft,
-  slideInRight,
-  fadeUp,
-  staggerSlow,
-  viewportOnce,
-} from "@/lib/motion";
-
-const aboutFeatures: {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-}[] = [
-  {
-    icon: Search,
-    title: "Smart Sourcing",
-    description: "AI-powered matching across thousands of verified listings.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Verified Quality",
-    description: "Rigorous 150-point inspection on every vehicle before export.",
-  },
-  {
-    icon: FileText,
-    title: "Export Docs",
-    description: "Complete export documentation handled end-to-end.",
-  },
-  {
-    icon: Ship,
-    title: "Global Shipping",
-    description: "RoRo and container shipping to 40+ countries worldwide.",
-  },
-  {
-    icon: Network,
-    title: "Supplier Network",
-    description: "Direct access to China's most trusted dealers and makers.",
-  },
-  {
-    icon: Globe,
-    title: "Worldwide Reach",
-    description: "Delivering to every major port across the globe.",
-  },
-];
+import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
 export function About() {
   return (
-    <section
-      id="about"
-      className="relative overflow-hidden bg-[var(--bg-secondary)] py-24 lg:py-32"
-    >
+    <section id="about" className="bg-[var(--bg-secondary)] py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        {/* Top: image + text in two columns */}
-        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
-          {/* Left: visual — taller to match content height */}
-          <motion.div
-            variants={slideInLeft}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewportOnce}
-            className="relative"
-          >
-            <div className="glass-card relative h-full min-h-[320px] overflow-hidden rounded-3xl sm:min-h-[400px] lg:min-h-[560px]">
-              {/* Real port imagery */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/hero/about-port.jpg"
-                alt="Aerial view of a major Chinese container shipping port with cargo ships and stacked containers"
-                className="absolute inset-0 h-full w-full object-cover"
-                loading="lazy"
-              />
-              {/* Subtle gradient overlay for depth */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/10" />
-            </div>
-          </motion.div>
-
-          {/* Right: content */}
-          <motion.div
-            variants={slideInRight}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewportOnce}
-            className="flex flex-col justify-center"
-          >
-            <SectionHeading
-              center={false}
-              eyebrow="Who We Are"
-              title="Your Trusted Partner in Chinese Vehicle Export"
-              subtitle="We bridge the gap between China's automotive market and global buyers — combining deep supplier relationships with rigorous quality control and seamless logistics."
-            />
-
-            <div className="mt-6 flex flex-col gap-4 text-base leading-relaxed text-[var(--text-secondary)]">
-              <p>
-                86Connect is a specialist vehicle export company headquartered
-                in Shanghai. We source premium cars — from electric vehicles to
-                SUVs and sedans — directly from China&apos;s most trusted
-                dealerships and manufacturers.
-              </p>
-              <p>
-                Our team handles every step of the journey: sourcing the right
-                vehicle, negotiating the best price, conducting a comprehensive
-                150-point inspection, preparing all export documentation, and
-                arranging reliable shipping to your destination port.
-              </p>
-            </div>
-
-
-          </motion.div>
-        </div>
-
-        {/* Feature cards — full width below the two-column layout */}
         <motion.div
-          variants={staggerSlow}
+          variants={stagger}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-20 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          className="flex flex-col items-center text-center"
         >
-          {aboutFeatures.map(({ icon: Icon, title, description }) => (
-            <motion.div
-              key={title}
-              variants={fadeUp}
-              className="glass-card rounded-2xl p-6"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 text-brand-500">
-                <Icon className="h-6 w-6" />
-              </div>
-              <h3 className="mt-4 font-display text-lg font-semibold text-[var(--text-primary)]">
-                {title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                {description}
+          <SectionHeading
+            eyebrow="Our Story"
+            title="86Connect"
+            subtitle="Bridging China & the World"
+          />
+        </motion.div>
+
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="mt-12 grid gap-8 lg:grid-cols-2 lg:gap-16"
+        >
+          {/* Left: Story */}
+          <motion.div variants={fadeUp} className="space-y-6">
+            <div className="glass-card rounded-2xl p-6 sm:rounded-3xl sm:p-8">
+              <p className="text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
+                86Connect is the digital gateway of{" "}
+                <strong className="text-[var(--text-primary)]">
+                  Beijing BridgePath International Consulting Co., Ltd
+                </strong>
+                , a consulting firm incorporated in Beijing, China on November 23, 2023.
+                The term "86Connect" refers to China's international dialing code (+86),
+                symbolizing our role as the direct line connecting the world to China's
+                educational and economic opportunities.
               </p>
-            </motion.div>
-          ))}
+            </div>
+
+            <div className="glass-card rounded-2xl p-6 sm:rounded-3xl sm:p-8">
+              <p className="text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
+                We provide a seamless online gateway for individuals and businesses seeking
+                to expand, source, or study in China. With a strategic presence in West Africa,
+                we connect overseas clients with trusted Chinese suppliers and universities —
+                ensuring smooth end-to-end operations from sourcing to delivery, and from
+                application to enrollment.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Right: Info cards */}
+          <motion.div variants={fadeUp} className="flex flex-col gap-6">
+            <div className="glass-card flex items-start gap-4 rounded-2xl p-6 sm:rounded-3xl sm:p-8">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-500 dark:bg-brand-900/30 dark:text-brand-400">
+                <Building2 className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-display text-lg font-semibold text-[var(--text-primary)]">
+                  Incorporated November 2023
+                </h3>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  Beijing BridgePath International Consulting Co., Ltd — a registered consulting
+                  firm in Beijing, China.
+                </p>
+              </div>
+            </div>
+
+            <div className="glass-card flex items-start gap-4 rounded-2xl p-6 sm:rounded-3xl sm:p-8">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-500 dark:bg-brand-900/30 dark:text-brand-400">
+                <Globe className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-display text-lg font-semibold text-[var(--text-primary)]">
+                  Global Reach
+                </h3>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  Strategic presence in West Africa, connecting overseas clients with trusted
+                  Chinese suppliers and universities worldwide.
+                </p>
+              </div>
+            </div>
+
+            <div className="glass-card flex items-start gap-4 rounded-2xl p-6 sm:rounded-3xl sm:p-8">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-500 dark:bg-brand-900/30 dark:text-brand-400">
+                <Phone className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-display text-lg font-semibold text-[var(--text-primary)]">
+                  The Number 86
+                </h3>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  China's international dialing code (+86) symbolizes our role as the direct line
+                  connecting you to everything China has to offer.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Quote */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="mx-auto mt-16 max-w-3xl"
+        >
+          <blockquote className="glass-card rounded-2xl border-l-4 border-brand-500 p-6 sm:rounded-3xl sm:p-8">
+            <p className="text-base italic leading-relaxed text-[var(--text-secondary)] sm:text-lg">
+              "Our mission is to simplify China for the world. Whether you're a student chasing
+              a world-class education or a business seeking quality manufacturers, we bridge the
+              gap with local expertise, transparent pricing, and relentless support."
+            </p>
+            <footer className="mt-4">
+              <p className="text-sm font-semibold text-[var(--text-primary)]">
+                — 86Connect Team
+              </p>
+              <p className="text-xs text-[var(--text-muted)]">
+                Beijing BridgePath International Consulting Co., Ltd
+              </p>
+            </footer>
+          </blockquote>
         </motion.div>
       </div>
     </section>

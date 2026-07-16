@@ -144,8 +144,8 @@ export function Footer() {
               />
             </a>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-[var(--text-secondary)]">
-              Source premium cars from China to the world. Verified suppliers,
-              worldwide shipping, professional export service.
+              The digital gateway of Beijing BridgePath International Consulting Co., Ltd.
+              Direct line connecting the world to China.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {socialIcons.map(({ icon: Icon, label, href }) => (
@@ -212,10 +212,10 @@ export function Footer() {
                   <Mail className="h-4 w-4" />
                 </span>
                 <a
-                  href="mailto:hello@86connect.com"
+                  href="mailto:beijingbridgepath@gmail.com"
                   className="transition-colors hover:text-brand-500"
                 >
-                  hello@86connect.com
+                  beijingbridgepath@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
@@ -223,10 +223,10 @@ export function Footer() {
                   <MessageCircle className="h-4 w-4" />
                 </span>
                 <a
-                  href="https://wa.me/8613800000000"
+                  href="https://wa.me/8617611533296"
                   className="transition-colors hover:text-brand-500"
                 >
-                  +86 138 0000 0000
+                  +86 176 1153 3296
                 </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">

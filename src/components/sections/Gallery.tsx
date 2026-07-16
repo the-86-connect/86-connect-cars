@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Image as ImageIcon, Video } from "lucide-react";
+import { X, Image as ImageIcon, Video, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { stagger, viewportOnce, EASE } from "@/lib/motion";
 
@@ -46,7 +47,7 @@ export function Gallery() {
     : mediaItems.filter((item) => item.type === activeTab);
 
   return (
-    <section className="relative bg-[var(--bg-secondary)] pt-12 pb-24 lg:pt-16 lg:pb-32">
+    <section id="gallery" className="relative bg-[var(--bg-secondary)] pt-12 pb-24 lg:pt-16 lg:pb-32">
       <div className="mx-auto max-w-[1400px] px-2">
         {/* Section heading */}
         <motion.div
@@ -148,6 +149,19 @@ export function Gallery() {
               </AnimatePresence>
             </motion.div>
         </div>
+
+        {/* Browse All Media button */}
+        {mediaItems.length > 0 && (
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/gallery"
+              className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:bg-brand-600 hover:shadow-xl hover:scale-105 active:scale-95"
+            >
+              Browse All Media
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        )}
 
         {/* Modal for viewing media */}
         <AnimatePresence>

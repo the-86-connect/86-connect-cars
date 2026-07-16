@@ -143,6 +143,8 @@ export function Hero() {
                 value={stat.value}
                 label={stat.label}
                 icon={stat.icon}
+                target={stat.target}
+                suffix={stat.suffix}
                 delay={0.3 + i * 0.1}
               />
             ))}

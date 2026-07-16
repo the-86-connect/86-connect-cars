@@ -1325,10 +1325,10 @@ export const features: Feature[] = [
 ];
 
 export const heroStats = [
-  { value: "2000+", label: "Cars Exported", icon: "Car" },
-  { value: "40+", label: "Countries", icon: "Globe" },
-  { value: "24/7", label: "Support", icon: "Headphones" },
-  { value: "100%", label: "Transparent Process", icon: "ShieldCheck" },
+  { value: "2000+", target: 2000, suffix: "+", label: "Cars Exported", icon: "Car" },
+  { value: "40+", target: 40, suffix: "+", label: "Countries", icon: "Globe" },
+  { value: "24/7", target: 24, suffix: "/7", label: "Support", icon: "Headphones" },
+  { value: "100%", target: 100, suffix: "%", label: "Transparent Process", icon: "ShieldCheck" },
 ];
 
 export const shippingRoutes = [
