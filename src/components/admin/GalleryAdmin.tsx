@@ -37,7 +37,8 @@ export function GalleryAdmin() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { fetchItems(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchItems(); }, []);
 
   const resetForm = () => {
     setType("photo");

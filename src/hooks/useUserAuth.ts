@@ -36,6 +36,7 @@ export function useFavorites(userId: string | null) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!userId) { setLoading(false); return; }
     fetch("/api/user/favorites")
       .then((r) => (r.ok ? r.json() : []))
@@ -43,10 +44,8 @@ export function useFavorites(userId: string | null) {
         if (Array.isArray(data)) {
           setFavoriteIds(new Set(data.map((f: Record<string, unknown>) => f.vehicleId as string)));
         }
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoading(false);
       })
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       .catch(() => setLoading(false));
   }, [userId]);
 
