@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!.env*.example
 
 # local database
 dev.db
@@ -57,3 +59,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# secrets / service accounts (never commit)
+*.pem
+*.key
+service-account*.json
+google-credentials*.json
+firebase-adminsdk*.json
