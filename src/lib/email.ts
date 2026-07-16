@@ -9,7 +9,7 @@ const FROM = process.env.EMAIL_FROM ?? "cars@the86connect.com";
 const ADMIN_EMAIL = "beijingbridgepath@gmail.com";
 
 // Contact info used in email footers
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://the86connect.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cars.the86connect.com";
 const SUPPORT_EMAIL = "info@the86connect.com";
 const SUPPORT_WHATSAPP = "+86 176 1153 3296";
 
