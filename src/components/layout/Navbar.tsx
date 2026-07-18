@@ -119,7 +119,7 @@ export function Navbar() {
           {/* Desktop actions */}
           <div className="hidden lg:flex items-center gap-3">
             <ThemeToggle />
-            {isLoggedIn && (
+            {isLoggedIn ? (
               <Link
                 href="/account"
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-brand-500"
@@ -127,6 +127,21 @@ export function Navbar() {
               >
                 <User className="h-4 w-4" />
               </Link>
+            ) : (
+              <>
+                <Link
+                  href="/account/login"
+                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/account/signup"
+                  className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
+                >
+                  Sign Up
+                </Link>
+              </>
             )}
             <MagneticButton>
               <Button
@@ -188,7 +203,7 @@ export function Navbar() {
                     </a>
                   ),
                 )}
-                {isLoggedIn && (
+                {isLoggedIn ? (
                   <Link
                     href="/account"
                     onClick={() => setMenuOpen(false)}
@@ -196,6 +211,23 @@ export function Navbar() {
                   >
                     My Account
                   </Link>
+                ) : (
+                  <div className="mt-2 flex gap-3">
+                    <Link
+                      href="/account/login"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex-1 rounded-xl border border-[var(--border-color)] px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
+                    >
+                      Log In
+                    </Link>
+                    <Link
+                      href="/account/signup"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex-1 rounded-xl bg-brand-500 px-4 py-3 text-center text-base font-medium text-white transition-colors hover:bg-brand-600"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
                 )}
                 <Button
                   variant="primary"
