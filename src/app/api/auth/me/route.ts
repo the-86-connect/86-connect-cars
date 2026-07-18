@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
 
   // Verify admin still exists in the database
   const adminClient = getSupabaseAdmin();
+  if (!adminClient) return NextResponse.json({ authenticated: false }, { status: 500 });
   const { data: admin, error } = await adminClient
     .from("admins")
     .select("*")

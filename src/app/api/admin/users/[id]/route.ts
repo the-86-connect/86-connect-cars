@@ -8,6 +8,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const { id } = await params;
     const dataOnly = req.nextUrl.searchParams.get("dataOnly") === "1";
     const supabase = getSupabaseAdmin();
+    if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 500 });
 
     await supabase.from("favorites").delete().eq("user_id", id);
     await supabase.from("quotes").delete().eq("user_id", id);

@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     }
 
     const adminClient = getSupabaseAdmin();
+    if (!adminClient) return NextResponse.json({ error: "Database not configured" }, { status: 500 });
     const { data: admin, error } = await adminClient
       .from("admins")
       .select("*")

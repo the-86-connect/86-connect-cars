@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = await getSupabaseServer();
+    if (!supabase) return NextResponse.json({ error: "Auth not configured" }, { status: 500 });
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
     // Create profile row in public.users (admin client bypasses RLS)
     try {
       const adminClient = getSupabaseAdmin();
+      if (!adminClient) throw new Error("Database not configured");
       await adminClient.from("users").insert({
         id: data.user.id,
         name,

@@ -7,6 +7,7 @@ import { hashPassword } from "@/lib/auth";
 export async function GET() {
   try {
     const supabase = getSupabaseAdmin();
+    if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 500 });
 
     const { data: userRows, error: userError } = await supabase
       .from("users")

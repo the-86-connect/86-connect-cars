@@ -32,6 +32,7 @@ export async function ensureSeeded() {
     if (existing > 0) return;
     // First call with empty table — seed from static list
     const supabase = getSupabaseAdmin();
+    if (!supabase) return;
     for (let i = 0; i < BRAND_LIST.length; i++) {
       const b = BRAND_LIST[i];
       await supabase.from("brands").insert({
