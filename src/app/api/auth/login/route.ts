@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { verifyPassword, createSessionToken } from "@/lib/auth";
-import { rateLimitAuth } from "@/lib/rate-limit";
+import { rateLimitAuth, recordFailedAuth, clearAuthFails } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   const limited = await rateLimitAuth(req);
@@ -22,12 +22,17 @@ export async function POST(req: NextRequest) {
       .maybeSingle();
 
     if (error || !admin) {
+      await recordFailedAuth(req);
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
     if (!verifyPassword(password, admin.password_hash)) {
+      await recordFailedAuth(req);
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
+
+    // Success — clear any fail counters
+    await clearAuthFails(req);
 
     const token = createSessionToken(admin.id, admin.email);
     const response = NextResponse.json({ success: true, email: admin.email, role: admin.role });
