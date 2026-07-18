@@ -32,16 +32,20 @@ export function useUserAuth() {
     const sb = getSupabaseBrowser();
     if (!sb) { setLoading(false); return; }
 
-    sb.auth.getSession().then((res) => {
-      setUser(sessionToUser(res.data.session));
-      setLoading(false);
-    });
+    let subscription: { unsubscribe: () => void } | null = null;
 
-    const { data: { subscription } } = sb.auth.onAuthStateChange((_event, session) => {
+    (async () => {
+      const { data: { session } } = await sb.auth.getSession();
       setUser(sessionToUser(session));
-    });
+      setLoading(false);
 
-    return () => subscription.unsubscribe();
+      const { data } = sb.auth.onAuthStateChange((_event, sess) => {
+        setUser(sessionToUser(sess));
+      });
+      subscription = data.subscription;
+    })();
+
+    return () => subscription?.unsubscribe();
   }, []);
 
   const logout = useCallback(async () => {
