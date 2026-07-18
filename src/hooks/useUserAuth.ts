@@ -32,8 +32,8 @@ export function useUserAuth() {
     const sb = getSupabaseBrowser();
     if (!sb) { setLoading(false); return; }
 
-    sb.auth.getSession().then(({ data: { session } }) => {
-      setUser(sessionToUser(session));
+    sb.auth.getSession().then((res) => {
+      setUser(sessionToUser(res.data.session));
       setLoading(false);
     });
 
