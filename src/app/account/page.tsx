@@ -94,29 +94,34 @@ export default function AccountPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const sb = getSupabaseBrowser();
-    Promise.all([
-      sb?.auth.getSession().then((res) => {
-        const session = res.data.session;
-        const u = session?.user;
-        if (!u) return null;
-        return {
-          id: u.id,
-          name: (u.user_metadata?.name as string) ?? "",
-          email: u.email ?? "",
-          whatsapp: u.user_metadata?.whatsapp as string | undefined,
-          country: u.user_metadata?.country as string | undefined,
-        };
-      }) ?? Promise.resolve(null),
-      fetch("/api/user/quotes").then((r) => r.ok ? r.json() : []),
-      fetch("/api/user/favorites").then((r) => r.ok ? r.json() : []),
-    ]).then(([userData, quotesData, favsData]) => {
-      if (!userData) { router.push("/account/login"); return; }
+    async function loadUserData() {
+      const sb = getSupabaseBrowser();
+      const [sessionResult, quotesResult, favsResult] = await Promise.all([
+        sb?.auth.getSession() ?? null,
+        fetch("/api/user/quotes").then((r) => r.ok ? r.json() : []),
+        fetch("/api/user/favorites").then((r) => r.ok ? r.json() : []),
+      ]);
+
+      if (!sessionResult) { router.push("/account/login"); return; }
+
+      const u = sessionResult.data.session?.user;
+      if (!u) { router.push("/account/login"); return; }
+
+      const userData: UserData = {
+        id: u.id,
+        name: (u.user_metadata?.name as string) ?? "",
+        email: u.email ?? "",
+        whatsapp: u.user_metadata?.whatsapp as string | undefined,
+        country: u.user_metadata?.country as string | undefined,
+      };
+
       setUser(userData);
-      setQuotes(Array.isArray(quotesData) ? quotesData : []);
-      setFavorites(Array.isArray(favsData) ? favsData : []);
+      setQuotes(Array.isArray(quotesResult) ? quotesResult : []);
+      setFavorites(Array.isArray(favsResult) ? favsResult : []);
       setLoading(false);
-    });
+    }
+
+    loadUserData();
   }, [router]);
 
   const handleLogout = async () => {
