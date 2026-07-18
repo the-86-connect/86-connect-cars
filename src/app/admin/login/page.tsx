@@ -45,19 +45,31 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-gray-500">Sign in to manage your inventory</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="on">
           {error && (
             <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
           )}
+
+          {/* Hidden username field — helps Chrome/Safari detect & offer to save password */}
+          <input
+            type="text"
+            name="username"
+            autoComplete="username"
+            value="admin"
+            readOnly
+            hidden
+          />
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-12 text-sm text-gray-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-12 text-sm text-black caret-black autofill-fix focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
                 placeholder="••••••••"
                 required
               />

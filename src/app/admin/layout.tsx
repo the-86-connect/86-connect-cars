@@ -7,6 +7,7 @@ import {
   LayoutDashboard, Car, MessageSquareQuote, HelpCircle,
   Star, ListChecks, FileText, LogOut, Menu, X, Images, Tag, Users,
 } from "lucide-react";
+import NotificationBell from "@/components/admin/NotificationBell";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -115,6 +116,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Menu className="h-6 w-6" />
           </button>
           <span className="font-display text-lg font-bold">86Connect Admin</span>
+          <div className="ml-auto">
+            <NotificationBell />
+          </div>
+        </div>
+
+        {/* Desktop top bar */}
+        <div className="hidden items-center justify-between border-b border-gray-200 bg-white px-6 py-3 lg:flex">
+          <span className="text-sm text-gray-500">Welcome back</span>
+          <NotificationBell />
         </div>
 
         <main className="p-4 sm:p-6 lg:p-8">{children}</main>

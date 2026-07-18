@@ -173,6 +173,27 @@ export const quotes = {
   update: (id: string, data: Record<string, unknown>) => dbUpdate("quotes", id, data),
   delete: (id: string) => dbDelete("quotes", id),
   count: () => dbCount("quotes"),
+  /** Count quotes with status "new" — used for the admin notification badge. */
+  countNew: async () => {
+    const client = supabase();
+    if (!client) return 0;
+    const { count, error } = await client
+      .from("quotes")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "new");
+    if (error) throw error;
+    return count ?? 0;
+  },
+  /** Mark all quotes with status "new" as "viewed" — dismisses admin notification badge. */
+  markNewAsRead: async () => {
+    const client = supabase();
+    if (!client) return;
+    const { error } = await client
+      .from("quotes")
+      .update(toSnake({ status: "viewed" }))
+      .eq("status", "new");
+    if (error) throw error;
+  },
 };
 
 export const admins = {

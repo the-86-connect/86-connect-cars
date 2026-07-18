@@ -301,6 +301,16 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* ---- Password autofill fix — keeps text black on Chrome/Safari/iOS ---- */
+  .autofill-fix:-webkit-autofill,
+  .autofill-fix:-webkit-autofill:hover,
+  .autofill-fix:-webkit-autofill:focus {
+    -webkit-text-fill-color: #000000 !important;
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    caret-color: #000000;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
   /* ---- Skeleton shimmer ---- */
   .skeleton {
     background: linear-gradient(
