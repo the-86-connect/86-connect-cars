@@ -128,20 +128,12 @@ export function Navbar() {
                 <User className="h-4 w-4" />
               </Link>
             ) : (
-              <>
-                <Link
-                  href="/account/login"
-                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
-                >
-                  Log In
-                </Link>
-                <Link
-                  href="/account/signup"
-                  className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
-                >
-                  Sign Up
-                </Link>
-              </>
+              <Link
+                href="/account/login"
+                className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
+              >
+                Sign In
+              </Link>
             )}
             <MagneticButton>
               <Button
@@ -212,22 +204,13 @@ export function Navbar() {
                     My Account
                   </Link>
                 ) : (
-                  <div className="mt-2 flex gap-3">
-                    <Link
-                      href="/account/login"
-                      onClick={() => setMenuOpen(false)}
-                      className="flex-1 rounded-xl border border-[var(--border-color)] px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
-                    >
-                      Log In
-                    </Link>
-                    <Link
-                      href="/account/signup"
-                      onClick={() => setMenuOpen(false)}
-                      className="flex-1 rounded-xl bg-brand-500 px-4 py-3 text-center text-base font-medium text-white transition-colors hover:bg-brand-600"
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
+                  <Link
+                    href="/account/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="mt-2 block rounded-xl border border-[var(--border-color)] px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
+                  >
+                    Sign In
+                  </Link>
                 )}
                 <Button
                   variant="primary"
