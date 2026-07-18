@@ -96,8 +96,8 @@ export default function AccountPage() {
   useEffect(() => {
     const sb = getSupabaseBrowser();
     Promise.all([
-      sb?.auth.getSession().then(({ data }) => {
-        const session = data.session;
+      sb?.auth.getSession().then((res) => {
+        const session = res.data.session;
         const u = session?.user;
         if (!u) return null;
         return {
