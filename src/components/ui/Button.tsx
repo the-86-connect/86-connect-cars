@@ -19,13 +19,13 @@ const variants: Record<Variant, string> = {
   secondary:
     "bg-[var(--bg-elevated)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-brand-500 hover:text-brand-500",
   outline:
-    "border-2 border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white",
+    "border border-[var(--border-color)] text-[var(--text-primary)] hover:border-brand-500 hover:text-brand-500",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "px-5 py-2.5 text-sm rounded-xl",
-  md: "px-7 py-3.5 text-sm rounded-xl",
-  lg: "px-9 py-4 text-base rounded-xl",
+  sm: "px-5 py-2.5 text-sm rounded-full",
+  md: "px-7 py-3.5 text-sm rounded-full",
+  lg: "px-8 py-4 text-base rounded-full",
 };
 
 const baseClasses =

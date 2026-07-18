@@ -53,10 +53,10 @@ export function MobileBottomNav() {
   };
 
   const tabClass = (isActive: boolean) =>
-    `group flex flex-col items-center gap-1 rounded-2xl border px-4 py-2.5 transition-all hover:scale-105 active:scale-95 ${
+    `group flex flex-col items-center gap-1 px-3 py-1.5 transition-all ${
       isActive
-        ? "border-accent-300 bg-accent-50 dark:border-accent-700 dark:bg-accent-900/20"
-        : "border-[var(--border-color)] hover:border-brand-300 hover:bg-brand-50 dark:hover:border-brand-700 dark:hover:bg-brand-900/20"
+        ? "text-accent-500"
+        : "text-[var(--text-muted)] group-hover:text-brand-500"
     }`;
 
   const iconClass = (isActive: boolean) =>
@@ -73,7 +73,7 @@ export function MobileBottomNav() {
     <>
     <div className="h-16 lg:hidden" aria-hidden />
     <nav className="mobile-bottom-nav lg:hidden">
-      <div className="flex items-center justify-around px-2 py-2">
+      <div className="mobile-bottom-nav-bar flex items-center justify-around px-2 py-2">
         {navItems.map(({ icon: Icon, label, id }) => (
           <button
             key={id}

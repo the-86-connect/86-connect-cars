@@ -21,42 +21,47 @@ export function Hero() {
       {/* Mobile hero image */}
       <div className="absolute inset-0 z-0 lg:hidden">
         <Image
-          src="/hero/86connect cars hero phone 2.png"
+          src="/hero/screen.png"
           alt="86Connect Hero Mobile"
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-85"
+          quality={100}
+          className="object-cover"
         />
       </div>
       {/* Desktop hero image */}
       <div className="absolute inset-0 z-0 hidden lg:block">
         <Image
-          src="/hero/hero 86connect cars 2.png"
+          src="/hero/hero stich pc 1.png"
           alt="86Connect Hero Desktop"
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-85"
+          quality={100}
+          className="object-cover object-[center_65%]"
         />
       </div>
 
+      {/* Gradient overlay for text readability — stronger on mobile */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/30 to-black/60 lg:from-black/40 lg:via-transparent lg:to-black/30" />
+
       {/* Content */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-28 lg:pt-40 lg:pb-32">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-28 lg:pt-40 lg:pb-32 lg:ml-12 xl:ml-16">
         <motion.div
           variants={stagger}
           initial="hidden"
           animate="show"
-          className="flex flex-col items-center text-center"
+          className="flex flex-col items-center text-center lg:items-start lg:text-left"
         >
-          {/* Headline — paint-order stroke gives crisp letter edges on bright video */}
+          {/* Headline */}
           <motion.h1
             variants={fadeUp}
             className="font-display text-4xl font-bold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-[4.5rem]"
             style={{
               paintOrder: "stroke fill",
-              WebkitTextStroke: "1.5px rgba(0,0,0,0.4)",
-              textShadow: "0 2px 16px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.5)",
+              WebkitTextStroke: "1.5px rgba(0,0,0,0.6)",
+              textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 0 50px rgba(0,0,0,0.6)",
             }}
           >
             <span
@@ -66,7 +71,7 @@ export function Hero() {
                 fontWeight: 600,
                 letterSpacing: "0.02em",
                 paintOrder: "stroke fill",
-                WebkitTextStroke: "1px rgba(0,0,0,0.35)",
+                WebkitTextStroke: "1px rgba(0,0,0,0.5)",
               }}
             >
               Source Premium Cars
@@ -78,8 +83,8 @@ export function Hero() {
                 style={{
                   color: "#ff2d2d",
                   paintOrder: "stroke fill",
-                  WebkitTextStroke: "1.5px rgba(0,0,0,0.45)",
-                  textShadow: "0 2px 16px rgba(0,0,0,0.9), 0 0 30px rgba(255,45,45,0.5)",
+                  WebkitTextStroke: "1.5px rgba(0,0,0,0.55)",
+                  textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 0 30px rgba(255,45,45,0.6)",
                 }}
               >
                 to the World.
@@ -94,20 +99,21 @@ export function Hero() {
               className="max-w-md text-base leading-relaxed text-white sm:text-lg"
               style={{
                 paintOrder: "stroke fill",
-                WebkitTextStroke: "0.5px rgba(0,0,0,0.3)",
-                textShadow: "0 2px 10px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.5)",
+                WebkitTextStroke: "0.5px rgba(0,0,0,0.5)",
+                textShadow: "0 2px 12px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.6)",
               }}
             >
               Affordable prices. Verified suppliers. Worldwide shipping. Professional export service.
             </p>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap justify-center gap-4">
+          {/* Buttons */}
+          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap justify-center gap-3 sm:gap-4 lg:justify-start">
             <MagneticButton>
               <Button
                 variant="primary"
                 size="lg"
-                className="bg-brand-600 hover:bg-brand-700"
+                className="bg-brand-500 hover:bg-brand-600 shadow-[0_8px_32px_rgba(227,30,36,0.5)] ring-2 ring-white/20"
                 onClick={() => scrollToId("contact")}
               >
                 Get Free Quote <ArrowRight className="h-4 w-4" />
@@ -117,7 +123,7 @@ export function Hero() {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-white bg-black/30 text-white backdrop-blur-md hover:bg-white hover:text-[var(--text-primary)]"
+                className="border-2 border-white/80 bg-black/40 text-white backdrop-blur-md hover:bg-white hover:text-[var(--text-primary)] hover:border-white"
                 onClick={() => scrollToId("inventory")}
               >
                 <Compass className="h-4 w-4" /> Browse Vehicles

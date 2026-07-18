@@ -34,10 +34,19 @@ function toSnake(data: Record<string, unknown>): Record<string, unknown> {
 
 const supabase = () => getSupabaseAdmin();
 
+// ponytail: When Supabase is not configured, return empty results for build-time static generation
+const isSupabaseConfigured = () => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  return !!(url && url.startsWith("http") && key && key !== "your-service-role-key");
+};
+
 // ── Generic CRUD helpers ──
 
 async function dbSelect(table: string, where?: Record<string, unknown>, order?: string) {
-  const { data, error } = await supabase()
+  const client = supabase();
+  if (!client) return [];
+  const { data, error } = await client
     .from(table)
     .select("*")
     .match(where ?? {})
@@ -47,7 +56,9 @@ async function dbSelect(table: string, where?: Record<string, unknown>, order?: 
 }
 
 async function dbFind(table: string, field: string, value: unknown) {
-  const { data, error } = await supabase()
+  const client = supabase();
+  if (!client) return null;
+  const { data, error } = await client
     .from(table)
     .select("*")
     .eq(field, value)
@@ -57,24 +68,32 @@ async function dbFind(table: string, field: string, value: unknown) {
 }
 
 async function dbInsert(table: string, data: Record<string, unknown>) {
-  const { error } = await supabase().from(table).insert(toSnake(data));
+  const client = supabase();
+  if (!client) throw new Error("Supabase not configured");
+  const { error } = await client.from(table).insert(toSnake(data));
   if (error) throw error;
   return data;
 }
 
 async function dbUpdate(table: string, id: string, data: Record<string, unknown>) {
-  const { error } = await supabase().from(table).update(toSnake(data)).eq("id", id);
+  const client = supabase();
+  if (!client) throw new Error("Supabase not configured");
+  const { error } = await client.from(table).update(toSnake(data)).eq("id", id);
   if (error) throw error;
   return { id, ...data };
 }
 
 async function dbDelete(table: string, id: string) {
-  const { error } = await supabase().from(table).delete().eq("id", id);
+  const client = supabase();
+  if (!client) throw new Error("Supabase not configured");
+  const { error } = await client.from(table).delete().eq("id", id);
   if (error) throw error;
 }
 
 async function dbCount(table: string) {
-  const { count, error } = await supabase()
+  const client = supabase();
+  if (!client) return 0;
+  const { count, error } = await client
     .from(table)
     .select("*", { count: "exact", head: true });
   if (error) throw error;
@@ -85,7 +104,9 @@ async function dbCount(table: string) {
 
 export const vehicles = {
   list: async () => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("vehicles")
       .select("*")
       .order("created_at", { ascending: false });
@@ -129,13 +150,17 @@ export const processSteps = {
   find: (step: number) => dbFind("process_steps", "step", step),
   create: (data: Record<string, unknown>) => dbInsert("process_steps", data),
   update: (step: number, data: Record<string, unknown>) => {
-    return supabase().from("process_steps").update(toSnake(data)).eq("step", step).then(({ error }) => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    return client.from("process_steps").update(toSnake(data)).eq("step", step).then(({ error }) => {
       if (error) throw error;
       return { step, ...data };
     });
   },
   delete: (step: number) => {
-    return supabase().from("process_steps").delete().eq("step", step).then(({ error }) => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    return client.from("process_steps").delete().eq("step", step).then(({ error }) => {
       if (error) throw error;
     });
   },
@@ -153,7 +178,9 @@ export const quotes = {
 export const admins = {
   findByEmail: (email: string) => dbFind("admins", "email", email),
   findFirst: async () => {
-    const { data, error } = await supabase().from("admins").select("*").limit(1).maybeSingle();
+    const client = supabase();
+    if (!client) return null;
+    const { data, error } = await client.from("admins").select("*").limit(1).maybeSingle();
     if (error) throw error;
     return data ? toCamel(data) : null;
   },
@@ -162,7 +189,9 @@ export const admins = {
 
 export const gallery = {
   list: async () => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("gallery")
       .select("*")
       .eq("active", 1)
@@ -171,7 +200,9 @@ export const gallery = {
     return toCamelList(data ?? []);
   },
   listAll: async () => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("gallery")
       .select("*")
       .order("sort_order", { ascending: true });
@@ -187,7 +218,9 @@ export const gallery = {
 
 export const brands = {
   list: async () => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("brands")
       .select("*")
       .eq("active", 1)
@@ -197,7 +230,9 @@ export const brands = {
     return toCamelList(data ?? []);
   },
   listAll: async () => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("brands")
       .select("*")
       .order("sort_order", { ascending: true })
@@ -215,7 +250,9 @@ export const brands = {
 
 export const users = {
   list: async () => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("users")
       .select("id, name, email, whatsapp, country, created_at")
       .order("created_at", { ascending: false });
@@ -231,7 +268,9 @@ export const users = {
 
 export const favorites = {
   listByUser: async (userId: string) => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("favorites")
       .select("*")
       .eq("user_id", userId)
@@ -240,7 +279,9 @@ export const favorites = {
     return toCamelList(data ?? []);
   },
   listByUserWithVehicle: async (userId: string) => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
       .from("favorites")
       .select(
         `id, user_id, vehicle_id, created_at,
@@ -274,7 +315,9 @@ export const favorites = {
     });
   },
   find: async (userId: string, vehicleId: string) => {
-    const { data, error } = await supabase()
+    const client = supabase();
+    if (!client) return null;
+    const { data, error } = await client
       .from("favorites")
       .select("*")
       .eq("user_id", userId)
@@ -288,7 +331,9 @@ export const favorites = {
     return dbInsert("favorites", { id, userId, vehicleId });
   },
   remove: async (userId: string, vehicleId: string) => {
-    const { error } = await supabase()
+    const client = supabase();
+    if (!client) return;
+    const { error } = await client
       .from("favorites")
       .delete()
       .eq("user_id", userId)
@@ -296,7 +341,9 @@ export const favorites = {
     if (error) throw error;
   },
   isFavorited: async (userId: string, vehicleId: string) => {
-    const { count } = await supabase()
+    const client = supabase();
+    if (!client) return false;
+    const { count } = await client
       .from("favorites")
       .select("*", { count: "exact", head: true })
       .eq("user_id", userId)

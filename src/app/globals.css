@@ -147,20 +147,26 @@
     color: #fff;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar — hidden */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 0px;
+    background: transparent;
   }
   ::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 9999px;
-    border: 2px solid var(--scrollbar-track);
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover);
+    background: transparent;
+  }
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
   }
 
   /* Headings use display font */
@@ -336,21 +342,29 @@
   }
 }
 
-/* ---- Mobile bottom nav (app-like liquid glass) ---- */
+/* ---- Mobile bottom nav (app-like floating 3D pill) ---- */
 @media (max-width: 767px) {
   .mobile-bottom-nav {
     @apply fixed bottom-0 inset-x-0 z-40;
-    background: rgba(255, 255, 255, 0.72);
+    padding: 8px 12px env(safe-area-inset-bottom, 0px);
+  }
+  .mobile-bottom-nav-bar {
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(24px) saturate(200%);
     -webkit-backdrop-filter: blur(24px) saturate(200%);
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 -2px 20px rgba(0, 0, 0, 0.08),
+      inset 0 1px 2px rgba(255, 255, 255, 0.8),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.04);
   }
-  .dark .mobile-bottom-nav {
-    background: rgba(10, 10, 10, 0.8);
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  .dark .mobile-bottom-nav-bar {
+    background: rgba(20, 20, 20, 0.8);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 -2px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 1px rgba(255, 255, 255, 0.06);
   }
 }
 

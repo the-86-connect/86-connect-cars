@@ -3,6 +3,9 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET() {
   const supabase = await getSupabaseServer();
+  if (!supabase) {
+    return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
+  }
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {

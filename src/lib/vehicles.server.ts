@@ -7,6 +7,7 @@
  */
 import "server-only";
 import { vehicles as vehicleTable } from "@/lib/db";
+import { vehicles as mockVehicles } from "@/lib/data";
 import type { Vehicle } from "@/types";
 
 function parseVehicle(v: Record<string, unknown>): Vehicle {
@@ -27,10 +28,12 @@ function parseVehicle(v: Record<string, unknown>): Vehicle {
 export async function getVehicles(): Promise<Vehicle[]> {
   try {
     const rows = await vehicleTable.list();
-    return rows.map(parseVehicle);
+    const dbVehicles = rows.map(parseVehicle);
+    // Fallback to mock data when DB is empty (dev without Supabase)
+    return dbVehicles.length > 0 ? dbVehicles : mockVehicles;
   } catch (error) {
     console.error("getVehicles error:", error);
-    return [];
+    return mockVehicles;
   }
 }
 

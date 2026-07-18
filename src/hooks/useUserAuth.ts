@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 interface UserData {
   id: string;
@@ -29,12 +29,15 @@ export function useUserAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const sb = getSupabaseBrowser();
+    if (!sb) { setLoading(false); return; }
+
+    sb.auth.getSession().then(({ data: { session } }) => {
       setUser(sessionToUser(session));
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = sb.auth.onAuthStateChange((_event, session) => {
       setUser(sessionToUser(session));
     });
 
@@ -42,7 +45,9 @@ export function useUserAuth() {
   }, []);
 
   const logout = useCallback(async () => {
-    await supabase.auth.signOut();
+    const sb = getSupabaseBrowser();
+    if (!sb) return;
+    await sb.auth.signOut();
     setUser(null);
   }, []);
 
