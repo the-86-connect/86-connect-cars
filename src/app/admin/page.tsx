@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Car, MessageSquareQuote, Star, HelpCircle, Users, Tag, Images, ListChecks, FileText, Cloud } from "lucide-react";
+import { Car, MessageSquareQuote, Star, HelpCircle, Users, Tag, Images, ListChecks, FileText, Cloud, Database } from "lucide-react";
 import { isCloudinaryConfigured } from "@/lib/cloudinary";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 interface Stats {
   vehicles: number;
@@ -26,6 +27,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   const cloudinaryConfigured = isCloudinaryConfigured();
+  const supabaseConfigured = isSupabaseConfigured();
 
   useEffect(() => {
     Promise.all([
@@ -73,14 +75,24 @@ export default function AdminDashboard() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        {/* Cloudinary config status — admins see this at a glance */}
-        <div className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium ${
-          cloudinaryConfigured
-            ? "bg-green-50 text-green-700 border border-green-200"
-            : "bg-amber-50 text-amber-700 border border-amber-200"
-        }`}>
-          <Cloud className="h-3.5 w-3.5" />
-          {cloudinaryConfigured ? "Cloudinary connected" : "Cloudinary not configured"}
+        {/* Service status pills */}
+        <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium ${
+            supabaseConfigured
+              ? "bg-green-50 text-green-700 border border-green-200"
+              : "bg-red-50 text-red-700 border border-red-200"
+          }`}>
+            <Database className="h-3.5 w-3.5" />
+            {supabaseConfigured ? "Supabase connected" : "Supabase not configured"}
+          </div>
+          <div className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium ${
+            cloudinaryConfigured
+              ? "bg-green-50 text-green-700 border border-green-200"
+              : "bg-amber-50 text-amber-700 border border-amber-200"
+          }`}>
+            <Cloud className="h-3.5 w-3.5" />
+            {cloudinaryConfigured ? "Cloudinary connected" : "Cloudinary not configured"}
+          </div>
         </div>
       </div>
 

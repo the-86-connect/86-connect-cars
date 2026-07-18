@@ -15,6 +15,13 @@ export function getSupabaseBrowser(): SupabaseClient | null {
   return _client;
 }
 
+/** Check if Supabase env vars are configured (client-side only — validates URL + anon key). */
+export function isSupabaseConfigured(): boolean {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  return Boolean(url && url.startsWith("http") && key && key !== "your-anon-key");
+}
+
 /** @deprecated Use getSupabaseBrowser() instead */
 export const supabase = new Proxy({} as SupabaseClient, {
   get(_, prop) {
