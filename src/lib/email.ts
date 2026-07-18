@@ -6,7 +6,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = process.env.EMAIL_FROM ?? "cars@the86connect.com";
-const ADMIN_EMAIL = "beijingbridgepath@gmail.com";
+const ADMIN_EMAIL = process.env.NOTIFY_EMAIL ?? "beijingbridgepath@gmail.com";
 
 // Contact info used in email footers
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cars.the86connect.com";
