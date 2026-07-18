@@ -96,7 +96,8 @@ export default function AccountPage() {
   useEffect(() => {
     const sb = getSupabaseBrowser();
     Promise.all([
-      sb ? sb.auth.getSession().then(({ data: { session } }) => {
+      sb?.auth.getSession().then(({ data }) => {
+        const session = data.session;
         const u = session?.user;
         if (!u) return null;
         return {
@@ -106,7 +107,7 @@ export default function AccountPage() {
           whatsapp: u.user_metadata?.whatsapp as string | undefined,
           country: u.user_metadata?.country as string | undefined,
         };
-      }) : Promise.resolve(null),
+      }) ?? Promise.resolve(null),
       fetch("/api/user/quotes").then((r) => r.ok ? r.json() : []),
       fetch("/api/user/favorites").then((r) => r.ok ? r.json() : []),
     ]).then(([userData, quotesData, favsData]) => {
