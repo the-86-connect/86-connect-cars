@@ -53,6 +53,16 @@ export async function getBrands(): Promise<BrandRow[]> {
   await ensureSeeded();
   try {
     const rows = await brandTable.list();
+    if (rows.length === 0) {
+      // DB empty or not configured — use static fallback
+      return BRAND_LIST.map((b, i) => ({
+        id: `brand-${i}`,
+        name: b.name,
+        logo: b.logoFile,
+        category: b.category,
+        sortOrder: i,
+      }));
+    }
     return rows.map((r) => ({
       id: String(r.id),
       name: String(r.name),
