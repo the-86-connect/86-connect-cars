@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Car, MessageSquareQuote, HelpCircle,
   Star, ListChecks, FileText, LogOut, Menu, X, Images, Tag, Users,
+  ExternalLink, Truck,
 } from "lucide-react";
 import NotificationBell from "@/components/admin/NotificationBell";
 
@@ -89,6 +90,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               );
             })}
           </nav>
+
+          {/* External links */}
+          <div className="border-t border-gray-800 p-3">
+            <a
+              href="https://admin.the86connect.com/admin#car-shipments"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-amber-400 transition-colors hover:bg-gray-800 hover:text-amber-300"
+            >
+              <Truck className="h-5 w-5" />
+              Shipments & Tracking
+              <ExternalLink className="h-3.5 w-3.5 ml-auto opacity-60" />
+            </a>
+          </div>
 
           {/* Logout */}
           <div className="border-t border-gray-800 p-3">

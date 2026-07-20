@@ -4,23 +4,6 @@ import { useEffect, useState } from "react";
 import { Trash2, FileText, Download, X } from "lucide-react";
 
 const QUOTE_STATUSES = ["new", "contacted", "closed"] as const;
-const DELIVERY_STATUSES = ["pending", "received", "in_transit", "shipped", "delivered"] as const;
-
-const DELIVERY_LABELS: Record<string, string> = {
-  pending: "Pending",
-  received: "Order Received",
-  in_transit: "In Transit",
-  shipped: "Shipped",
-  delivered: "Delivered",
-};
-
-const DELIVERY_COLORS: Record<string, string> = {
-  pending: "bg-gray-100 text-gray-700",
-  received: "bg-blue-100 text-blue-700",
-  in_transit: "bg-yellow-100 text-yellow-700",
-  shipped: "bg-purple-100 text-purple-700",
-  delivered: "bg-green-100 text-green-700",
-};
 
 const STATUS_COLORS: Record<string, string> = {
   new: "bg-blue-100 text-blue-700",
@@ -126,7 +109,6 @@ export default function AdminQuotes() {
           {quotes.map((q) => {
             const id = q.id as string;
             const isExpanded = expandedId === id;
-            const deliveryStatus = (q.deliveryStatus as string) || "pending";
             return (
               <div key={id} className="rounded-xl bg-white border border-[#e6f4f8] shadow-sm hover:shadow-md hover:border-[#b8e4f0] transition-all">
                 <div className="px-4 py-2.5">
@@ -137,9 +119,6 @@ export default function AdminQuotes() {
                           <h3 className="text-sm font-semibold text-gray-900">{q.name as string}</h3>
                           <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${STATUS_COLORS[q.status as string] || ""}`}>
                             {q.status as string}
-                          </span>
-                          <span className={`rounded-full px-1.5 py-px text-[10px] font-medium ${DELIVERY_COLORS[deliveryStatus] || ""}`}>
-                            {DELIVERY_LABELS[deliveryStatus] || deliveryStatus}
                           </span>
                           {q.userId ? (
                             <span className="rounded-full bg-[#e0f0ff] px-1.5 py-px text-[10px] font-medium text-[#087ea4]">Registered</span>
@@ -188,47 +167,26 @@ export default function AdminQuotes() {
                   </div>
                 </div>
 
-                {/* Expanded panel — quote status + delivery status controls */}
+                {/* Expanded panel — quote status controls */}
                 {isExpanded && (
                   <div className="border-t border-gray-100 bg-gray-50/50 px-4 py-3">
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      <div>
-                        <label className="block text-[10px] font-semibold text-gray-400 mb-1.5">Quote Status</label>
-                        <div className="flex flex-wrap gap-1">
-                          {QUOTE_STATUSES.map((s) => (
-                            <button
-                              key={s}
-                              type="button"
-                              onClick={() => updateField(id, "status", s)}
-                              className={`rounded-full px-2 py-1 text-[10px] font-medium transition-all ${
-                                q.status === s
-                                  ? `${STATUS_COLORS[s]} ring-2 ring-offset-1`
-                                  : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50"
-                              }`}
-                            >
-                              {s.charAt(0).toUpperCase() + s.slice(1)}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-semibold text-gray-400 mb-1.5">Delivery Tracking</label>
-                        <div className="flex flex-wrap gap-1">
-                          {DELIVERY_STATUSES.map((s) => (
-                            <button
-                              key={s}
-                              type="button"
-                              onClick={() => updateField(id, "deliveryStatus", s)}
-                              className={`rounded-full px-2 py-1 text-[10px] font-medium transition-all ${
-                                deliveryStatus === s
-                                  ? `${DELIVERY_COLORS[s]} ring-2 ring-offset-1`
-                                  : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50"
-                              }`}
-                            >
-                              {DELIVERY_LABELS[s]}
-                            </button>
-                          ))}
-                        </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-gray-400 mb-1.5">Quote Status</label>
+                      <div className="flex flex-wrap gap-1">
+                        {QUOTE_STATUSES.map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => updateField(id, "status", s)}
+                            className={`rounded-full px-2 py-1 text-[10px] font-medium transition-all ${
+                              q.status === s
+                                ? `${STATUS_COLORS[s]} ring-2 ring-offset-1`
+                                : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50"
+                            }`}
+                          >
+                            {s.charAt(0).toUpperCase() + s.slice(1)}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -272,9 +230,6 @@ export default function AdminQuotes() {
               <div className="flex items-center gap-2 mb-5">
                 <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_COLORS[quote.status as string] || ""}`}>
                   {quote.status as string}
-                </span>
-                <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${DELIVERY_COLORS[(quote.deliveryStatus as string) || "pending"] || ""}`}>
-                  {DELIVERY_LABELS[(quote.deliveryStatus as string) || "pending"] || "Pending"}
                 </span>
                 {quote.userId ? (
                   <span className="rounded-full bg-[#e0f0ff] px-2 py-0.5 text-[11px] font-medium text-[#087ea4]">Registered User</span>
