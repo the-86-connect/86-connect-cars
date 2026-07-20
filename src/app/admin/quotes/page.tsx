@@ -130,9 +130,9 @@ export default function AdminQuotes() {
                         <div className="flex items-center gap-2 mt-0.5">
                           <p className="text-[11px] text-gray-500">{q.email as string}</p>
                           <span className="text-[11px] font-medium text-gray-700">{String(q.vehicleBrand)} {String(q.model)}</span>
-                          {q.vehicleSlug && (
+                          {!!q.vehicleSlug && (
                             <a
-                              href={`/inventory/${q.vehicleSlug}`}
+                              href={`/inventory/${q.vehicleSlug as string}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-[10px] font-medium text-[#087ea4] hover:underline flex items-center gap-0.5"
@@ -276,18 +276,18 @@ export default function AdminQuotes() {
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Model</span>
                   <p className="text-sm text-gray-700 mt-0.5">{quote.model as string || "—"}</p>
                 </div>
-                {quote.vehicleSlug && (
+                {!!quote.vehicleSlug && (
                   <div className="col-span-2">
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Vehicle Page</span>
                     <p className="text-sm mt-0.5">
                       <a
-                        href={`/inventory/${quote.vehicleSlug}`}
+                        href={`/inventory/${quote.vehicleSlug as string}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[#087ea4] hover:underline flex items-center gap-1"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
-                        View {quote.vehicleBrand} {quote.model}
+                        View {quote.vehicleBrand as string} {quote.model as string}
                       </a>
                     </p>
                   </div>
