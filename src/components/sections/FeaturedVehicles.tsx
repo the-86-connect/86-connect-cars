@@ -37,9 +37,9 @@ function VehicleCard({
   vehicle: Vehicle; index: number;
   isFavorited: boolean; onToggleFavorite: (id: string) => void;
 }) {
-  const isTransparentPng = vehicle.image.startsWith("/cars/");
+  const isTransparentPng = vehicle.image?.startsWith("/cars/") ?? false;
   const [imgError, setImgError] = useState(false);
-  const hasImage = !imgError && (isTransparentPng || vehicle.image.startsWith("/vehicles/"));
+  const hasImage = !imgError && !!vehicle.image && (isTransparentPng || vehicle.image.startsWith("/vehicles/") || vehicle.image.startsWith("http"));
   const gradient = brandGradients[vehicle.brand] ?? "from-brand-500/15 to-brand-700/5";
 
   // ponytail: hardcoded WhatsApp number matches the convention used in Contact, Footer,

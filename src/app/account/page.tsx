@@ -276,7 +276,7 @@ export default function AccountPage() {
                           <img
                             src={fav.image}
                             alt={`${fav.brand} ${fav.model}`}
-                            className={`h-full w-full ${fav.image.startsWith("/cars/") ? "object-contain p-3" : "object-cover"}`}
+                            className={`h-full w-full ${fav.image?.startsWith("/cars/") ? "object-contain p-3" : "object-cover"}`}
                           />
                         ) : (
                           <div className="flex h-full items-center justify-center text-[var(--text-muted)]">

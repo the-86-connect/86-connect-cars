@@ -1949,7 +1949,7 @@ export function InventoryClient({
                                 alt={`${v.brand} ${v.model}`}
                                 className={cn(
                                   "h-full w-full",
-                                  v.image.startsWith("/cars/")
+                                  v.image?.startsWith("/cars/")
                                     ? "object-contain p-2"
                                     : "object-cover",
                                 )}
