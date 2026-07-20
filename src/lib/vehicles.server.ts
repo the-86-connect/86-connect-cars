@@ -14,9 +14,19 @@ function parseVehicle(v: Record<string, unknown>): Vehicle {
   const parse = (val: unknown, fallback: unknown) =>
     typeof val === "string" ? JSON.parse(val) : val ?? fallback;
 
+  const mainImage = (v.image as string) || "";
+  const galleryImages = parse(v.images, []) as string[];
+  const images =
+    galleryImages.length > 0
+      ? galleryImages
+      : mainImage
+        ? [mainImage]
+        : [];
+
   return {
     ...v,
-    images: parse(v.images, []),
+    image: mainImage || images[0] || "",
+    images,
     specs: parse(v.specs, {}),
     features: parse(v.features, []),
     colors: parse(v.colors, []),

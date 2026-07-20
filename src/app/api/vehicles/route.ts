@@ -13,15 +13,27 @@ function revalidateVehiclePages() {
 export async function GET() {
   try {
     const data = await vehicles.list();
-    // Parse JSON fields
-    const parsed = data.map((v) => ({
-      ...v,
-      images: typeof v.images === "string" ? JSON.parse(v.images as string) : v.images,
-      specs: typeof v.specs === "string" ? JSON.parse(v.specs as string) : v.specs,
-      features: typeof v.features === "string" ? JSON.parse(v.features as string) : v.features,
-      colors: typeof v.colors === "string" ? JSON.parse(v.colors as string) : v.colors,
-      exportDocs: typeof v.exportDocs === "string" ? JSON.parse(v.exportDocs as string) : v.exportDocs,
-    }));
+    // Parse JSON fields and normalize image/images
+    const parsed = data.map((v) => {
+      const mainImage = (v.image as string) || "";
+      const galleryImages =
+        typeof v.images === "string" ? JSON.parse(v.images as string) : v.images || [];
+      const images =
+        galleryImages.length > 0
+          ? galleryImages
+          : mainImage
+            ? [mainImage]
+            : [];
+      return {
+        ...v,
+        image: mainImage || images[0] || "",
+        images,
+        specs: typeof v.specs === "string" ? JSON.parse(v.specs as string) : v.specs,
+        features: typeof v.features === "string" ? JSON.parse(v.features as string) : v.features,
+        colors: typeof v.colors === "string" ? JSON.parse(v.colors as string) : v.colors,
+        exportDocs: typeof v.exportDocs === "string" ? JSON.parse(v.exportDocs as string) : v.exportDocs,
+      };
+    });
     return NextResponse.json(parsed);
   } catch (e) {
     console.error("Vehicles API error:", e);

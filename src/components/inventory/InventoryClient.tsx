@@ -463,10 +463,11 @@ function VehicleCard({
   isFavorited: boolean;
   onToggleFavorite: (id: string) => void;
 }) {
-  const isTransparentPng = vehicle.image.startsWith("/cars/");
+  const isTransparentPng = vehicle.image?.startsWith("/cars/") ?? false;
   const [imgError, setImgError] = useState(false);
   const hasImage =
-    !imgError && (isTransparentPng || vehicle.image.startsWith("/vehicles/"));
+    !imgError &&
+    (isTransparentPng || vehicle.image?.startsWith("/vehicles/") || vehicle.image?.startsWith("http"));
   const gradient =
     brandGradients[vehicle.brand] ?? "from-brand-500/15 to-brand-700/5";
 
@@ -482,7 +483,7 @@ function VehicleCard({
   const currentImage =
     galleryImages[Math.min(imgIndex, galleryImages.length - 1)] ??
     vehicle.image;
-  const isCurrentTransparentPng = currentImage.startsWith("/cars/");
+  const isCurrentTransparentPng = currentImage?.startsWith("/cars/") ?? false;
   const cycleImage = (e: React.MouseEvent, dir: 1 | -1) => {
     e.preventDefault();
     e.stopPropagation();

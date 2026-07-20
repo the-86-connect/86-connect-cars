@@ -239,7 +239,7 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
     addRecentlyViewed(vehicle.slug);
   }, [vehicle.slug, addRecentlyViewed]);
 
-  const isTransparentPng = (src: string) => src.startsWith("/cars/");
+  const isTransparentPng = (src?: string) => !!src && src.startsWith("/cars/");
 
   const quickSpecs: SpecRow[] = [
     { icon: Zap, label: "Power", value: vehicle.specs.power },
@@ -800,7 +800,7 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
                         alt={`${v.brand} ${v.model}`}
                         className={cn(
                           "h-full w-full transition-transform duration-500 group-hover:scale-110",
-                          v.image.startsWith("/cars/")
+                          v.image?.startsWith("/cars/")
                             ? "object-contain p-3"
                             : "object-cover",
                         )}
