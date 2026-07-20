@@ -39,7 +39,7 @@ function VehicleCard({
 }) {
   const isTransparentPng = vehicle.image?.startsWith("/cars/") ?? false;
   const [imgError, setImgError] = useState(false);
-  const hasImage = !imgError && !!vehicle.image && (isTransparentPng || vehicle.image.startsWith("/vehicles/") || vehicle.image.startsWith("http"));
+  const hasImage = !imgError && !!vehicle.image && (isTransparentPng || vehicle.image?.startsWith("/vehicles/") || vehicle.image?.startsWith("http"));
   const gradient = brandGradients[vehicle.brand] ?? "from-brand-500/15 to-brand-700/5";
 
   // ponytail: hardcoded WhatsApp number matches the convention used in Contact, Footer,
