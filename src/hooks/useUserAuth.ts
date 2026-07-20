@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { useRouter, usePathname } from "next/navigation";
 
 interface UserData {
   id: string;
@@ -12,50 +11,46 @@ interface UserData {
   country?: string;
 }
 
-function sessionToUser(session: { user: { id: string; email?: string; user_metadata?: Record<string, unknown> } } | null): UserData | null {
-  if (!session?.user) return null;
-  const u = session.user;
-  return {
-    id: u.id,
-    name: (u.user_metadata?.name as string) ?? "",
-    email: u.email ?? "",
-    whatsapp: u.user_metadata?.whatsapp as string | undefined,
-    country: u.user_metadata?.country as string | undefined,
-  };
-}
-
 export function useUserAuth() {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await fetch("/api/user/me", { cache: "no-store" });
+      if (!res.ok) { setUser(null); setLoading(false); return; }
+      const data = await res.json();
+      if (data.authenticated) {
+        setUser({
+          id: data.id,
+          name: data.name ?? "",
+          email: data.email ?? "",
+          whatsapp: data.whatsapp,
+          country: data.country,
+        });
+      } else {
+        setUser(null);
+      }
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const sb = getSupabaseBrowser();
-    if (!sb) { setLoading(false); return; }
-
-    let subscription: { unsubscribe: () => void } | null = null;
-
-    (async () => {
-      const { data: { session } } = await sb.auth.getSession();
-      setUser(sessionToUser(session));
-      setLoading(false);
-
-      const { data } = sb.auth.onAuthStateChange((_event, sess) => {
-        setUser(sessionToUser(sess));
-      });
-      subscription = data.subscription;
-    })();
-
-    return () => subscription?.unsubscribe();
-  }, []);
+    fetchUser();
+  }, [fetchUser, pathname]);
 
   const logout = useCallback(async () => {
-    const sb = getSupabaseBrowser();
-    if (!sb) return;
-    await sb.auth.signOut();
+    await fetch("/api/user/logout", { method: "POST" });
     setUser(null);
-  }, []);
+    router.refresh();
+  }, [router]);
 
-  return { user, loading, logout, userId: user?.id ?? null, isLoggedIn: !!user };
+  return { user, loading, logout, userId: user?.id ?? null, isLoggedIn: !!user, refresh: fetchUser };
 }
 
 export function useFavorites(userId: string | null) {

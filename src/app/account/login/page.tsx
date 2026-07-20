@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,11 +16,18 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      const sb = getSupabaseBrowser();
-      if (!sb) { setError("Auth not configured"); return; }
-      const { error: authError } = await sb.auth.signInWithPassword({ email, password });
-      if (authError) { setError(authError.message); return; }
+      const res = await fetch("/api/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Login failed");
+        return;
+      }
       router.push("/account");
+      router.refresh();
     } catch { setError("Network error"); }
     finally { setLoading(false); }
   };

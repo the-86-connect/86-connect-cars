@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { createServerClient } from "@supabase/ssr";
 import { rateLimitAuth } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
@@ -12,21 +12,46 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email and password required" }, { status: 400 });
     }
 
-    const supabase = await getSupabaseServer();
-    if (!supabase) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !url.startsWith("http") || !key || key === "your-anon-key") {
       return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
     }
+
+    const response = NextResponse.json({ success: true, user: {} });
+
+    const supabase = createServerClient(url, key, {
+      cookies: {
+        getAll() {
+          return req.cookies.getAll().map(({ name, value }) => ({ name, value }));
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
+        },
+      },
+    });
+
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    return NextResponse.json({
+    const body = JSON.stringify({
       success: true,
       id: data.user.id,
       name: data.user.user_metadata?.name,
       email: data.user.email,
+    });
+
+    return new NextResponse(body, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        ...Object.fromEntries(response.headers.entries()),
+      },
     });
   } catch {
     return NextResponse.json({ error: "Login failed" }, { status: 500 });

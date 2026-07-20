@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Heart, MessageSquareQuote, LogOut, User, Package, Truck, CheckCircle2, Clock, Ship } from "lucide-react";
-import { getSupabaseBrowser } from "@/lib/supabase/client";
 
 interface UserData { id: string; name: string; email: string; whatsapp?: string; country?: string; }
 interface Quote {
@@ -95,24 +94,20 @@ export default function AccountPage() {
 
   useEffect(() => {
     async function loadUserData() {
-      const sb = getSupabaseBrowser();
-      const [sessionResult, quotesResult, favsResult] = await Promise.all([
-        sb?.auth.getSession() ?? null,
+      const [meResult, quotesResult, favsResult] = await Promise.all([
+        fetch("/api/user/me").then((r) => r.ok ? r.json() : null),
         fetch("/api/user/quotes").then((r) => r.ok ? r.json() : []),
         fetch("/api/user/favorites").then((r) => r.ok ? r.json() : []),
       ]);
 
-      if (!sessionResult) { router.push("/account/login"); return; }
-
-      const u = sessionResult.data.session?.user;
-      if (!u) { router.push("/account/login"); return; }
+      if (!meResult || !meResult.authenticated) { router.push("/account/login"); return; }
 
       const userData: UserData = {
-        id: u.id,
-        name: (u.user_metadata?.name as string) ?? "",
-        email: u.email ?? "",
-        whatsapp: u.user_metadata?.whatsapp as string | undefined,
-        country: u.user_metadata?.country as string | undefined,
+        id: meResult.id,
+        name: meResult.name ?? "",
+        email: meResult.email ?? "",
+        whatsapp: meResult.whatsapp,
+        country: meResult.country,
       };
 
       setUser(userData);
@@ -125,9 +120,9 @@ export default function AccountPage() {
   }, [router]);
 
   const handleLogout = async () => {
-    const sb = getSupabaseBrowser();
-    if (sb) await sb.auth.signOut();
+    await fetch("/api/user/logout", { method: "POST" });
     router.push("/");
+    router.refresh();
   };
 
   const removeFavorite = async (vehicleId: string) => {

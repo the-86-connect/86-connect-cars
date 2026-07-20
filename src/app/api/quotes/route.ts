@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 import { quotes } from "@/lib/db";
-import { verifyUserSessionToken } from "@/lib/auth";
 import { rateLimitForm } from "@/lib/rate-limit";
 import { sendQuoteConfirmationEmail, sendQuoteNotificationEmail } from "@/lib/email";
 
@@ -45,6 +45,24 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
   }
 }
 
+async function getUserIdFromSession(req: NextRequest): Promise<string | null> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !url.startsWith("http") || !key) return null;
+
+  const supabase = createServerClient(url, key, {
+    cookies: {
+      getAll() {
+        return req.cookies.getAll().map(({ name, value }) => ({ name, value }));
+      },
+      setAll() {},
+    },
+  });
+
+  const { data } = await supabase.auth.getUser();
+  return data.user?.id ?? null;
+}
+
 export async function POST(req: NextRequest) {
   const limited = await rateLimitForm(req);
   if (limited) return limited;
@@ -52,19 +70,12 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    let userId: string | null = null;
-    const token = req.cookies.get("user-session")?.value;
-    if (token) {
-      const session = verifyUserSessionToken(token);
-      if (session) userId = session.userId;
-    }
+    const userId = await getUserIdFromSession(req);
 
     const id = `quote-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     const data = { id, userId, status: "new", createdAt: new Date().toISOString(), ...body };
     await quotes.create(data);
 
-    // Fire-and-forget: user confirmation, admin notification, legacy admin forward
-    // Emails/forwards must never fail the quote submission
     Promise.allSettled([
       sendQuoteConfirmationEmail(data.email, data).catch((e) => console.error("User email failed:", e)),
       sendQuoteNotificationEmail(data).catch((e) => console.error("Admin email failed:", e)),
