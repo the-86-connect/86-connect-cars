@@ -10,7 +10,7 @@ const CONTENT_SECURITY_POLICY = [
   "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://*.supabase.co",
   "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://res.cloudinary.com https://*.supabase.co",
+  "connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://*.supabase.co",
   "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
   "object-src 'none'",
   "base-uri 'self'",
