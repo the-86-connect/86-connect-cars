@@ -5,12 +5,12 @@ import type { NextConfig } from "next";
 // if bundle analysis confirms no eval() usage — HMR needs it in dev.
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://vercel.live",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://*.supabase.co",
+  "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://*.supabase.co https://vercel.live",
   "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://*.supabase.co",
+  "connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://*.supabase.co https://vercel.live wss://vercel.live",
   "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
   "object-src 'none'",
   "base-uri 'self'",
