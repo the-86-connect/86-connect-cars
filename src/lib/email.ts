@@ -1,10 +1,17 @@
 import { Resend } from "resend";
 
-// ── Resend email client ──
+// ── Resend email client (lazy — only init when API key is present) ──
 // From: cars@the86connect.com (verified domain)
 // Admin notifications go to: beijingbridgepath@gmail.com
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function getResend(): Resend | null {
+  if (_resend) return _resend;
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  _resend = new Resend(key);
+  return _resend;
+}
 const FROM = process.env.EMAIL_FROM ?? "cars@the86connect.com";
 const ADMIN_EMAIL = process.env.NOTIFY_EMAIL ?? "beijingbridgepath@gmail.com";
 
@@ -97,6 +104,8 @@ export async function sendQuoteConfirmationEmail(to: string, q: QuoteEmailData):
     </p>
   `;
 
+  const resend = getResend();
+  if (!resend) return;
   const { error } = await resend.emails.send({
     from: `86Connect Cars <${FROM}>`,
     to,
@@ -157,6 +166,8 @@ export async function sendQuoteNotificationEmail(q: QuoteEmailData): Promise<voi
     </p>
   `;
 
+  const resend = getResend();
+  if (!resend) return;
   const { error } = await resend.emails.send({
     from: `86Connect Cars <${FROM}>`,
     to: ADMIN_EMAIL,
@@ -196,6 +207,8 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<void> 
     </p>
   `;
 
+  const resend = getResend();
+  if (!resend) return;
   const { error } = await resend.emails.send({
     from: `86Connect Cars <${FROM}>`,
     to,
