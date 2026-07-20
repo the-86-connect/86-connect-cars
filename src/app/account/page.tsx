@@ -152,20 +152,15 @@ export default function AccountPage() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-500 text-white">
-                <User className="h-6 w-6" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold text-gray-900">{user?.name}</h1>
-                <p className="text-sm text-gray-500">{user?.email}</p>
-                {user?.country && <p className="text-xs text-gray-400">{user.country}</p>}
-              </div>
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-500 text-white">
+              <User className="h-6 w-6" />
             </div>
-            <button onClick={handleLogout} className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
-              <LogOut className="h-4 w-4" /> Sign Out
-            </button>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">{user?.name}</h1>
+              <p className="text-sm text-gray-500">{user?.email}</p>
+              {user?.country && <p className="text-xs text-gray-400">{user.country}</p>}
+            </div>
           </div>
 
           {/* Tabs */}
@@ -288,6 +283,16 @@ export default function AccountPage() {
             </div>
           )
         )}
+      </div>
+
+      {/* Sign Out — bottom of page so it's always reachable */}
+      <div className="mx-auto max-w-4xl px-4 pb-10 sm:px-6">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 active:scale-[0.99] transition"
+        >
+          <LogOut className="h-4 w-4" /> Sign Out
+        </button>
       </div>
     </div>
   );
