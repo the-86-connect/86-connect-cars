@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Heart, MessageSquareQuote, LogOut, User, Package, Truck, CheckCircle2, Clock, Ship } from "lucide-react";
+import { Heart, MessageSquareQuote, LogOut, User, Package, Truck, CheckCircle2, Clock, Ship, Anchor, FileCheck, Loader } from "lucide-react";
 
 interface UserData { id: string; name: string; email: string; whatsapp?: string; country?: string; }
 interface Quote {
@@ -31,10 +31,12 @@ interface Favorite {
 }
 
 const DELIVERY_STEPS = [
-  { key: "pending", label: "Pending", icon: Clock },
-  { key: "received", label: "Order Received", icon: Package },
+  { key: "pending", label: "Shipment Pending", icon: Clock },
+  { key: "booking_confirmed", label: "Booking Confirmed", icon: FileCheck },
+  { key: "loading", label: "Loading", icon: Loader },
   { key: "in_transit", label: "In Transit", icon: Truck },
-  { key: "shipped", label: "Shipped", icon: Ship },
+  { key: "at_destination_port", label: "At Destination Port", icon: Anchor },
+  { key: "customs_clearance", label: "Customs Clearance", icon: Ship },
   { key: "delivered", label: "Delivered", icon: CheckCircle2 },
 ];
 
