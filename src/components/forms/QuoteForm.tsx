@@ -120,7 +120,7 @@ export function QuoteForm({
               Request Submitted!
             </h3>
             <p className="mt-2 max-w-xs text-sm text-[var(--text-secondary)]">
-              Your quote request has been submitted. We'll contact you within 24 hours via WhatsApp or email.
+              Your quote request has been submitted. We&apos;ll contact you within 24 hours via WhatsApp or email.
             </p>
           </motion.div>
         ) : (

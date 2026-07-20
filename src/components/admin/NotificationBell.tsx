@@ -19,6 +19,7 @@ export default function NotificationBell() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCount();
     // Poll every 30s for new submissions
     const interval = setInterval(fetchCount, 30_000);

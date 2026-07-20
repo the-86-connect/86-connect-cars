@@ -41,6 +41,7 @@ export function useUserAuth() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchUser();
   }, [fetchUser, pathname]);
 
