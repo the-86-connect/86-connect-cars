@@ -23,6 +23,7 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
     if (quote.country) messageParts.push(`Country: ${quote.country}`);
     if (quote.budget) messageParts.push(`Budget: ${quote.budget}`);
     if (quote.message) messageParts.push(String(quote.message));
+    if (quote.vehicleSlug) messageParts.push(`Vehicle: https://cars.the86connect.com/inventory/${quote.vehicleSlug}`);
     if (quote.referenceImages && Array.isArray(quote.referenceImages) && quote.referenceImages.length > 0) {
       messageParts.push(`Images: ${(quote.referenceImages as string[]).join(", ")}`);
     }

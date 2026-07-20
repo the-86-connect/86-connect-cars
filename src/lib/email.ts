@@ -27,6 +27,7 @@ export type QuoteEmailData = {
   country?: string;
   vehicleBrand?: string;
   model?: string;
+  vehicleSlug?: string;
   budget?: string;
   message?: string;
   referenceImages?: string[];
@@ -129,6 +130,7 @@ export async function sendQuoteNotificationEmail(q: QuoteEmailData): Promise<voi
     ["WhatsApp", q.whatsapp || "—"],
     ["Country", q.country || "—"],
     ["Vehicle", vehicle],
+    ...(q.vehicleSlug ? [["Vehicle Page", `<a href="${SITE_URL}/inventory/${q.vehicleSlug}" target="_blank" style="color:#b91c1c;text-decoration:none;">View on site →</a>`]] : []),
     ["Budget", q.budget || "—"],
   ];
 

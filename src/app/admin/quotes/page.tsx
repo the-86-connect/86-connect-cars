@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2, FileText, Download, X } from "lucide-react";
+import { Trash2, FileText, Download, X, ExternalLink } from "lucide-react";
 
 const QUOTE_STATUSES = ["new", "contacted", "closed"] as const;
 
@@ -34,6 +34,7 @@ function generateDocxHtml(q: Record<string, unknown>): string {
     <tr><td style="padding:8px 0;font-weight:bold;color:#555;">Country:</td><td>${q.country || "—"}</td></tr>
     <tr><td style="padding:8px 0;font-weight:bold;color:#555;">Vehicle Brand:</td><td>${q.vehicleBrand || "—"}</td></tr>
     <tr><td style="padding:8px 0;font-weight:bold;color:#555;">Model:</td><td>${q.model || "—"}</td></tr>
+    ${q.vehicleSlug ? `<tr><td style="padding:8px 0;font-weight:bold;color:#555;">Vehicle Page:</td><td><a href="/inventory/${q.vehicleSlug}">View ${q.vehicleBrand} ${q.model}</a></td></tr>` : ""}
     <tr><td style="padding:8px 0;font-weight:bold;color:#555;">Budget:</td><td>${q.budget || "—"}</td></tr>
     <tr><td style="padding:8px 0;font-weight:bold;color:#555;">Status:</td><td>${q.status || "new"}</td></tr>
     <tr><td style="padding:8px 0;font-weight:bold;color:#555;">Date:</td><td>${new Date(q.createdAt as string).toLocaleString()}</td></tr>
@@ -129,6 +130,17 @@ export default function AdminQuotes() {
                         <div className="flex items-center gap-2 mt-0.5">
                           <p className="text-[11px] text-gray-500">{q.email as string}</p>
                           <span className="text-[11px] font-medium text-gray-700">{String(q.vehicleBrand)} {String(q.model)}</span>
+                          {q.vehicleSlug && (
+                            <a
+                              href={`/inventory/${q.vehicleSlug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[10px] font-medium text-[#087ea4] hover:underline flex items-center gap-0.5"
+                            >
+                              <ExternalLink className="h-2.5 w-2.5" />
+                              View
+                            </a>
+                          )}
                           <span className="text-[10px] text-gray-300">{new Date(q.createdAt as string).toLocaleDateString()}</span>
                         </div>
                       </div>
@@ -264,6 +276,22 @@ export default function AdminQuotes() {
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Model</span>
                   <p className="text-sm text-gray-700 mt-0.5">{quote.model as string || "—"}</p>
                 </div>
+                {quote.vehicleSlug && (
+                  <div className="col-span-2">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-[#087ea4]">Vehicle Page</span>
+                    <p className="text-sm mt-0.5">
+                      <a
+                        href={`/inventory/${quote.vehicleSlug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#087ea4] hover:underline flex items-center gap-1"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        View {quote.vehicleBrand} {quote.model}
+                      </a>
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Message */}

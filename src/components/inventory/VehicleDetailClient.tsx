@@ -648,7 +648,7 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
                   size="lg"
                   onClick={() =>
                     router.push(
-                      `/?brand=${encodeURIComponent(vehicle.brand)}&model=${encodeURIComponent(vehicle.model)}#contact`,
+                      `/?vehicleSlug=${encodeURIComponent(vehicle.slug)}&brand=${encodeURIComponent(vehicle.brand)}&model=${encodeURIComponent(vehicle.model)}#contact`,
                     )
                   }
                 >
@@ -844,7 +844,11 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
               <Button
                 variant="primary"
                 size="lg"
-                onClick={() => router.push("/#contact")}
+                onClick={() =>
+                  router.push(
+                    `/?vehicleSlug=${encodeURIComponent(vehicle.slug)}&brand=${encodeURIComponent(vehicle.brand)}&model=${encodeURIComponent(vehicle.model)}#contact`,
+                  )
+                }
               >
                 Get Free Quote
                 <ArrowRight className="h-4 w-4" />

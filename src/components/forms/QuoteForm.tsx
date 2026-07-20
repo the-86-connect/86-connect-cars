@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Send, CheckCircle2, ChevronDown } from "lucide-react";
+import { Send, CheckCircle2, ChevronDown, Car } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/Button";
 import { MultiImageUpload } from "./MultiImageUpload";
@@ -46,9 +46,11 @@ function Field({
 export function QuoteForm({
   defaultBrand,
   defaultModel,
+  vehicleSlug,
 }: {
   defaultBrand?: string;
   defaultModel?: string;
+  vehicleSlug?: string;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -87,6 +89,7 @@ export function QuoteForm({
           budget: data.budget,
           message: data.message,
           referenceImages: data.referenceImages ?? [],
+          vehicleSlug: vehicleSlug ?? undefined,
         }),
       });
       if (!res.ok) throw new Error("Submission failed");
@@ -134,6 +137,21 @@ export function QuoteForm({
             noValidate
             className="flex flex-col gap-5"
           >
+            {vehicleSlug && defaultBrand && defaultModel && (
+              <div className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50/60 px-4 py-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/10">
+                  <Car className="h-5 w-5 text-brand-600" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-500">
+                    Selected Vehicle
+                  </p>
+                  <p className="truncate text-sm font-bold text-brand-900">
+                    {defaultBrand} {defaultModel}
+                  </p>
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <Field label="Full Name" error={errors.name?.message} className="sm:col-span-1">
                 <input

@@ -60,6 +60,7 @@ function ContactInner() {
   const searchParams = useSearchParams();
   const brand = searchParams.get("brand") ?? undefined;
   const model = searchParams.get("model") ?? undefined;
+  const vehicleSlug = searchParams.get("vehicleSlug") ?? undefined;
 
   return (
     <section id="contact" className="bg-[var(--bg-primary)] py-24 lg:py-32">
@@ -147,7 +148,7 @@ function ContactInner() {
             viewport={viewportOnce}
           >
             <div className="rounded-3xl border-2 border-brand-500/30 bg-white p-6 sm:p-8">
-              <QuoteForm defaultBrand={brand} defaultModel={model} />
+              <QuoteForm defaultBrand={brand} defaultModel={model} vehicleSlug={vehicleSlug} />
             </div>
           </motion.div>
         </div>
