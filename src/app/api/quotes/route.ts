@@ -15,6 +15,7 @@ export async function GET() {
 
 async function forwardToMainAdmin(quote: Record<string, unknown>) {
   const endpoint = process.env.MAIN_ADMIN_CAR_QUOTE_API;
+  const webhookSecret = process.env.WEBHOOK_SECRET;
   if (!endpoint) return;
 
   try {
@@ -28,9 +29,12 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
       messageParts.push(`Images: ${(quote.referenceImages as string[]).join(", ")}`);
     }
 
-    await fetch(endpoint, {
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (webhookSecret) headers["Authorization"] = `Bearer ${webhookSecret}`;
+
+    const response = await fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({
         externalId: quote.id,
         name: quote.name,
@@ -42,7 +46,11 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
         source: "cars.the86connect.com",
         vehicleLink: quote.vehicleSlug ? `https://cars.the86connect.com/inventory/${quote.vehicleSlug}` : undefined,
       }),
+      signal: AbortSignal.timeout(10_000),
     });
+    if (!response.ok) {
+      console.error(`Failed to forward quote to main admin: ${response.status} ${response.statusText}`);
+    }
   } catch (error) {
     console.error("Failed to forward quote to main admin:", error);
   }
