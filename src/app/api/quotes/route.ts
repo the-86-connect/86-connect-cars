@@ -25,12 +25,14 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
     if (quote.budget) messageParts.push(`Budget: ${quote.budget}`);
     if (quote.message) messageParts.push(String(quote.message));
     if (quote.vehicleSlug) messageParts.push(`Vehicle: https://cars.the86connect.com/inventory/${quote.vehicleSlug}`);
-    if (quote.referenceImages && Array.isArray(quote.referenceImages) && quote.referenceImages.length > 0) {
-      messageParts.push(`Images: ${(quote.referenceImages as string[]).join(", ")}`);
-    }
 
     const headers: Record<string, string> = { "Content-Type": "application/json" };
     if (webhookSecret) headers["Authorization"] = `Bearer ${webhookSecret}`;
+
+    const referenceImages =
+      Array.isArray(quote.referenceImages) && quote.referenceImages.length > 0
+        ? (quote.referenceImages as string[])
+        : undefined;
 
     const response = await fetch(endpoint, {
       method: "POST",
@@ -45,6 +47,7 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
         submissionType: "car-quote",
         source: "cars.the86connect.com",
         vehicleLink: quote.vehicleSlug ? `https://cars.the86connect.com/inventory/${quote.vehicleSlug}` : undefined,
+        referenceImages,
       }),
       signal: AbortSignal.timeout(10_000),
     });
