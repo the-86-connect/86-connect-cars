@@ -11,38 +11,43 @@ interface Props {
 }
 
 /**
- * Multi-image uploader — renders one CloudinaryUpload slot per filled URL,
- * plus an "add slot" button (when below max). Empty URLs are pruned.
+ * Multi-image uploader — renders one CloudinaryUpload per slot (filled or empty),
+ * plus an "add slot" button when below max.
  */
 export function MultiImageUpload({ value, onChange, max = 6, alt = "Image" }: Props) {
-  const urls = value.filter(Boolean);
-
-  const setAt = (i: number, url: string) => {
-    const next = [...urls];
-    if (url) next[i] = url;
-    else next.splice(i, 1);
-    onChange(next);
-  };
+  const filled = value.filter(Boolean);
+  const hasEmptySlot = value.some((v) => !v);
 
   const addSlot = () => {
-    if (urls.length < max) onChange([...urls, ""]);
+    if (filled.length < max && !hasEmptySlot) {
+      onChange([...value, ""]);
+    }
+  };
+
+  const updateSlot = (i: number, url: string) => {
+    const next = [...value];
+    if (url) {
+      next[i] = url;
+    } else {
+      next.splice(i, 1);
+    }
+    onChange(next);
   };
 
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {urls.map((url, i) => (
+        {value.map((url, i) => (
           <div key={i} className="relative">
             <CloudinaryUpload
-              value={url}
-              onChange={(next) => setAt(i, next)}
+              value={url || undefined}
+              onChange={(next) => updateSlot(i, next)}
               alt={`${alt} ${i + 1}`}
             />
           </div>
         ))}
 
-        {/* Add slot button — hidden once max reached */}
-        {urls.length < max && (
+        {filled.length < max && !hasEmptySlot && (
           <button
             type="button"
             onClick={addSlot}
@@ -55,7 +60,7 @@ export function MultiImageUpload({ value, onChange, max = 6, alt = "Image" }: Pr
       </div>
 
       <p className="text-xs text-gray-500">
-        {urls.length} / {max} images — shown as a carousel on the vehicle detail page.
+        {filled.length} / {max} images — shown as a carousel on the vehicle detail page.
       </p>
     </div>
   );
