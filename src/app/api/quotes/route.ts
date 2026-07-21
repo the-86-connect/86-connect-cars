@@ -32,6 +32,7 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        externalId: quote.id,
         name: quote.name,
         email: quote.email,
         phone: quote.whatsapp,
@@ -39,6 +40,7 @@ async function forwardToMainAdmin(quote: Record<string, unknown>) {
         message: messageParts.join("\n\n"),
         submissionType: "car-quote",
         source: "cars.the86connect.com",
+        vehicleLink: quote.vehicleSlug ? `https://cars.the86connect.com/inventory/${quote.vehicleSlug}` : undefined,
       }),
     });
   } catch (error) {
