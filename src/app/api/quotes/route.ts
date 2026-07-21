@@ -107,12 +107,60 @@ export async function PUT(req: NextRequest) {
   }
 }
 
+function isWebhookAuthorized(req: NextRequest): boolean {
+  const secret = process.env.WEBHOOK_SECRET;
+  if (!secret) return false;
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader) return false;
+  return authHeader === `Bearer ${secret}`;
+}
+
+async function notifyMainAdminDelete(quoteId: string, hard: boolean): Promise<void> {
+  const adminApiUrl = process.env.MAIN_ADMIN_CAR_QUOTE_API;
+  const webhookSecret = process.env.WEBHOOK_SECRET;
+  if (!adminApiUrl || !webhookSecret) return;
+
+  const deleteUrl = `${adminApiUrl}/${encodeURIComponent(quoteId)}?hard=${hard ? "true" : "false"}`;
+  try {
+    const response = await fetch(deleteUrl, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${webhookSecret}` },
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (response.status === 404) return; // already deleted — not an error
+    if (!response.ok) console.error(`Main admin delete webhook failed: ${response.status} for quote ${quoteId}`);
+  } catch (error) {
+    console.error(`Main admin delete webhook error for quote ${quoteId}:`, (error as Error).message);
+  }
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+
+    // Case 1: Main admin panel webhook calling us (Bearer auth) — just delete, no callback
+    if (isWebhookAuthorized(req)) {
+      const isHardDelete = searchParams.get("hard") === "true";
+      console.log(`Admin panel webhook: ${isHardDelete ? "hard" : "soft"} delete for quote ${id}`);
+      await quotes.delete(id);
+      return NextResponse.json({ success: true });
+    }
+
+    // Cases 2 & 3: User or admin deleting via the cars app UI — need session auth
+    const userId = await getUserIdFromSession(req);
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     await quotes.delete(id);
+
+    // Notify main admin panel to soft-delete the corresponding submission
+    // Always pass hard=false because the admin panel handles its own hard-delete
+    // via its 7-day auto-purge or manual "Purge" button
+    notifyMainAdminDelete(id, false).catch(() => {});
+
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Failed to delete quote" }, { status: 500 });
@@ -120,9 +168,14 @@ export async function DELETE(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const authHeader = req.headers.get("Authorization");
+  // Security guard: reject ALL requests if WEBHOOK_SECRET is not configured
   const expectedToken = process.env.WEBHOOK_SECRET;
+  if (!expectedToken) {
+    console.error("PATCH /api/quotes: WEBHOOK_SECRET is not set — rejecting all webhook requests");
+    return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
+  }
 
+  const authHeader = req.headers.get("Authorization");
   if (!authHeader || authHeader !== `Bearer ${expectedToken}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
