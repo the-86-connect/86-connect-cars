@@ -167,12 +167,70 @@ export const processSteps = {
 };
 
 export const quotes = {
-  list: () => dbSelect("quotes", undefined, "created_at"),
-  find: (id: string) => dbFind("quotes", "id", id),
+  list: async () => {
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
+      .from("quotes")
+      .select("*")
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true });
+    if (error) throw error;
+    return toCamelList(data ?? []);
+  },
+  find: async (id: string) => {
+    const client = supabase();
+    if (!client) return null;
+    const { data, error } = await client
+      .from("quotes")
+      .select("*")
+      .eq("id", id)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? toCamel(data) : null;
+  },
   create: (data: Record<string, unknown>) => dbInsert("quotes", data),
   update: (id: string, data: Record<string, unknown>) => dbUpdate("quotes", id, data),
   delete: (id: string) => dbDelete("quotes", id),
-  count: () => dbCount("quotes"),
+  softDelete: async (id: string) => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    const { error } = await client
+      .from("quotes")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", id);
+    if (error) throw error;
+  },
+  countSoftDeleted: async () => {
+    const client = supabase();
+    if (!client) return 0;
+    const { count, error } = await client
+      .from("quotes")
+      .select("*", { count: "exact", head: true })
+      .not("deleted_at", "is", null);
+    if (error) throw error;
+    return count ?? 0;
+  },
+  purgeAllSoftDeleted: async () => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    const { error } = await client
+      .from("quotes")
+      .delete()
+      .not("deleted_at", "is", null);
+    if (error) throw error;
+  },
+  count: async () => {
+    const client = supabase();
+    if (!client) return 0;
+    const { count, error } = await client
+      .from("quotes")
+      .select("*", { count: "exact", head: true })
+      .is("deleted_at", null);
+    if (error) throw error;
+    return count ?? 0;
+  },
   /** Count quotes with status "new" — used for the admin notification badge. */
   countNew: async () => {
     const client = supabase();
@@ -180,7 +238,8 @@ export const quotes = {
     const { count, error } = await client
       .from("quotes")
       .select("*", { count: "exact", head: true })
-      .eq("status", "new");
+      .eq("status", "new")
+      .is("deleted_at", null);
     if (error) throw error;
     return count ?? 0;
   },
@@ -191,7 +250,8 @@ export const quotes = {
     const { error } = await client
       .from("quotes")
       .update(toSnake({ status: "viewed" }))
-      .eq("status", "new");
+      .eq("status", "new")
+      .is("deleted_at", null);
     if (error) throw error;
   },
 };
@@ -276,15 +336,85 @@ export const users = {
     const { data, error } = await client
       .from("users")
       .select("id, name, email, whatsapp, country, created_at")
+      .is("deleted_at", null)
       .order("created_at", { ascending: false });
     if (error) throw error;
     return toCamelList(data ?? []);
   },
-  find: (id: string) => dbFind("users", "id", id),
-  findByEmail: (email: string) => dbFind("users", "email", email),
+  find: async (id: string) => {
+    const client = supabase();
+    if (!client) return null;
+    const { data, error } = await client
+      .from("users")
+      .select("*")
+      .eq("id", id)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? toCamel(data) : null;
+  },
+  findByEmail: async (email: string) => {
+    const client = supabase();
+    if (!client) return null;
+    const { data, error } = await client
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? toCamel(data) : null;
+  },
   create: (data: Record<string, unknown>) => dbInsert("users", data),
   update: (id: string, data: Record<string, unknown>) => dbUpdate("users", id, data),
-  count: () => dbCount("users"),
+  softDelete: async (id: string) => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    const { error } = await client
+      .from("users")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", id);
+    if (error) throw error;
+  },
+  countSoftDeleted: async () => {
+    const client = supabase();
+    if (!client) return 0;
+    const { count, error } = await client
+      .from("users")
+      .select("*", { count: "exact", head: true })
+      .not("deleted_at", "is", null);
+    if (error) throw error;
+    return count ?? 0;
+  },
+  purgeAllSoftDeleted: async () => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    // Cascade: delete quotes and favorites for soft-deleted users first
+    const { data: softDeletedUsers } = await client
+      .from("users")
+      .select("id")
+      .not("deleted_at", "is", null);
+    const userIds = (softDeletedUsers ?? []).map((u: Row) => u.id as string);
+    if (userIds.length > 0) {
+      await client.from("favorites").delete().in("user_id", userIds);
+      await client.from("quotes").delete().in("user_id", userIds);
+    }
+    const { error } = await client
+      .from("users")
+      .delete()
+      .not("deleted_at", "is", null);
+    if (error) throw error;
+  },
+  count: async () => {
+    const client = supabase();
+    if (!client) return 0;
+    const { count, error } = await client
+      .from("users")
+      .select("*", { count: "exact", head: true })
+      .is("deleted_at", null);
+    if (error) throw error;
+    return count ?? 0;
+  },
 };
 
 export const favorites = {

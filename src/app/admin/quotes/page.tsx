@@ -84,7 +84,7 @@ export default function AdminQuotes() {
   const handleDelete = async (id: string) => {
     setDeleteLoading(true);
     try {
-      await fetch(`/api/quotes?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      await fetch(`/api/quotes?id=${encodeURIComponent(id)}&hard=1`, { method: "DELETE" });
       setQuotes((prev) => prev.filter((q) => q.id !== id));
       setDeleteId(null);
       if (expandedId === id) setExpandedId(null);

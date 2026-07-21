@@ -148,7 +148,7 @@ export async function DELETE(req: NextRequest) {
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
-    // Case 1: Main admin panel webhook calling us (Bearer auth) — just delete, no callback
+    // Case 1: Main admin panel webhook calling us (Bearer auth) — hard delete, no callback
     if (isWebhookAuthorized(req)) {
       const isHardDelete = searchParams.get("hard") === "true";
       console.log(`Admin panel webhook: ${isHardDelete ? "hard" : "soft"} delete for quote ${id}`);
@@ -162,11 +162,17 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await quotes.delete(id);
+    // Admin deletions (?hard=1) → hard delete immediately
+    // User deletions (no ?hard=1) → soft delete (recoverable, admin can purge later)
+    const forceHard = searchParams.get("hard") === "1";
+
+    if (forceHard) {
+      await quotes.delete(id);
+    } else {
+      await quotes.softDelete(id);
+    }
 
     // Notify main admin panel to soft-delete the corresponding submission
-    // Always pass hard=false because the admin panel handles its own hard-delete
-    // via its 7-day auto-purge or manual "Purge" button
     notifyMainAdminDelete(id, false).catch(() => {});
 
     return NextResponse.json({ success: true });
