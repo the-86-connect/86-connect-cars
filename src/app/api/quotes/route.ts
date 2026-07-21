@@ -190,7 +190,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { id, deliveryStatus } = body;
+    const { id, deliveryStatus, updatedAt } = body;
 
     if (!id || !deliveryStatus) {
       return NextResponse.json({ error: "id and deliveryStatus are required" }, { status: 400 });
@@ -202,7 +202,9 @@ export async function PATCH(req: NextRequest) {
     }
 
     if (existingQuote.delivery_status !== deliveryStatus) {
-      await quotes.update(id, { delivery_status: deliveryStatus });
+      // Use the timestamp from the webhook, or fall back to now
+      const statusUpdatedAt = updatedAt || new Date().toISOString();
+      await quotes.update(id, { delivery_status: deliveryStatus, statusUpdatedAt });
     }
 
     return NextResponse.json({ success: true, id, deliveryStatus });

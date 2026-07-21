@@ -13,6 +13,7 @@ interface Quote {
   status: string;
   deliveryStatus: string;
   createdAt: string;
+  statusUpdatedAt?: string;
   message?: string;
 }
 interface Favorite {
@@ -45,8 +46,9 @@ function getStepIndex(status: string): number {
   return idx === -1 ? 0 : idx;
 }
 
-function DeliveryTracker({ status }: { status: string }) {
+function DeliveryTracker({ status, statusUpdatedAt }: { status: string; statusUpdatedAt?: string }) {
   const currentStep = getStepIndex(status);
+  const currentStepData = DELIVERY_STEPS[currentStep];
 
   return (
     <div className="mt-4">
@@ -82,6 +84,12 @@ function DeliveryTracker({ status }: { status: string }) {
           );
         })}
       </div>
+      {statusUpdatedAt && (
+        <p className="mt-3 text-[11px] text-[var(--text-muted)]">
+          {currentStepData?.label} — updated {new Date(statusUpdatedAt).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })} at{" "}
+          {new Date(statusUpdatedAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}
+        </p>
+      )}
     </div>
   );
 }
@@ -242,7 +250,7 @@ export default function AccountPage() {
                         {q.message}
                       </p>
                     )}
-                    <DeliveryTracker status={q.deliveryStatus || "pending"} />
+                    <DeliveryTracker status={q.deliveryStatus || "pending"} statusUpdatedAt={q.statusUpdatedAt} />
                   </div>
                 ))}
               </div>
