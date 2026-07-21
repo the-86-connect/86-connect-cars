@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { quotes } from "@/lib/db";
 import { rateLimitForm } from "@/lib/rate-limit";
-import { sendQuoteConfirmationEmail, sendQuoteNotificationEmail } from "@/lib/email";
+import { sendQuoteConfirmationEmail, sendQuoteNotificationEmail, sendTrackingUpdateEmail } from "@/lib/email";
 
 export async function GET() {
   try {
@@ -93,10 +93,26 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, ...updates } = body;
+    const { id, deliveryStatus, ...updates } = body;
     if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-    await quotes.update(id, updates);
-    return NextResponse.json({ id, ...updates });
+
+    const existingQuote = await quotes.find(id);
+    const hasDeliveryStatusChange = deliveryStatus !== undefined && existingQuote?.delivery_status !== deliveryStatus;
+
+    const updateData = deliveryStatus !== undefined ? { ...updates, delivery_status: deliveryStatus } : updates;
+    await quotes.update(id, updateData);
+
+    if (hasDeliveryStatusChange && existingQuote?.email) {
+      sendTrackingUpdateEmail(existingQuote.email as string, {
+        name: (existingQuote.name as string) || "",
+        email: existingQuote.email as string,
+        vehicleBrand: existingQuote.vehicle_brand as string,
+        model: existingQuote.model as string,
+        deliveryStatus: deliveryStatus as string,
+      }).catch((e) => console.error("Tracking email failed:", e));
+    }
+
+    return NextResponse.json({ id, ...updateData });
   } catch {
     return NextResponse.json({ error: "Failed to update quote" }, { status: 500 });
   }
@@ -111,5 +127,47 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Failed to delete quote" }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  const authHeader = req.headers.get("Authorization");
+  const expectedToken = process.env.WEBHOOK_SECRET;
+
+  if (!authHeader || authHeader !== `Bearer ${expectedToken}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const body = await req.json();
+    const { id, deliveryStatus } = body;
+
+    if (!id || !deliveryStatus) {
+      return NextResponse.json({ error: "id and deliveryStatus are required" }, { status: 400 });
+    }
+
+    const existingQuote = await quotes.find(id);
+    if (!existingQuote) {
+      return NextResponse.json({ error: "Quote not found" }, { status: 404 });
+    }
+
+    if (existingQuote.delivery_status !== deliveryStatus) {
+      await quotes.update(id, { delivery_status: deliveryStatus });
+
+      if (existingQuote.email) {
+        sendTrackingUpdateEmail(existingQuote.email as string, {
+          name: (existingQuote.name as string) || "",
+          email: existingQuote.email as string,
+          vehicleBrand: existingQuote.vehicle_brand as string,
+          model: existingQuote.model as string,
+          deliveryStatus: deliveryStatus as string,
+        }).catch((e) => console.error("Tracking email failed:", e));
+      }
+    }
+
+    return NextResponse.json({ success: true, id, deliveryStatus });
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return NextResponse.json({ error: "Failed to process webhook" }, { status: 500 });
   }
 }
