@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { quotes } from "@/lib/db";
 import { rateLimitForm } from "@/lib/rate-limit";
-import { sendQuoteConfirmationEmail, sendQuoteNotificationEmail, sendTrackingUpdateEmail } from "@/lib/email";
+import { sendQuoteConfirmationEmail, sendQuoteNotificationEmail } from "@/lib/email";
 
 export async function GET() {
   try {
@@ -96,21 +96,8 @@ export async function PUT(req: NextRequest) {
     const { id, deliveryStatus, ...updates } = body;
     if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
 
-    const existingQuote = await quotes.find(id);
-    const hasDeliveryStatusChange = deliveryStatus !== undefined && existingQuote?.delivery_status !== deliveryStatus;
-
     const updateData = deliveryStatus !== undefined ? { ...updates, delivery_status: deliveryStatus } : updates;
     await quotes.update(id, updateData);
-
-    if (hasDeliveryStatusChange && existingQuote?.email) {
-      sendTrackingUpdateEmail(existingQuote.email as string, {
-        name: (existingQuote.name as string) || "",
-        email: existingQuote.email as string,
-        vehicleBrand: existingQuote.vehicle_brand as string,
-        model: existingQuote.model as string,
-        deliveryStatus: deliveryStatus as string,
-      }).catch((e) => console.error("Tracking email failed:", e));
-    }
 
     return NextResponse.json({ id, ...updateData });
   } catch {
@@ -153,16 +140,6 @@ export async function PATCH(req: NextRequest) {
 
     if (existingQuote.delivery_status !== deliveryStatus) {
       await quotes.update(id, { delivery_status: deliveryStatus });
-
-      if (existingQuote.email) {
-        sendTrackingUpdateEmail(existingQuote.email as string, {
-          name: (existingQuote.name as string) || "",
-          email: existingQuote.email as string,
-          vehicleBrand: existingQuote.vehicle_brand as string,
-          model: existingQuote.model as string,
-          deliveryStatus: deliveryStatus as string,
-        }).catch((e) => console.error("Tracking email failed:", e));
-      }
     }
 
     return NextResponse.json({ success: true, id, deliveryStatus });

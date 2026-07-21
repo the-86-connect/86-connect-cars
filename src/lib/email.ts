@@ -30,7 +30,6 @@ export type QuoteEmailData = {
   vehicleSlug?: string;
   budget?: string;
   message?: string;
-  deliveryStatus?: string;
   referenceImages?: string[];
 };
 
@@ -182,54 +181,7 @@ export async function sendQuoteNotificationEmail(q: QuoteEmailData): Promise<voi
   if (error) throw new Error(`Resend error: ${error.message}`);
 }
 
-// ── 3. Tracking status update email to user ──
-
-const DELIVERY_STATUS_LABELS: Record<string, string> = {
-  pending: "Shipment Pending",
-  booking_confirmed: "Booking Confirmed",
-  loading: "Loading",
-  in_transit: "In Transit",
-  at_destination_port: "At Destination Port",
-  customs_clearance: "Customs Clearance",
-  delivered: "Delivered",
-};
-
-export async function sendTrackingUpdateEmail(to: string, q: QuoteEmailData): Promise<void> {
-  const firstName = q.name.split(" ")[0] || q.name;
-  const vehicle = [q.vehicleBrand, q.model].filter(Boolean).join(" ") || "your vehicle";
-  const statusLabel = DELIVERY_STATUS_LABELS[q.deliveryStatus || "pending"] || "Shipment Pending";
-  const subject = `Update: Your ${vehicle} shipment status has changed`;
-
-  const body = `
-    <h2 style="margin:0 0 12px;font-size:20px;color:#18181b;font-weight:700;">Hi ${firstName},</h2>
-    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#3f3f46;">
-      We wanted to let you know that the tracking status for your <strong style="color:#b91c1c;">${vehicle}</strong> quote has been updated.
-    </p>
-    <div style="background:#fafafa;border-radius:12px;padding:20px;margin:0 0 20px;border:1px solid #e4e4e7;">
-      <p style="margin:0 0 8px;font-size:13px;color:#71717a;text-transform:uppercase;letter-spacing:0.06em;">Current Status</p>
-      <p style="margin:0;font-size:20px;color:#b91c1c;font-weight:700;">${statusLabel}</p>
-    </div>
-    <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#52525b;">
-      You can view the full tracking timeline and all updates in your account dashboard.
-    </p>
-    <p style="margin:0;">
-      <a href="${SITE_URL}/account" style="display:inline-block;background:#b91c1c;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:12px 24px;border-radius:8px;">View Tracking</a>
-    </p>
-  `;
-
-  const resend = getResend();
-  if (!resend) return;
-  const { error } = await resend.emails.send({
-    from: `86Connect Cars <${FROM}>`,
-    to,
-    subject,
-    html: emailShell(subject, body),
-  });
-
-  if (error) throw new Error(`Resend error: ${error.message}`);
-}
-
-// ── 4. Welcome email to new user ──
+// ── 3. Welcome email to new user ──
 
 export async function sendWelcomeEmail(to: string, name: string): Promise<void> {
   const firstName = name.split(" ")[0] || name;
