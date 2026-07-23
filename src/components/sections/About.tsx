@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
 import { Building2, Globe, Phone } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
@@ -21,6 +22,37 @@ export function About() {
             title="86Connect"
             subtitle="Bridging China & the World"
           />
+        </motion.div>
+
+        {/* Parent company badge */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="mt-10 flex justify-center"
+        >
+          <div className="glass-card flex flex-col items-center gap-4 rounded-2xl px-8 py-6 sm:flex-row sm:gap-6 sm:rounded-3xl sm:px-10 sm:py-7">
+            <div className="relative h-20 w-20 shrink-0 sm:h-24 sm:w-24">
+              <Image
+                src="/parent company logo 86connect.png"
+                alt="Beijing BridgePath International Consulting Co., Ltd"
+                fill
+                sizes="96px"
+                className="object-contain"
+              />
+            </div>
+            <div className="text-center sm:text-left">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
+                A division of
+              </p>
+              <p className="mt-1 font-display text-base font-bold text-[var(--text-primary)] sm:text-lg">
+                Beijing BridgePath International
+                <br className="hidden sm:block" />
+                Consulting Co., Ltd
+              </p>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div

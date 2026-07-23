@@ -59,19 +59,16 @@ export function Hero() {
             variants={fadeUp}
             className="font-display text-4xl font-bold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-[4.5rem]"
             style={{
-              paintOrder: "stroke fill",
-              WebkitTextStroke: "1.5px rgba(0,0,0,0.6)",
-              textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 0 50px rgba(0,0,0,0.6)",
+              textShadow: "0 2px 24px rgba(0,0,0,0.6), 0 8px 40px rgba(0,0,0,0.4)",
             }}
           >
             <span
-              className="block text-white"
+              className="block text-white/90"
               style={{
                 fontSize: "0.55em",
                 fontWeight: 600,
                 letterSpacing: "0.02em",
-                paintOrder: "stroke fill",
-                WebkitTextStroke: "1px rgba(0,0,0,0.5)",
+                textShadow: "0 1px 12px rgba(0,0,0,0.6)",
               }}
             >
               Source Premium Cars
@@ -80,11 +77,9 @@ export function Hero() {
               From China
               <br />
               <span
+                className="bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 bg-clip-text text-transparent"
                 style={{
-                  color: "#ff2d2d",
-                  paintOrder: "stroke fill",
-                  WebkitTextStroke: "1.5px rgba(0,0,0,0.55)",
-                  textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 0 30px rgba(255,45,45,0.6)",
+                  textShadow: "0 2px 20px rgba(227,30,36,0.4), 0 0 40px rgba(0,0,0,0.5)",
                 }}
               >
                 to the World.
@@ -96,11 +91,9 @@ export function Hero() {
           <motion.div variants={fadeUp} className="mt-6 flex items-start gap-4">
             <span className="mt-2 h-12 w-1 shrink-0 rounded-full bg-gradient-to-b from-brand-500 to-brand-700" />
             <p
-              className="max-w-md text-base leading-relaxed text-white sm:text-lg"
+              className="max-w-md text-base leading-relaxed text-white/90 sm:text-lg"
               style={{
-                paintOrder: "stroke fill",
-                WebkitTextStroke: "0.5px rgba(0,0,0,0.5)",
-                textShadow: "0 2px 12px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.6)",
+                textShadow: "0 1px 10px rgba(0,0,0,0.6)",
               }}
             >
               Affordable prices. Verified suppliers. Worldwide shipping. Professional export service.

@@ -686,12 +686,12 @@ function VehicleCard({
             <button
               type="button"
               onClick={onInquiry}
-              className="flex items-center justify-center gap-1.5 rounded-full bg-green-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-green-600 min-h-[36px]"
+              className="flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-elevated)] px-4 py-2 text-xs font-medium text-[var(--text-primary)] transition-all hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400 min-h-[36px]"
               aria-label={`Inquiry about ${vehicle.brand} ${vehicle.model}`}
             >
               <svg
                 viewBox="0 0 24 24"
-                className="h-4 w-4"
+                className="h-4 w-4 text-emerald-500"
                 fill="currentColor"
                 aria-hidden="true"
               >

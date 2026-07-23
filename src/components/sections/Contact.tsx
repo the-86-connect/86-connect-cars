@@ -7,6 +7,7 @@ import {
   Mail,
   MessageCircle,
   Globe,
+  MapPin,
   Clock,
   BadgeCheck,
   ShieldCheck,
@@ -35,9 +36,9 @@ const contactInfo: {
     href: "https://wa.me/8617611533296",
   },
   {
-    icon: Globe,
-    label: "Location",
-    value: "Shanghai, China",
+    icon: MapPin,
+    label: "Office",
+    value: "Beijing, China",
     href: null,
   },
 ];

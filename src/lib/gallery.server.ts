@@ -15,7 +15,7 @@ export function normalizeYouTube(input: string): { src: string; thumbnail: strin
   if (/^[A-Za-z0-9_-]{11}$/.test(trimmed)) {
     return {
       src: `https://www.youtube.com/embed/${trimmed}`,
-      thumbnail: `https://img.youtube.com/vi/${trimmed}/hqdefault.jpg`,
+      thumbnail: `https://i.ytimg.com/vi/${trimmed}/hqdefault.jpg`,
     };
   }
   const match = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([A-Za-z0-9_-]{11})/);
@@ -23,7 +23,7 @@ export function normalizeYouTube(input: string): { src: string; thumbnail: strin
     const id = match[1];
     return {
       src: `https://www.youtube.com/embed/${id}`,
-      thumbnail: `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+      thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
     };
   }
   if (trimmed.includes("youtube.com/embed/")) {
@@ -31,7 +31,7 @@ export function normalizeYouTube(input: string): { src: string; thumbnail: strin
     if (id && /^[A-Za-z0-9_-]{11}$/.test(id)) {
       return {
         src: trimmed,
-        thumbnail: `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+        thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
       };
     }
   }

@@ -99,7 +99,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-accent-500"
+                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
                 >
                   {link.label}
                 </Link>
@@ -108,7 +108,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-accent-500"
+                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
                 >
                   {link.label}
                 </a>

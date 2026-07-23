@@ -2,13 +2,20 @@ import type { Metadata } from "next";
 import { About } from "@/components/sections/About";
 
 export const metadata: Metadata = {
-  title: "About Us — China's Premier Vehicle Export Partner | 86Connect",
+  title: "About Us — China Car Export Experts",
   description:
-    "Learn about 86Connect — your trusted partner in Chinese vehicle export. We bridge the gap between China's automotive market and global buyers with deep supplier relationships, rigorous quality control, and seamless logistics.",
+    "Learn about 86Connect — your trusted partner for Chinese vehicle export. We connect global buyers with verified Chinese car suppliers, handling sourcing, inspection, export documentation, and worldwide shipping. 2000+ cars exported to 40+ countries.",
+  alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Us — China's Premier Vehicle Export Partner | 86Connect",
-    description:
-      "Your trusted partner in Chinese vehicle export with 2000+ cars exported to 40+ countries.",
+    url: "/about",
+    title: "About Us — China Car Export Experts",
+    description: "Your trusted partner in Chinese vehicle export with 2000+ cars exported to 40+ countries.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us — China Car Export Experts",
+    description: "Your trusted partner in Chinese vehicle export. Verified suppliers, worldwide shipping.",
   },
 };
 

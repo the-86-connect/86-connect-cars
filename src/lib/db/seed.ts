@@ -100,9 +100,9 @@ async function main() {
     { id: "g-3", type: "photo", src: "/vehicles/monjaro.jpg", title: "Geely Monjaro ready for export", sort_order: 3 },
     { id: "g-4", type: "photo", src: "/vehicles/civic.jpg", title: "Honda Civic ready for export", sort_order: 4 },
     { id: "g-5", type: "photo", src: "/vehicles/uni-k.jpg", title: "Changan UNI-K ready for export", sort_order: 5 },
-    { id: "g-v1", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Vehicle loading at Tianjin Port", sort_order: 6 },
-    { id: "g-v2", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Container shipping process walkthrough", sort_order: 7 },
-    { id: "g-v3", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Quality inspection at factory", sort_order: 8 },
+    { id: "g-v1", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Vehicle loading at Tianjin Port", sort_order: 6 },
+    { id: "g-v2", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Container shipping process walkthrough", sort_order: 7 },
+    { id: "g-v3", type: "video", src: "https://www.youtube.com/embed/dQw4w9WgXcQ", thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg", title: "Quality inspection at factory", sort_order: 8 },
   ];
   let galleryAdded = 0;
   for (const g of galleryItems) {

@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
-import { Mail, MessageCircle, MapPin } from "lucide-react";
+import { Mail, MessageCircle, MapPin, ExternalLink } from "lucide-react";
 import { scrollToId } from "@/lib/utils";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
@@ -114,7 +114,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-[var(--border-color)] bg-[var(--bg-elevated)]">
+    <footer className="border-t border-red-300/60 bg-gradient-to-br from-red-100 via-red-50 to-white dark:border-red-800/40 dark:bg-gradient-to-br dark:from-red-950/40 dark:via-red-900/20 dark:to-[var(--bg-primary)]">
       {/* Main footer content */}
       <motion.div
         variants={stagger}
@@ -142,17 +142,49 @@ export function Footer() {
               The digital gateway of Beijing BridgePath International Consulting Co., Ltd.
               Direct line connecting the world to China.
             </p>
-            <div className="mt-6 flex items-center gap-3">
-              {socialIcons.map(({ icon: Icon, label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="glass-card flex h-10 w-10 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:border-brand-500 hover:text-brand-500"
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
+
+            {/* Parent company + Social + Main site — one row */}
+            <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[var(--border-color)] pt-6">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/parent company logo 86connect.png"
+                  alt="Beijing BridgePath International Consulting Co., Ltd"
+                  className="h-10 w-10 shrink-0 object-contain"
+                />
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                    Parent Company
+                  </p>
+                  <p className="text-xs font-medium text-[var(--text-secondary)]">
+                    Beijing BridgePath Intl.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {socialIcons.map(({ icon: Icon, label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    className="glass-card flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:border-brand-500 hover:text-brand-500"
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                  </a>
+                ))}
+              </div>
+
+              <a
+                href="https://the86connect.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 transition-all hover:border-brand-500 hover:bg-brand-50/50 dark:hover:bg-brand-900/10"
+              >
+                <span className="text-xs font-medium text-[var(--text-primary)]">
+                  the86connect.com
+                </span>
+                <ExternalLink className="h-3.5 w-3.5 shrink-0 text-brand-500" />
+              </a>
             </div>
           </motion.div>
 
@@ -224,12 +256,6 @@ export function Footer() {
                   +86 176 1153 3296
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-                <span className="glass-card flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-brand-500">
-                  <MapPin className="h-4 w-4" />
-                </span>
-                <span>Shanghai, China</span>
-              </li>
             </ul>
           </motion.div>
         </div>
@@ -237,12 +263,23 @@ export function Footer() {
         {/* Bottom bar */}
         <motion.div
           variants={fadeUp}
-          className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-[var(--border-color)] pt-8 sm:flex-row"
+          className="mt-14 grid gap-3 border-t border-[var(--border-color)] pt-8 sm:grid-cols-3 sm:items-center sm:gap-6"
         >
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--text-muted)] sm:text-left">
             © {new Date().getFullYear()} 86Connect. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <p className="text-sm text-[var(--text-muted)] text-center sm:text-center">
+            Developed by{" "}
+            <a
+              href="https://www.linkedin.com/in/milton-babu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-brand-500 transition-colors hover:text-brand-600"
+            >
+              MD MILTON BABU
+            </a>
+          </p>
+          <div className="flex items-center justify-center gap-6 sm:justify-end">
             <a
               href="#"
               className="text-sm text-[var(--text-muted)] transition-colors hover:text-brand-500"

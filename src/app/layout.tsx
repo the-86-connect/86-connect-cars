@@ -19,27 +19,50 @@ const playfair = Playfair_Display({
   weight: ["400", "600", "700", "800"],
 });
 
+const SITE_URL = "https://cars.the86connect.com";
+const OG_IMAGE = `${SITE_URL}/hero/hero-poster.jpg`;
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://86connect.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "86Connect — Source Premium Cars From China to the World",
+    default: "China Car Export | Buy & Import Cars from China Worldwide | 86Connect",
     template: "%s | 86Connect",
   },
   description:
-    "Affordable prices. Verified suppliers. Worldwide shipping. Professional export service. Source premium vehicles from China with 86Connect.",
+    "86Connect — your trusted China car export partner. Source premium new & used vehicles directly from China. BYD, Geely, Toyota, Changan and more. Verified suppliers, worldwide shipping, full export documentation. Get a quote in 24 hours.",
   keywords: [
     "China car export",
-    "vehicle sourcing China",
+    "import cars from China",
+    "Chinese cars for export",
     "buy cars from China",
-    "auto export service",
+    "China vehicle exporter",
+    "Chinese EV export",
     "BYD export",
-    "Chinese vehicles",
+    "Geely export",
+    "China car wholesale",
+    "new cars from China",
+    "used cars China export",
+    "China car shipping worldwide",
+    "China auto export service",
+    "Chinese electric vehicles export",
+    "China car supplier",
+    "bulk car purchase China",
+    "FOB China cars",
+    "vehicle export documentation China",
+    "LHD cars from China",
+    "RHD cars for export",
     "86Connect",
   ],
+  category: "Automotive",
+  classification: "Car Export",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/favicon 86 Connect Official 1.png",
-    apple: "/favicon 86 Connect Official 1.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
   },
   appleWebApp: {
     capable: true,
@@ -47,11 +70,31 @@ export const metadata: Metadata = {
     title: "86Connect",
   },
   openGraph: {
-    title: "86Connect — Source Premium Cars From China to the World",
-    description:
-      "Affordable prices. Verified suppliers. Worldwide shipping. Professional export service.",
     type: "website",
     locale: "en_US",
+    siteName: "86Connect",
+    url: SITE_URL,
+    title: "China Car Export | Buy & Import Cars from China Worldwide | 86Connect",
+    description:
+      "Source premium new & used vehicles from China. Verified suppliers, worldwide shipping, full export documentation. BYD, Geely, Toyota and more.",
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "86Connect — China Car Export",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "China Car Export | Buy & Import Cars from China Worldwide | 86Connect",
+    description:
+      "Source premium new & used vehicles from China. Verified suppliers, worldwide shipping, full export documentation.",
+    images: [OG_IMAGE],
+  },
+  alternates: {
+    canonical: "/",
   },
   robots: { index: true, follow: true },
 };
@@ -62,6 +105,48 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "86Connect",
+  legalName: "Beijing BridgePath International Consulting Co., Ltd",
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo-86connect.png`,
+  description:
+    "Professional China car export service connecting global buyers with verified Chinese vehicle suppliers. Worldwide shipping, full export documentation.",
+  email: "b*************************",
+  telephone: "+86-176-1153-3296",
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "CN",
+    addressLocality: "Beijing",
+  },
+  sameAs: ["https://the86connect.com"],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "sales",
+    email: "b*************************",
+    telephone: "+86-176-1153-3296",
+    availableLanguage: ["English", "Chinese"],
+  },
+};
+
+const webSiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "86Connect",
+  url: SITE_URL,
+  description: "China Car Export — Source premium vehicles from China to the world.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE_URL}/inventory?brand={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function RootLayout({
@@ -78,6 +163,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var s=localStorage.getItem('86connect-theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&d))document.documentElement.classList.add('dark');}catch(e){}})();`,
           }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col">
