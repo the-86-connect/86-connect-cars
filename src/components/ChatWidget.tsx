@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  MessageCircle, X, Send, Bot, User, Trash2, Copy, Check, FileText,
+  X, Send, User, Trash2, Copy, Check, FileText,
 } from "lucide-react";
 
 interface Message {
@@ -180,7 +180,7 @@ export function ChatWidget() {
           boxShadow: "0 8px 28px rgba(79, 70, 229, 0.35)",
         }}
       >
-        {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+        {open ? <X className="h-6 w-6" /> : <RobotIcon size={32} className="text-white" />}
         {!open && unread && (
           <span className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-red-600" />
         )}
@@ -202,7 +202,7 @@ export function ChatWidget() {
               backgroundImage: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.25) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 0%, transparent 40%)",
             }} />
             <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-1 ring-white/30">
-              <Bot className="h-5 w-5" />
+              <RobotIcon size={24} className="text-white" />
             </div>
             <div className="relative flex-1 min-w-0">
               <p className="text-sm font-semibold truncate">86Connect Assistant</p>
@@ -253,7 +253,7 @@ export function ChatWidget() {
             {loading && (
               <div className="flex items-center gap-2 text-xs text-gray-500">
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
-                  <Bot className="h-4 w-4 text-indigo-600" />
+                  <RobotIcon size={18} className="text-indigo-600" />
                 </div>
                 <div className="flex items-center gap-1 rounded-full bg-white px-3 py-2 shadow-sm ring-1 ring-gray-100">
                   <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-400 [animation-delay:0ms]" />
@@ -292,7 +292,7 @@ export function ChatWidget() {
               placeholder="Ask about vehicles, shipping, pricing..."
               maxLength={500}
               disabled={loading}
-              className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm transition-colors focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-100"
+              className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-100 disabled:text-gray-400"
             />
             <button
               type="submit"
@@ -340,7 +340,7 @@ function MessageBubble({
         {isUser ? (
           <User className="h-4 w-4" />
         ) : (
-          <Bot className="h-4 w-4 text-indigo-600" />
+          <RobotIcon size={18} className="text-indigo-600" />
         )}
       </div>
       <div className="flex max-w-[82%] flex-col gap-1.5">
@@ -475,4 +475,41 @@ function extractContact(text: string) {
     email,
     phone,
   };
+}
+
+/** Animated robot SVG — floating body, blinking eyes, glowing antenna. */
+function RobotIcon({ size = 28, className = "" }: { size?: number; className?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      className={className}
+      style={{ animation: "robot-float 2.5s ease-in-out infinite" }}
+    >
+      {/* Antenna */}
+      <line x1="32" y1="8" x2="32" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+      <circle cx="32" cy="7" r="3" fill="#fbbf24" style={{ animation: "robot-antenna-glow 1.5s ease-in-out infinite" }} />
+
+      {/* Head */}
+      <rect x="16" y="14" width="32" height="26" rx="8" fill="currentColor" opacity="0.15" />
+      <rect x="16" y="14" width="32" height="26" rx="8" stroke="currentColor" strokeWidth="2.5" fill="none" />
+
+      {/* Eyes */}
+      <g style={{ animation: "robot-blink 4s ease-in-out infinite", transformOrigin: "24px 26px" }}>
+        <circle cx="24" cy="26" r="3.5" fill="currentColor" />
+      </g>
+      <g style={{ animation: "robot-blink 4s ease-in-out infinite", transformOrigin: "40px 26px" }}>
+        <circle cx="40" cy="26" r="3.5" fill="currentColor" />
+      </g>
+
+      {/* Mouth — speaker grille */}
+      <rect x="26" y="32" width="12" height="3" rx="1.5" fill="currentColor" opacity="0.4" />
+
+      {/* Ears */}
+      <rect x="12" y="22" width="4" height="10" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
+      <rect x="48" y="22" width="4" height="10" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
+    </svg>
+  );
 }
