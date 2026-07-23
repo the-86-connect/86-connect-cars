@@ -127,7 +127,9 @@ const splitter = new RecursiveCharacterTextSplitter({
 
 /** Parse .docx ArrayBuffer → plain text. */
 export async function parseDocx(arrayBuffer: ArrayBuffer): Promise<string> {
-  const result = await mammoth.extractRawText({ arrayBuffer });
+  // Mammoth expects Node Buffer (not browser ArrayBuffer).
+  const buf = Buffer.from(arrayBuffer);
+  const result = await mammoth.extractRawText({ buffer: buf });
   return result.value;
 }
 
