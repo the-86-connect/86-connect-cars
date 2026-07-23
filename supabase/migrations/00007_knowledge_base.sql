@@ -41,6 +41,15 @@ create index if not exists kb_chunks_doc_id_idx on kb_chunks(doc_id);
 -- Soft-delete filter index
 create index if not exists kb_documents_deleted_at_idx on kb_documents(deleted_at);
 
+-- ── Row Level Security (defense in depth) ──────────────────────────────
+-- All server-side access uses SUPABASE_SERVICE_ROLE_KEY which bypasses RLS.
+-- RLS is enabled so that if the anon key ever leaks, KB data is still safe.
+alter table kb_documents enable row level security;
+alter table kb_chunks  enable row level security;
+
+-- No policies = no access for anon/authenticated users.
+-- Only service_role can read/write these tables.
+
 -- Similarity search RPC (used by Supabase .rpc() call)
 -- Filters out soft-deleted documents
 -- Vector dimension is unconstrained — must match the provider in use
