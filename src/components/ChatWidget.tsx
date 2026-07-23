@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
-  MessageCircle, X, Send, Bot, User, Trash2, Copy, Check,
+  MessageCircle, X, Send, Bot, User, Trash2, Copy, Check, FileText,
 } from "lucide-react";
 
 interface Message {
@@ -246,6 +247,7 @@ export function ChatWidget() {
                 message={m}
                 onCopy={copy}
                 copied={copied}
+                onClose={() => setOpen(false)}
               />
             ))}
             {loading && (
@@ -314,14 +316,17 @@ function MessageBubble({
   message,
   onCopy,
   copied,
+  onClose,
 }: {
   message: Message;
   onCopy: (text: string, key: string) => void;
   copied: string | null;
+  onClose: () => void;
 }) {
   const isUser = message.role === "user";
 
   const contactInfo = extractContact(message.content);
+  const showQuoteBtn = !isUser && hasQuoteIntent(message.content);
 
   return (
     <div className={`flex items-start gap-2 ${isUser ? "flex-row-reverse" : ""}`}>
@@ -338,45 +343,58 @@ function MessageBubble({
           <Bot className="h-4 w-4 text-indigo-600" />
         )}
       </div>
-      <div
-        className={`max-w-[82%] whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm leading-relaxed ${
-          isUser
-            ? "rounded-tr-sm text-white shadow-sm"
-            : "rounded-tl-sm bg-white text-gray-800 shadow-sm ring-1 ring-gray-100"
-        }`}
-        style={
-          isUser
-            ? { background: "linear-gradient(135deg, #4f46e5, #6366f1)" }
-            : undefined
-        }
-      >
-        {contactInfo ? (
-          <div className="space-y-1.5">
-            <div className="whitespace-pre-wrap">{contactInfo.before}</div>
-            {contactInfo.email && (
-              <ContactRow
-                label="Email"
-                value={contactInfo.email}
-                href={`mailto:${contactInfo.email}`}
-                onCopy={() => onCopy(contactInfo.email!, `${message.id}-email`)}
-                copied={copied === `${message.id}-email`}
-              />
-            )}
-            {contactInfo.phone && (
-              <ContactRow
-                label="WhatsApp"
-                value={contactInfo.phone}
-                href={`https://wa.me/${contactInfo.phone.replace(/[\s+]/g, "")}`}
-                onCopy={() => onCopy(contactInfo.phone!, `${message.id}-phone`)}
-                copied={copied === `${message.id}-phone`}
-              />
-            )}
-            {contactInfo.after && (
-              <div className="whitespace-pre-wrap pt-0.5">{contactInfo.after}</div>
-            )}
-          </div>
-        ) : (
-          message.content
+      <div className="flex max-w-[82%] flex-col gap-1.5">
+        <div
+          className={`whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm leading-relaxed ${
+            isUser
+              ? "rounded-tr-sm text-white shadow-sm"
+              : "rounded-tl-sm bg-white text-gray-800 shadow-sm ring-1 ring-gray-100"
+          }`}
+          style={
+            isUser
+              ? { background: "linear-gradient(135deg, #4f46e5, #6366f1)" }
+              : undefined
+          }
+        >
+          {contactInfo ? (
+            <div className="space-y-1.5">
+              <div className="whitespace-pre-wrap">{contactInfo.before}</div>
+              {contactInfo.email && (
+                <ContactRow
+                  label="Email"
+                  value={contactInfo.email}
+                  href={`mailto:${contactInfo.email}`}
+                  onCopy={() => onCopy(contactInfo.email!, `${message.id}-email`)}
+                  copied={copied === `${message.id}-email`}
+                />
+              )}
+              {contactInfo.phone && (
+                <ContactRow
+                  label="WhatsApp"
+                  value={contactInfo.phone}
+                  href={`https://wa.me/${contactInfo.phone.replace(/[\s+]/g, "")}`}
+                  onCopy={() => onCopy(contactInfo.phone!, `${message.id}-phone`)}
+                  copied={copied === `${message.id}-phone`}
+                />
+              )}
+              {contactInfo.after && (
+                <div className="whitespace-pre-wrap pt-0.5">{contactInfo.after}</div>
+              )}
+            </div>
+          ) : (
+            message.content
+          )}
+        </div>
+        {showQuoteBtn && (
+          <Link
+            href="/#contact"
+            onClick={onClose}
+            className="flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:scale-[1.02] active:scale-95"
+            style={{ background: "linear-gradient(135deg, #4f46e5, #8b5cf6)" }}
+          >
+            <FileText className="h-3.5 w-3.5" />
+            Get a Quote
+          </Link>
         )}
       </div>
     </div>
@@ -426,8 +444,14 @@ function ContactRow({
   );
 }
 
+function hasQuoteIntent(text: string): boolean {
+  const lower = text.toLowerCase();
+  return /\b(quote|quotation|pricing|price|get a quote|request a quote|cost|how much|budget|buy|purchase|order|source.*(vehicle|car))\b/.test(lower);
+}
+
 function extractContact(text: string) {
-  const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
+  // Email regex — does NOT capture trailing punctuation
+  const emailMatch = text.match(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/);
   const phoneMatch = text.match(/\+\d[\d\s-]{7,}\d/);
 
   if (!emailMatch && !phoneMatch) return null;
