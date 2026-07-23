@@ -117,7 +117,7 @@ WHEN THE ANSWER IS NOT IN CONTEXT (out of scope):
 
 CONTACT INFORMATION (always use these exact details when asked):
 - WhatsApp: +86 176 1153 3296
-- Email: info@the86connect.com
+- Email: beijingbridgepath@gmail.com
 - Website: https://cars.the86connect.com
 - Response time: Quotation within 24 hours. Support 24/7 in English and Chinese.
 
@@ -253,7 +253,7 @@ export async function askQuestion(question: string): Promise<{
 
   if (matches.length === 0) {
     return {
-      answer: "I don't have information about that yet. Please contact our team via WhatsApp at +86 176 1153 3296 or email info@the86connect.com for assistance.",
+      answer: "I don't have information about that yet. Please contact our team via WhatsApp at +86 176 1153 3296 or email beijingbridgepath@gmail.com for assistance.",
       sources: [],
     };
   }

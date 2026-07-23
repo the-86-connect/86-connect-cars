@@ -54,21 +54,76 @@ function saveHistory(messages: Message[]) {
   }
 }
 
+// ── Sound effects via Web Audio API (no external files) ──
+let audioCtx: AudioContext | null = null;
+
+function getAudioCtx() {
+  if (typeof window === "undefined") return null;
+  if (!audioCtx) {
+    try {
+      const Ctor = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioCtx = new Ctor();
+    } catch {
+      return null;
+    }
+  }
+  return audioCtx;
+}
+
+function playTone(freq: number, duration: number, type: OscillatorType, volume = 0.08) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  // Resume if suspended (browser autoplay policy)
+  if (ctx.state === "suspended") ctx.resume();
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + duration);
+}
+
+/** Short upward blip — user sent a message. */
+function playSendSound() {
+  playTone(600, 0.08, "sine", 0.06);
+  setTimeout(() => playTone(800, 0.06, "sine", 0.05), 60);
+}
+
+/** Pleasant two-note chime — AI replied. */
+function playReceiveSound() {
+  playTone(523, 0.1, "sine", 0.07); // C5
+  setTimeout(() => playTone(784, 0.12, "sine", 0.06), 80); // G5
+}
+
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [unread, setUnread] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [copied, setCopied] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const didLoad = useRef(false);
+  const prevMsgCount = useRef(0);
+  const openRef = useRef(false);
+
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
 
   useEffect(() => {
     if (!didLoad.current) {
       didLoad.current = true;
-      setMessages(loadHistory());
+      const history = loadHistory();
+      setMessages(history);
+      prevMsgCount.current = history.length;
     }
   }, []);
 
@@ -82,6 +137,18 @@ export function ChatWidget() {
     }
   }, [messages, loading]);
 
+  // Play receive sound when a new assistant message arrives
+  useEffect(() => {
+    if (!didLoad.current) return;
+    if (messages.length > prevMsgCount.current) {
+      const lastMsg = messages[messages.length - 1];
+      if (lastMsg.role === "assistant") {
+        playReceiveSound();
+      }
+    }
+    prevMsgCount.current = messages.length;
+  }, [messages]);
+
   useEffect(() => {
     if (open) {
       const t = setTimeout(() => inputRef.current?.focus(), 100);
@@ -91,6 +158,8 @@ export function ChatWidget() {
 
   const clearChat = useCallback(() => {
     setMessages([WELCOME]);
+    setUnreadCount(0);
+    prevMsgCount.current = 1;
     if (typeof window !== "undefined") {
       localStorage.removeItem(STORAGE_KEY);
     }
@@ -106,6 +175,8 @@ export function ChatWidget() {
   const send = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
+
+    playSendSound();
 
     const userMsg: Message = { id: uid(), role: "user", content: trimmed };
     const next = [...messages, userMsg];
@@ -131,6 +202,7 @@ export function ChatWidget() {
               "You're sending messages too quickly. Please wait a moment and try again, or reach us directly via WhatsApp at +86 176 1153 3296.",
           },
         ]);
+        if (!openRef.current) setUnreadCount((c) => c + 1);
         return;
       }
 
@@ -142,8 +214,7 @@ export function ChatWidget() {
           content: data.answer || "Sorry, I couldn't generate a response right now.",
         },
       ]);
-
-      if (!open) setUnread(true);
+      if (!openRef.current) setUnreadCount((c) => c + 1);
     } catch {
       setMessages([
         ...next,
@@ -151,9 +222,10 @@ export function ChatWidget() {
           id: uid(),
           role: "assistant",
           content:
-            "I'm having trouble connecting right now. Please try again in a moment, or reach us directly via WhatsApp at +86 176 1153 3296 or email info@the86connect.com.",
+            "I'm having trouble connecting right now. Please try again in a moment, or reach us directly via WhatsApp at +86 176 1153 3296 or email beijingbridgepath@gmail.com.",
         },
       ]);
+      if (!openRef.current) setUnreadCount((c) => c + 1);
     } finally {
       setLoading(false);
     }
@@ -173,7 +245,7 @@ export function ChatWidget() {
         aria-label={open ? "Close chat" : "Open chat assistant"}
         onClick={() => {
           setOpen((o) => !o);
-          if (!open) setUnread(false);
+          if (!open) setUnreadCount(0);
         }}
         className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 via-brand-500 to-purple-600 text-white shadow-lg shadow-brand-500/30 transition-transform hover:scale-105 active:scale-95"
         style={{
@@ -181,8 +253,10 @@ export function ChatWidget() {
         }}
       >
         {open ? <X className="h-6 w-6" /> : <RobotIcon size={32} className="text-white" />}
-        {!open && unread && (
-          <span className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-red-600" />
+        {!open && unreadCount > 0 && (
+          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white" style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}>
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
         )}
       </button>
 
