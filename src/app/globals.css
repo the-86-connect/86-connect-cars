@@ -412,6 +412,25 @@
   100% { transform: scale(0.95); opacity: 0.6; }
 }
 
+@keyframes robot-wave {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+}
+
+@keyframes robot-float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes robot-glow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5)); }
+  50% { filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.7)); }
+}
+
 /* ---- Utility: hide scrollbar ---- */
 .scrollbar-hide {
   -ms-overflow-style: none;

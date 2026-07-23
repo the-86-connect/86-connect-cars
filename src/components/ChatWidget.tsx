@@ -247,12 +247,12 @@ export function ChatWidget() {
           setOpen((o) => !o);
           if (!open) setUnreadCount(0);
         }}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 via-brand-500 to-purple-600 text-white shadow-lg shadow-brand-500/30 transition-transform hover:scale-105 active:scale-95"
+        className="fixed bottom-5 right-5 z-50 flex h-16 w-16 items-end justify-center overflow-hidden rounded-full bg-gradient-to-br from-indigo-600 via-brand-500 to-purple-600 text-white shadow-lg shadow-brand-500/30 transition-transform hover:scale-105 active:scale-95"
         style={{
           boxShadow: "0 8px 28px rgba(79, 70, 229, 0.35)",
         }}
       >
-        {open ? <X className="h-6 w-6" /> : <RobotIcon size={32} className="text-white" />}
+        {open ? <X className="h-6 w-6" /> : <RobotIcon size={62} wave glow />}
         {!open && unreadCount > 0 && (
           <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white" style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}>
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -275,8 +275,8 @@ export function ChatWidget() {
             <div className="absolute inset-0 opacity-20" style={{
               backgroundImage: "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.25) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 0%, transparent 40%)",
             }} />
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-1 ring-white/30">
-              <RobotIcon size={24} className="text-white" />
+            <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
+              <RobotIcon size={44} wave glow />
             </div>
             <div className="relative flex-1 min-w-0">
               <p className="text-sm font-semibold truncate">86Connect Assistant</p>
@@ -326,8 +326,8 @@ export function ChatWidget() {
             ))}
             {loading && (
               <div className="flex items-center gap-2 text-xs text-gray-500">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
-                  <RobotIcon size={18} className="text-indigo-600" />
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center">
+                  <RobotIcon size={30} glow />
                 </div>
                 <div className="flex items-center gap-1 rounded-full bg-white px-3 py-2 shadow-sm ring-1 ring-gray-100">
                   <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-400 [animation-delay:0ms]" />
@@ -405,16 +405,16 @@ function MessageBubble({
   return (
     <div className={`flex items-start gap-2 ${isUser ? "flex-row-reverse" : ""}`}>
       <div
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
           isUser
             ? "bg-gray-200 text-gray-600"
-            : "bg-white shadow-sm ring-1 ring-indigo-100"
+            : ""
         }`}
       >
         {isUser ? (
           <User className="h-4 w-4" />
         ) : (
-          <RobotIcon size={18} className="text-indigo-600" />
+          <RobotIcon size={30} glow />
         )}
       </div>
       <div className="flex max-w-[82%] flex-col gap-1.5">
@@ -609,39 +609,44 @@ function extractContact(text: string) {
   };
 }
 
-/** Animated robot SVG — floating body, blinking eyes, glowing antenna. */
-function RobotIcon({ size = 28, className = "" }: { size?: number; className?: string }) {
+/**
+ * Robot mascot image with animations.
+ * Image path: /robot-chatbot.png (save your robot PNG to public/robot-chatbot.png)
+ *
+ * size: pixel size of the container
+ * wave: enable waving animation (for button/header)
+ * glow: enable cyan glow effect
+ */
+function RobotIcon({
+  size = 28,
+  className = "",
+  wave = false,
+  glow = false,
+}: {
+  size?: number;
+  className?: string;
+  wave?: boolean;
+  glow?: boolean;
+}) {
+  const anim = wave
+    ? "robot-wave 2.5s ease-in-out infinite, robot-float-gentle 3s ease-in-out infinite"
+    : "robot-float-gentle 3s ease-in-out infinite";
+  const glowStyle = glow
+    ? { filter: "drop-shadow(0 0 10px rgba(56, 189, 248, 0.6))" }
+    : undefined;
+
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      fill="none"
+    <img
+      src="/robot-chatbot.png"
+      alt="86Connect assistant"
       className={className}
-      style={{ animation: "robot-float 2.5s ease-in-out infinite" }}
-    >
-      {/* Antenna */}
-      <line x1="32" y1="8" x2="32" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-      <circle cx="32" cy="7" r="3" fill="#fbbf24" style={{ animation: "robot-antenna-glow 1.5s ease-in-out infinite" }} />
-
-      {/* Head */}
-      <rect x="16" y="14" width="32" height="26" rx="8" fill="currentColor" opacity="0.15" />
-      <rect x="16" y="14" width="32" height="26" rx="8" stroke="currentColor" strokeWidth="2.5" fill="none" />
-
-      {/* Eyes */}
-      <g style={{ animation: "robot-blink 4s ease-in-out infinite", transformOrigin: "24px 26px" }}>
-        <circle cx="24" cy="26" r="3.5" fill="currentColor" />
-      </g>
-      <g style={{ animation: "robot-blink 4s ease-in-out infinite", transformOrigin: "40px 26px" }}>
-        <circle cx="40" cy="26" r="3.5" fill="currentColor" />
-      </g>
-
-      {/* Mouth — speaker grille */}
-      <rect x="26" y="32" width="12" height="3" rx="1.5" fill="currentColor" opacity="0.4" />
-
-      {/* Ears */}
-      <rect x="12" y="22" width="4" height="10" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
-      <rect x="48" y="22" width="4" height="10" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
-    </svg>
+      style={{
+        width: size,
+        height: size,
+        objectFit: "contain",
+        animation: anim,
+        ...glowStyle,
+      }}
+    />
   );
 }
