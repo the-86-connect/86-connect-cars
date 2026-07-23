@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySessionToken } from "@/lib/auth";
-import { upsertDocument } from "@/lib/kb";
+import { upsertDocument, getKbProviderInfo } from "@/lib/kb";
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10MB .docx cap — chunks+embeddings dominate DB, not source
 
@@ -20,9 +20,10 @@ export async function POST(req: NextRequest) {
   if (auth) return auth;
 
   try {
-    if (!process.env.ZHIPU_API_KEY) {
+    const provider = getKbProviderInfo();
+    if (!provider.configured) {
       return NextResponse.json(
-        { error: "ZHIPU_API_KEY not configured. Add it to .env.local" },
+        { error: `No AI provider configured. Set ZHIPU_API_KEY or OPENAI_API_KEY in environment variables.` },
         { status: 500 },
       );
     }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimitChat } from "@/lib/rate-limit";
-import { askQuestion } from "@/lib/kb";
+import { askQuestion, getKbProviderInfo } from "@/lib/kb";
 
 const MAX_QUESTION_LEN = 500;
 
@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. GLM not configured → graceful fallback with contact info
-    if (!process.env.ZHIPU_API_KEY) {
+    // 2. No AI provider configured → graceful fallback with contact info
+    if (!getKbProviderInfo().configured) {
       return NextResponse.json({
         answer:
           "Our AI assistant is being set up. For immediate help, contact us via WhatsApp at +86 176 1153 3296 or email info@the86connect.com.",
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 3. RAG: embed question → pgvector search → GLM chat with context
+    // 3. RAG: embed question → pgvector search → chat with context
     const result = await askQuestion(trimmed);
     return NextResponse.json(result);
   } catch (error) {
