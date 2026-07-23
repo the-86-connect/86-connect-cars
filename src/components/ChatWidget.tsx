@@ -432,7 +432,7 @@ function MessageBubble({
         >
           {contactInfo ? (
             <div className="space-y-1.5">
-              <div className="whitespace-pre-wrap">{contactInfo.before}</div>
+              <div className="whitespace-pre-wrap">{renderFormattedText(contactInfo.before)}</div>
               {contactInfo.email && (
                 <ContactRow
                   label="Email"
@@ -452,11 +452,11 @@ function MessageBubble({
                 />
               )}
               {contactInfo.after && (
-                <div className="whitespace-pre-wrap pt-0.5">{contactInfo.after}</div>
+                <div className="whitespace-pre-wrap pt-0.5">{renderFormattedText(contactInfo.after)}</div>
               )}
             </div>
           ) : (
-            message.content
+            renderFormattedText(message.content)
           )}
         </div>
         {showQuoteBtn && (
@@ -516,6 +516,64 @@ function ContactRow({
       </button>
     </div>
   );
+}
+
+/**
+ * Render plain text with:
+ * - URLs → clickable links
+ * - **bold** → <strong>
+ * - newlines → preserved (via whitespace-pre-wrap on parent)
+ */
+function renderFormattedText(text: string): React.ReactNode {
+  // Tokenize: split on URLs and **bold** segments
+  const parts: Array<{ type: "text" | "url" | "bold"; value: string }> = [];
+  let remaining = text;
+
+  // Combined regex: match URL or **bold** (whichever comes first)
+  const combinedRe = /(https?:\/\/[^\s<>"')]+)|(\*\*[^*]+\*\*)/;
+
+  while (remaining.length > 0) {
+    const match = remaining.match(combinedRe);
+    if (!match) {
+      parts.push({ type: "text", value: remaining });
+      break;
+    }
+    const idx = match.index ?? 0;
+    if (idx > 0) {
+      parts.push({ type: "text", value: remaining.slice(0, idx) });
+    }
+    if (match[1]) {
+      // URL
+      parts.push({ type: "url", value: match[1] });
+      remaining = remaining.slice(idx + match[1].length);
+    } else if (match[2]) {
+      // **bold**
+      parts.push({ type: "bold", value: match[2].slice(2, -2) });
+      remaining = remaining.slice(idx + match[2].length);
+    } else {
+      break;
+    }
+  }
+
+  return parts.map((p, i) => {
+    if (p.type === "url") {
+      return (
+        <a
+          key={i}
+          href={p.value}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-700"
+        >
+          {p.value}
+        </a>
+      );
+    }
+    if (p.type === "bold") {
+      return <strong key={i} className="font-semibold">{p.value}</strong>;
+    }
+    return <span key={i}>{p.value}</span>;
+  });
 }
 
 function hasQuoteIntent(text: string): boolean {
