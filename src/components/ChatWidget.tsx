@@ -37,6 +37,7 @@ export function ChatWidget() {
   }, [messages, loading]);
 
   // Focus input when opened
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (open) {
       setUnread(false);

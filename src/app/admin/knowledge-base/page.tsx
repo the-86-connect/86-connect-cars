@@ -50,16 +50,15 @@ export default function AdminKnowledgeBase() {
       const statsData = await statsRes.json();
       setDocs(Array.isArray(docsData) ? docsData : []);
       setStats(statsData);
-    } catch (e) {
+    } catch {
       setError("Failed to load knowledge base");
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { void refresh(); }, [refresh]);
 
   // Auto-clear transient messages
   useEffect(() => {

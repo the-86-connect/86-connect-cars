@@ -110,6 +110,7 @@ export default function AdminDashboard() {
     } catch {}
   }, []);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     Promise.all([
       fetch("/api/vehicles").then((r) => r.json()).catch(() => []),
