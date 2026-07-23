@@ -31,15 +31,32 @@ create table if not exists kb_chunks (
   metadata jsonb default '{}'::jsonb
 );
 
--- HNSW index for fast cosine similarity search
-create index if not exists kb_chunks_embedding_idx
-  on kb_chunks using hnsw (embedding vector_cosine_ops);
-
 -- Index for doc-level lookups/deletes
 create index if not exists kb_chunks_doc_id_idx on kb_chunks(doc_id);
 
 -- Soft-delete filter index
 create index if not exists kb_documents_deleted_at_idx on kb_documents(deleted_at);
+
+-- ── HNSW index — create AFTER you've chosen your provider ─────────────
+-- HNSW indexes require a fixed dimension. The embedding column is
+-- dimension-unconstrained to support both GLM (2048d) and OpenAI (1536d).
+-- Run ONE of these in the Supabase SQL Editor after your first upload:
+--
+--   For GLM (2048 dims):
+--     create index kb_chunks_embedding_idx
+--       on kb_chunks using hnsw (embedding vector_cosine_ops)
+--       with (m = 16, ef_construction = 64);
+--
+--   For OpenAI (1536 dims):
+--     create index kb_chunks_embedding_idx
+--       on kb_chunks using hnsw (embedding vector_cosine_ops)
+--       with (m = 16, ef_construction = 64);
+--
+--   (You may need to alter the column first:
+--    alter table kb_chunks alter column embedding type vector(2048);)
+--
+-- Without an HNSW index, similarity search still works (sequential scan)
+-- which is fine up to ~10k chunks — most small knowledge bases never need it.
 
 -- ── Row Level Security (defense in depth) ──────────────────────────────
 -- All server-side access uses SUPABASE_SERVICE_ROLE_KEY which bypasses RLS.
