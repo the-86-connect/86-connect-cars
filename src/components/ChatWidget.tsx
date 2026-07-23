@@ -247,12 +247,15 @@ export function ChatWidget() {
           setOpen((o) => !o);
           if (!open) setUnreadCount(0);
         }}
-        className="fixed bottom-5 right-5 z-50 flex h-16 w-16 items-end justify-center overflow-hidden rounded-full bg-gradient-to-br from-indigo-600 via-brand-500 to-purple-600 text-white shadow-lg shadow-brand-500/30 transition-transform hover:scale-105 active:scale-95"
-        style={{
-          boxShadow: "0 8px 28px rgba(79, 70, 229, 0.35)",
-        }}
+        className="fixed bottom-5 right-5 z-50 flex h-16 w-16 items-end justify-center transition-transform hover:scale-110 active:scale-95"
       >
-        {open ? <X className="h-6 w-6" /> : <RobotIcon size={62} wave glow />}
+        {open ? (
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-800 text-white shadow-lg">
+            <X className="h-5 w-5" />
+          </span>
+        ) : (
+          <RobotIcon size={68} wave glow />
+        )}
         {!open && unreadCount > 0 && (
           <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white" style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}>
             {unreadCount > 9 ? "9+" : unreadCount}
