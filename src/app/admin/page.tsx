@@ -110,7 +110,6 @@ export default function AdminDashboard() {
     } catch {}
   }, []);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     Promise.all([
       fetch("/api/vehicles").then((r) => r.json()).catch(() => []),
@@ -137,6 +136,7 @@ export default function AdminDashboard() {
       if (Array.isArray(quotes)) setAllQuotes(quotes);
       setLoading(false);
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPurgeStats();
   }, [fetchPurgeStats]);
 
