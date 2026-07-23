@@ -11,7 +11,7 @@ const CONTENT_SECURITY_POLICY = [
   "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
   "connect-src 'self' https://res.cloudinary.com https://api.cloudinary.com https://*.supabase.co https://vercel.live wss://vercel.live",
-  "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
+  "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://vercel.live",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

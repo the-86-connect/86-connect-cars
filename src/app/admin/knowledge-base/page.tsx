@@ -48,10 +48,14 @@ export default function AdminKnowledgeBase() {
       ]);
       const docsData = await docsRes.json();
       const statsData = await statsRes.json();
+      if (!docsRes.ok || !statsRes.ok) throw new Error(docsData.error || statsData.error || "Failed");
       setDocs(Array.isArray(docsData) ? docsData : []);
       setStats(statsData);
+      setError("");
     } catch {
-      setError("Failed to load knowledge base");
+      setDocs([]);
+      setStats(null);
+      setError("Knowledge base tables not found — run migration 00007_knowledge_base.sql on Supabase.");
     } finally {
       setLoading(false);
     }
@@ -213,7 +217,7 @@ export default function AdminKnowledgeBase() {
       {stats && (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <StatCard icon={FileText} label="Documents" value={String(stats.docCount)} />
-          <StatCard icon={Database} label="Chunks" value={stats.chunkCount.toLocaleString()} />
+          <StatCard icon={Database} label="Chunks" value={(stats.chunkCount ?? 0).toLocaleString()} />
           <StatCard icon={HardDrive} label="Storage Used" value={stats.storageLabel} />
           <StatCard
             icon={Database}
@@ -293,7 +297,7 @@ export default function AdminKnowledgeBase() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-gray-900">{doc.title}</p>
                   <p className="truncate text-xs text-gray-500">
-                    {doc.filename} · {doc.chunkCount} chunks · {doc.charCount.toLocaleString()} chars · {formatDate(doc.createdAt)}
+                    {doc.filename} · {doc.chunkCount ?? 0} chunks · {(doc.charCount ?? 0).toLocaleString()} chars · {formatDate(doc.createdAt)}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
