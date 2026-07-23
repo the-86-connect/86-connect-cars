@@ -107,6 +107,26 @@ export function ChatWidget() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [hintIndex, setHintIndex] = useState(0);
+
+  const hintMessages = [
+    "Need a car quote? 🚗",
+    "Looking for BYD cars?",
+    "Export from China? ✈️",
+    "How can I help you?",
+    "Find your dream car 🇨🇳",
+    "Car sourcing made easy",
+    "Need shipping info? 🚢",
+    "Ask me anything!",
+  ];
+
+  useEffect(() => {
+    if (open) return;
+    const timer = setInterval(() => {
+      setHintIndex((i) => (i + 1) % hintMessages.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [open, hintMessages.length]);
   const [copied, setCopied] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -247,25 +267,40 @@ export function ChatWidget() {
           setOpen((o) => !o);
           if (!open) setUnreadCount(0);
         }}
-        className="fixed bottom-5 right-5 z-50 flex h-16 w-16 items-end justify-center transition-transform hover:scale-110 active:scale-95"
+        className="fixed bottom-20 right-5 z-50 flex items-end justify-center transition-transform hover:scale-110 active:scale-95 lg:bottom-5"
       >
         {open ? (
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-800 text-white shadow-lg">
             <X className="h-5 w-5" />
           </span>
         ) : (
-          <RobotIcon size={68} wave glow />
-        )}
-        {!open && unreadCount > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white" style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}>
-            {unreadCount > 9 ? "9+" : unreadCount}
-          </span>
+          <>
+            <RobotIcon size={56} wave glow />
+            {unreadCount > 0 && (
+              <span
+                className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white"
+                style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}
+              >
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+            <span
+              className="pointer-events-none absolute right-16 -top-1 whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-sm font-medium text-gray-800 shadow-lg ring-1 ring-gray-200"
+              style={{
+                animation: "hint-pop 0.35s ease-out",
+              }}
+              key={hintIndex}
+            >
+              {hintMessages[hintIndex]}
+              <span className="absolute right-[-6px top-1/2 -translate-y-1/2 h-0 w-0 border-y-[6px] border-l-[6px] border-y-transparent border-l-white" />
+            </span>
+          </>
         )}
       </button>
 
       {open && (
         <div
-          className="fixed bottom-24 right-5 z-50 flex h-[min(600px,calc(100vh-7rem))] w-[min(400px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl"
+          className="fixed bottom-28 right-5 z-50 flex h-[min(520px,calc(100vh-10rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl lg:bottom-24 lg:h-[min(600px,calc(100vh-7rem))] lg:w-[min(400px,calc(100vw-2.5rem))]"
           style={{ boxShadow: "0 20px 60px -15px rgba(0,0,0,0.25)" }}
         >
           {/* Header */}

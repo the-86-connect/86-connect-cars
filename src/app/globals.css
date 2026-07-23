@@ -431,6 +431,12 @@
   50% { filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.7)); }
 }
 
+@keyframes hint-pop {
+  0% { opacity: 0; transform: translateY(6px) scale(0.9); }
+  50% { transform: translateY(-2px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* ---- Utility: hide scrollbar ---- */
 .scrollbar-hide {
   -ms-overflow-style: none;
