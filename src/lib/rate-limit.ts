@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 let authLimiter: Ratelimit | null = null;
 let formLimiter: Ratelimit | null = null;
 let frequencyLimiter: Ratelimit | null = null;
+let chatLimiter: Ratelimit | null = null;
 
 function getRedis(): Redis | null {
   const url = process.env.UPSTASH_REDIS_REST_URL;
@@ -142,4 +143,21 @@ export async function clearAuthFails(req: NextRequest): Promise<void> {
 
 export async function rateLimitForm(req: NextRequest): Promise<NextResponse | null> {
   return checkLimit(getFormLimiter(), req);
+}
+
+function getChatLimiter(): Ratelimit | null {
+  if (chatLimiter) return chatLimiter;
+  const redis = getRedis();
+  if (!redis) return null;
+  // 10 chat questions per minute per IP (public endpoint)
+  chatLimiter = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(10, "1 m"),
+    analytics: true,
+  });
+  return chatLimiter;
+}
+
+export async function rateLimitChat(req: NextRequest): Promise<NextResponse | null> {
+  return checkLimit(getChatLimiter(), req);
 }

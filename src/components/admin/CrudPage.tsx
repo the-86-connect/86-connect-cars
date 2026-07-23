@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X, Check } from "lucide-react";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { CloudinaryUpload } from "./CloudinaryUpload";
 
 interface Field {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "select";
+  type?: "text" | "textarea" | "number" | "select" | "image";
   options?: string[];
   required?: boolean;
 }
@@ -89,9 +90,15 @@ export function CrudPage({
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {fields.map((field) => (
-              <div key={field.key} className={field.type === "textarea" ? "sm:col-span-2" : ""}>
+              <div key={field.key} className={field.type === "textarea" || field.type === "image" ? "sm:col-span-2" : ""}>
                 <label className="block text-xs font-medium text-gray-600 mb-1">{field.label}</label>
-                {field.type === "textarea" ? (
+                {field.type === "image" ? (
+                  <CloudinaryUpload
+                    value={form[field.key] ?? ""}
+                    onChange={(url) => setForm((prev) => ({ ...prev, [field.key]: url }))}
+                    alt={field.label}
+                  />
+                ) : field.type === "textarea" ? (
                   <textarea
                     value={form[field.key] ?? ""}
                     onChange={(e) => setForm((prev) => ({ ...prev, [field.key]: e.target.value }))}

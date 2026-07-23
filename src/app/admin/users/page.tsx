@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Users as UsersIcon, Mail, Phone, Globe, MessageSquareQuote, Plus, Trash2, X, Database } from "lucide-react";
+import { Users as UsersIcon, Mail, Phone, Globe, MessageSquareQuote, Plus, Trash2, X, Database, Download } from "lucide-react";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 
 interface UserRow {
@@ -13,6 +13,38 @@ interface UserRow {
   createdAt: string;
   quoteCount: number;
   favoriteCount: number;
+}
+
+function exportUsersXls(users: UserRow[]) {
+  const headerStyle = "style=\"background:#2563eb;color:white;font-weight:bold;padding:6px;\"";
+  const rows = users.map((u) => `<tr>
+    <td>${u.name ?? ""}</td>
+    <td>${u.email ?? ""}</td>
+    <td>${u.whatsapp ?? ""}</td>
+    <td>${u.country ?? ""}</td>
+    <td>${new Date(u.createdAt).toLocaleString()}</td>
+    <td>${u.quoteCount}</td>
+    <td>${u.favoriteCount}</td>
+  </tr>`).join("");
+  const html = `<table border="1">
+    <thead><tr>
+      <th ${headerStyle}>Name</th>
+      <th ${headerStyle}>Email</th>
+      <th ${headerStyle}>WhatsApp</th>
+      <th ${headerStyle}>Country</th>
+      <th ${headerStyle}>Joined</th>
+      <th ${headerStyle}>Quotes</th>
+      <th ${headerStyle}>Favorites</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+  const blob = new Blob(["\uFEFF" + html], { type: "application/vnd.ms-excel" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `users-${new Date().toISOString().slice(0, 10)}.xls`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 export default function AdminUsers() {
@@ -134,13 +166,23 @@ export default function AdminUsers() {
             {users.length} registered
           </span>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-600"
-        >
-          <Plus className="h-4 w-4" /> Add User
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => exportUsersXls(filtered)}
+            disabled={loading || filtered.length === 0}
+            className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <Download className="h-4 w-4" /> Export Excel
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowForm(true)}
+            className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-600"
+          >
+            <Plus className="h-4 w-4" /> Add User
+          </button>
+        </div>
       </div>
 
       {/* Add user form */}

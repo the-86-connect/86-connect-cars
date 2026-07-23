@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Car, MessageSquareQuote, HelpCircle,
   Star, ListChecks, FileText, LogOut, Menu, X, Images, Tag, Users,
-  ExternalLink, Truck,
+  ExternalLink, Truck, BrainCircuit,
 } from "lucide-react";
 import NotificationBell from "@/components/admin/NotificationBell";
 
@@ -21,6 +21,7 @@ const navItems = [
   { href: "/admin/features", label: "Features", icon: ListChecks },
   { href: "/admin/process-steps", label: "Process Steps", icon: FileText },
   { href: "/admin/quotes", label: "Quotes", icon: MessageSquareQuote },
+  { href: "/admin/knowledge-base", label: "Knowledge Base", icon: BrainCircuit },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

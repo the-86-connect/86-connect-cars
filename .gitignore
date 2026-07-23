@@ -66,3 +66,6 @@ next-env.d.ts
 service-account*.json
 google-credentials*.json
 firebase-adminsdk*.json
+
+# TRAE workspace planning docs (local only)
+.trae/

@@ -506,3 +506,81 @@ export const favorites = {
 export const userQuotes = {
   listByUser: (userId: string) => dbSelect("quotes", { user_id: userId }, "created_at"),
 };
+
+// ── Knowledge base (pgvector) ──
+
+export const kbDocuments = {
+  list: async () => {
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client
+      .from("kb_documents")
+      .select("*")
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return toCamelList(data ?? []);
+  },
+  find: (id: string) => dbFind("kb_documents", "id", id),
+  create: (data: Record<string, unknown>) => dbInsert("kb_documents", data),
+  // Hard delete — cascade removes chunks. Frees storage immediately.
+  delete: async (id: string) => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    const { error } = await client.from("kb_documents").delete().eq("id", id);
+    if (error) throw error;
+  },
+  update: (id: string, data: Record<string, unknown>) => dbUpdate("kb_documents", id, data),
+  count: async () => {
+    const client = supabase();
+    if (!client) return 0;
+    const { count, error } = await client
+      .from("kb_documents")
+      .select("*", { count: "exact", head: true })
+      .is("deleted_at", null);
+    if (error) throw error;
+    return count ?? 0;
+  },
+};
+
+export const kbChunks = {
+  insertMany: async (rows: Record<string, unknown>[]) => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    const { error } = await client.from("kb_chunks").insert(rows.map(toSnake));
+    if (error) throw error;
+  },
+  // Semantic search via pgvector RPC — returns camelCase mapped results
+  search: async (queryEmbedding: number[], topK = 5) => {
+    const client = supabase();
+    if (!client) return [];
+    const { data, error } = await client.rpc("match_kb_chunks", {
+      query_embedding: queryEmbedding,
+      match_count: topK,
+    });
+    if (error) throw error;
+    return ((data ?? []) as Record<string, unknown>[]).map((row) => ({
+      id: row.id as string,
+      docId: row.doc_id as string,
+      content: row.content as string,
+      metadata: row.metadata as Record<string, unknown>,
+      similarity: row.similarity as number,
+    }));
+  },
+  count: async () => {
+    const client = supabase();
+    if (!client) return 0;
+    const { data, error } = await client.rpc("get_kb_chunk_count");
+    if (error) throw error;
+    return Number(data) || 0;
+  },
+};
+
+// Storage monitor — total disk usage of kb_* tables (data + indexes)
+export async function getKbStorageBytes(): Promise<number> {
+  const client = supabase();
+  if (!client) return 0;
+  const { data, error } = await client.rpc("get_kb_storage_bytes");
+  if (error) return 0;
+  return Number(data) || 0;
+}

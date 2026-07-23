@@ -58,6 +58,58 @@ function downloadDocx(html: string, filename: string) {
   URL.revokeObjectURL(url);
 }
 
+function exportAllQuotesXls(quotes: Record<string, unknown>[]) {
+  const esc = (v: unknown) => String(v ?? "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const headerStyle = "style=\"background:#2563eb;color:white;font-weight:bold;padding:6px;\"";
+  const rows = quotes.map((q) => {
+    const images = (q.referenceImages as string[]) ?? [];
+    const imageLinks = images.join(" | ");
+    const vehicleUrl = q.vehicleSlug ? `https://cars.the86connect.com/inventory/${q.vehicleSlug}` : "";
+    return `<tr>
+      <td>${esc(q.id)}</td>
+      <td>${esc(q.name)}</td>
+      <td>${esc(q.email)}</td>
+      <td>${esc(q.whatsapp)}</td>
+      <td>${esc(q.country)}</td>
+      <td>${esc(q.vehicleBrand)}</td>
+      <td>${esc(q.model)}</td>
+      <td>${esc(q.budget)}</td>
+      <td>${esc(q.status)}</td>
+      <td>${esc(q.deliveryStatus)}</td>
+      <td>${new Date(q.createdAt as string).toLocaleString()}</td>
+      <td>${esc(q.message)}</td>
+      <td>${imageLinks}</td>
+      <td>${vehicleUrl}</td>
+    </tr>`;
+  }).join("");
+  const html = `<table border="1">
+    <thead><tr>
+      <th ${headerStyle}>Quote ID</th>
+      <th ${headerStyle}>Name</th>
+      <th ${headerStyle}>Email</th>
+      <th ${headerStyle}>WhatsApp</th>
+      <th ${headerStyle}>Country</th>
+      <th ${headerStyle}>Vehicle Brand</th>
+      <th ${headerStyle}>Model</th>
+      <th ${headerStyle}>Budget</th>
+      <th ${headerStyle}>Status</th>
+      <th ${headerStyle}>Delivery Status</th>
+      <th ${headerStyle}>Date</th>
+      <th ${headerStyle}>Message</th>
+      <th ${headerStyle}>Image Links</th>
+      <th ${headerStyle}>Vehicle Page URL</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+  const blob = new Blob(["\uFEFF" + html], { type: "application/vnd.ms-excel" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `quotes-${new Date().toISOString().slice(0, 10)}.xls`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function AdminQuotes() {
   const [quotes, setQuotes] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
@@ -99,7 +151,17 @@ export default function AdminQuotes() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Quote Submissions</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-bold text-gray-900">Quote Submissions</h1>
+        <button
+          type="button"
+          onClick={() => exportAllQuotesXls(quotes)}
+          disabled={loading || quotes.length === 0}
+          className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        >
+          <Download className="h-4 w-4" /> Download All Quotes (Excel)
+        </button>
+      </div>
 
       {loading ? (
         <p className="text-gray-500">Loading...</p>

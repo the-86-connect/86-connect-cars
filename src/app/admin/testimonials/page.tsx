@@ -13,7 +13,7 @@ export default function AdminTestimonials() {
         { key: "country", label: "Country" },
         { key: "flag", label: "Flag Emoji" },
         { key: "quote", label: "Quote", type: "textarea", required: true },
-        { key: "avatar", label: "Avatar URL" },
+        { key: "avatar", label: "Avatar", type: "image" },
         { key: "rating", label: "Rating", type: "number" },
       ]}
     />
