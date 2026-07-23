@@ -12,6 +12,8 @@ interface KbDoc {
   filename: string;
   chunkCount: number;
   charCount: number;
+  provider?: string;
+  embeddingDim?: number;
   createdAt: string;
 }
 
@@ -20,7 +22,10 @@ interface KbStats {
   chunkCount: number;
   storageBytes: number;
   storageLabel: string;
-  glmConfigured: boolean;
+  provider: string;
+  providerLabel: string;
+  embeddingDims: number;
+  providerConfigured: boolean;
   avgBytesPerChunk: number;
 }
 
@@ -154,7 +159,14 @@ export default function AdminKnowledgeBase() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Knowledge Base</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-gray-900">Knowledge Base</h1>
+            {stats?.providerConfigured && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                {stats.providerLabel} · {stats.embeddingDims}d
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-sm text-gray-500">
             Upload .docx documents — the AI chatbot on the homepage will use them to answer visitor questions.
           </p>
@@ -190,24 +202,21 @@ export default function AdminKnowledgeBase() {
         </div>
       )}
 
-      {/* GLM config warning */}
-      {stats && !stats.glmConfigured && (
+      {/* Provider / config warning */}
+      {stats && !stats.providerConfigured && (
         <div className="flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4">
           <AlertCircle className="h-5 w-5 shrink-0 text-amber-600" />
           <div className="flex-1 text-sm text-amber-800">
-            <p className="font-semibold">ZHIPU_API_KEY is not configured</p>
+            <p className="font-semibold">No AI provider configured</p>
             <p className="mt-1">
-              Add it to your environment variables to enable document embedding and chatbot responses.
-              Get a key from{" "}
-              <a
-                href="https://bigmodel.cn/usercenter/proj-mgmt/apikeys"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                bigmodel.cn
-              </a>
-              .
+              Set <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-xs">ZHIPU_API_KEY</code>
+              {" "}or <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-xs">OPENAI_API_KEY</code>{" "}
+              in your environment variables to enable document embedding and chatbot responses.
+            </p>
+            <p className="mt-1 text-xs">
+              Current: <span className="font-semibold">{stats.providerLabel}</span> ({stats.embeddingDims} dims).
+              Set <code className="rounded bg-amber-100 px-1 py-0.5 font-mono">KB_PROVIDER=glm</code>{" "}
+              or <code className="rounded bg-amber-100 px-1 py-0.5 font-mono">KB_PROVIDER=openai</code> to force.
             </p>
           </div>
         </div>

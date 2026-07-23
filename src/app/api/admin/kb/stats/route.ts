@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySessionToken } from "@/lib/auth";
 import { kbDocuments, kbChunks, getKbStorageBytes } from "@/lib/db";
+import { getKbProviderInfo } from "@/lib/kb";
 
 function requireAdmin(req: NextRequest): NextResponse | null {
   const token = req.cookies.get("admin-session")?.value;
@@ -16,10 +17,11 @@ export async function GET(req: NextRequest) {
   if (auth) return auth;
 
   try {
-    const [docCount, chunkCount, storageBytes] = await Promise.all([
+    const [docCount, chunkCount, storageBytes, providerInfo] = await Promise.all([
       kbDocuments.count(),
       kbChunks.count(),
       getKbStorageBytes(),
+      Promise.resolve(getKbProviderInfo()),
     ]);
 
     return NextResponse.json({
@@ -27,8 +29,10 @@ export async function GET(req: NextRequest) {
       chunkCount,
       storageBytes,
       storageLabel: formatBytes(storageBytes),
-      glmConfigured: !!process.env.ZHIPU_API_KEY,
-      // ~8KB per chunk (2048-dim float32 = 8192B embedding + ~1KB text + ~0.5KB metadata)
+      provider: providerInfo.provider,
+      providerLabel: providerInfo.label,
+      embeddingDims: providerInfo.dims,
+      providerConfigured: providerInfo.configured,
       // Used by admin UI to show projected storage growth
       avgBytesPerChunk: chunkCount > 0 ? Math.round(storageBytes / chunkCount) : 0,
     });

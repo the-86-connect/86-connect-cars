@@ -1,6 +1,9 @@
 -- Knowledge base for admin AI chat assistant
--- Uses pgvector (2048 dims = GLM embedding-3)
+-- Embedding provider configurable: GLM (2048 dims) or OpenAI (1536 dims)
 -- Storage: ~10KB per chunk (8KB embedding + 1KB text + 0.5KB metadata)
+--
+-- IMPORTANT: All vectors in kb_chunks must use the same provider/dimension.
+-- Switching providers requires deleting all documents and re-uploading.
 
 -- Enable vector extension
 create extension if not exists vector;
@@ -12,16 +15,18 @@ create table if not exists kb_documents (
   filename text not null,
   chunk_count integer not null default 0,
   char_count integer not null default 0,
+  provider text not null default 'glm',
+  embedding_dim integer not null default 2048,
   created_at timestamptz not null default now(),
   deleted_at timestamptz
 );
 
--- Text chunks + embeddings
+-- Text chunks + embeddings (dimension-unconstrained to support multiple providers)
 create table if not exists kb_chunks (
   id uuid primary key default gen_random_uuid(),
   doc_id text not null references kb_documents(id) on delete cascade,
   content text not null,
-  embedding vector(2048) not null,
+  embedding vector not null,
   chunk_index integer not null,
   metadata jsonb default '{}'::jsonb
 );
@@ -38,8 +43,9 @@ create index if not exists kb_documents_deleted_at_idx on kb_documents(deleted_a
 
 -- Similarity search RPC (used by Supabase .rpc() call)
 -- Filters out soft-deleted documents
+-- Vector dimension is unconstrained — must match the provider in use
 create or replace function match_kb_chunks(
-  query_embedding vector(2048),
+  query_embedding vector,
   match_count integer default 5
 )
 returns table (

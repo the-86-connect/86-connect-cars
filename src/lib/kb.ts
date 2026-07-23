@@ -3,56 +3,122 @@ import mammoth from "mammoth";
 import { randomUUID } from "crypto";
 import { kbDocuments, kbChunks } from "@/lib/db";
 
-const GLM_BASE = "https://open.bigmodel.cn/api/paas/v4";
-const GLM_KEY = process.env.ZHIPU_API_KEY;
+// ── Provider selection ──────────────────────────────────────────────────
+// GLM (Zhipu) is primary; OpenAI is fallback.
+// Both use OpenAI-compatible REST APIs — plain fetch, no SDK needed.
 
-// ponytail: GLM API is OpenAI-compatible REST — plain fetch, no SDK needed
+export type KbProvider = "glm" | "openai";
+
+const GLM_BASE = "https://open.bigmodel.cn/api/paas/v4";
+const OPENAI_BASE = "https://api.openai.com/v1";
+
+function resolveProvider(): KbProvider {
+  const pref = process.env.KB_PROVIDER?.toLowerCase() ?? "auto";
+  const hasGlm = !!process.env.ZHIPU_API_KEY;
+  const hasOai = !!process.env.OPENAI_API_KEY;
+
+  if (pref === "glm") return "glm";
+  if (pref === "openai") return "openai";
+
+  // auto mode: prefer GLM if key set, else OpenAI
+  return hasGlm ? "glm" : (hasOai ? "openai" : "glm");
+}
+
+function getProviderConfig(provider: KbProvider) {
+  if (provider === "openai") {
+    const key = process.env.OPENAI_API_KEY;
+    if (!key) throw new Error("OPENAI_API_KEY not set");
+    return {
+      baseUrl: OPENAI_BASE,
+      key,
+      embedModel: "text-embedding-3-small",
+      chatModel: "gpt-4o-mini",
+      dims: 1536,
+      label: "OpenAI",
+    };
+  }
+  // glm
+  const key = process.env.ZHIPU_API_KEY;
+  if (!key) throw new Error("ZHIPU_API_KEY not set");
+  return {
+    baseUrl: GLM_BASE,
+    key,
+    embedModel: "embedding-3",
+    chatModel: "glm-4-flash",
+    dims: 2048,
+    label: "GLM (Zhipu)",
+  };
+}
+
+export function getKbProviderInfo(): {
+  provider: KbProvider;
+  label: string;
+  dims: number;
+  configured: boolean;
+} {
+  const provider = resolveProvider();
+  const hasKey =
+    provider === "glm" ? !!process.env.ZHIPU_API_KEY : !!process.env.OPENAI_API_KEY;
+  try {
+    const cfg = getProviderConfig(provider);
+    return { provider, label: cfg.label, dims: cfg.dims, configured: hasKey };
+  } catch {
+    return { provider, label: provider === "glm" ? "GLM (Zhipu)" : "OpenAI", dims: provider === "glm" ? 2048 : 1536, configured: false };
+  }
+}
+
+// ── Embedding ───────────────────────────────────────────────────────────
+
 async function embed(texts: string[]): Promise<number[][]> {
-  if (!GLM_KEY) throw new Error("ZHIPU_API_KEY not set");
-  const res = await fetch(`${GLM_BASE}/embeddings`, {
+  const provider = resolveProvider();
+  const cfg = getProviderConfig(provider);
+
+  const res = await fetch(`${cfg.baseUrl}/embeddings`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${GLM_KEY}`,
+      Authorization: `Bearer ${cfg.key}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ model: "embedding-3", input: texts }),
+    body: JSON.stringify({ model: cfg.embedModel, input: texts }),
   });
-  if (!res.ok) throw new Error(`GLM embed ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`${cfg.label} embed ${res.status}: ${await res.text()}`);
   const json = await res.json();
   return (json.data as { index: number; embedding: number[] }[])
     .sort((a, b) => a.index - b.index)
     .map((d) => d.embedding);
 }
 
+// ── Chat ────────────────────────────────────────────────────────────────
+
+const SYSTEM_PROMPT =
+  "You are an assistant for 86Connect Cars, a China car export company. Answer using ONLY the provided context. If the context doesn't contain the answer, say you don't know and suggest contacting the team via WhatsApp at +86 176 1153 3296 or email info@the86connect.com. Be concise and helpful. When discussing prices, shipping, or vehicles, reference the specific details from the context.";
+
 async function chat(prompt: string, context: string): Promise<string> {
-  if (!GLM_KEY) throw new Error("ZHIPU_API_KEY not set");
-  const res = await fetch(`${GLM_BASE}/chat/completions`, {
+  const provider = resolveProvider();
+  const cfg = getProviderConfig(provider);
+
+  const res = await fetch(`${cfg.baseUrl}/chat/completions`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${GLM_KEY}`,
+      Authorization: `Bearer ${cfg.key}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "glm-4-flash",
+      model: cfg.chatModel,
       messages: [
-        {
-          role: "system",
-          content:
-            "You are an assistant for 86Connect Cars, a China car export company. Answer using ONLY the provided context. If the context doesn't contain the answer, say you don't know and suggest contacting the team via WhatsApp or email. Be concise and helpful. When discussing prices, shipping, or vehicles, reference the specific details from the context.",
-        },
-        {
-          role: "user",
-          content: `Context:\n${context}\n\nQuestion: ${prompt}`,
-        },
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: `Context:\n${context}\n\nQuestion: ${prompt}` },
       ],
       temperature: 0.3,
       max_tokens: 1000,
     }),
   });
-  if (!res.ok) throw new Error(`GLM chat ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`${cfg.label} chat ${res.status}: ${await res.text()}`);
   const json = await res.json();
   return json.choices?.[0]?.message?.content ?? "No response";
 }
+
+// ── Document processing ─────────────────────────────────────────────────
 
 const splitter = new RecursiveCharacterTextSplitter({
   chunkSize: 1000,
@@ -76,6 +142,9 @@ export async function upsertDocument(
   filename: string,
   title: string
 ): Promise<{ id: string; chunkCount: number; charCount: number }> {
+  const provider = resolveProvider();
+  const cfg = getProviderConfig(provider);
+
   const text = await parseDocx(arrayBuffer);
   const chunks = await chunkText(text);
   if (chunks.length === 0) throw new Error("Document has no extractable text");
@@ -83,7 +152,7 @@ export async function upsertDocument(
   const docId = `kb-${Date.now()}-${randomUUID().slice(0, 8)}`;
   const charCount = text.length;
 
-  // Embed in batches of 20 (GLM supports batch input)
+  // Embed in batches of 20 (both providers support batch input)
   const EMBED_BATCH = 20;
   const allEmbeddings: number[][] = [];
   for (let i = 0; i < chunks.length; i += EMBED_BATCH) {
@@ -92,13 +161,15 @@ export async function upsertDocument(
     allEmbeddings.push(...embeddings);
   }
 
-  // Store doc metadata
+  // Store doc metadata with provider info
   await kbDocuments.create({
     id: docId,
     title,
     filename,
     chunkCount: chunks.length,
     charCount,
+    provider,
+    embeddingDim: cfg.dims,
   });
 
   // Store chunks + embeddings in batches of 50 (avoids huge payloads)
@@ -109,7 +180,7 @@ export async function upsertDocument(
       content,
       embedding: allEmbeddings[i + j],
       chunkIndex: i + j,
-      metadata: { source: filename, chunk: i + j },
+      metadata: { source: filename, chunk: i + j, provider },
     }));
     await kbChunks.insertMany(batch);
   }
@@ -124,9 +195,7 @@ export async function replaceDocument(
   filename: string,
   title: string
 ): Promise<{ id: string; chunkCount: number; charCount: number }> {
-  // Delete old doc (cascade removes old chunks)
   await kbDocuments.delete(docId);
-  // Insert new
   return upsertDocument(arrayBuffer, filename, title);
 }
 
@@ -135,9 +204,11 @@ export async function deleteDocument(docId: string): Promise<void> {
   await kbDocuments.delete(docId);
 }
 
+// ── RAG query ───────────────────────────────────────────────────────────
+
 export type KbSource = { docId: string; content: string; similarity: number };
 
-/** RAG query: embed question, search pgvector, call GLM chat with context. */
+/** RAG query: embed question, search pgvector, call chat with context. */
 export async function askQuestion(question: string): Promise<{
   answer: string;
   sources: KbSource[];
