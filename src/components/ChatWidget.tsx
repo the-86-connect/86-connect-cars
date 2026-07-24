@@ -314,12 +314,12 @@ export function ChatWidget() {
             </span>
           )}
           <span
-            className="pointer-events-none absolute right-16 -top-1 whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-sm font-medium text-gray-800 shadow-lg ring-1 ring-gray-200"
+            className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-md ring-1 ring-gray-200 lg:text-sm lg:px-3 lg:py-1.5 lg:-top-12"
             style={{ animation: "hint-pop 0.35s ease-out" }}
             key={hintIndex}
           >
             {hintMessages[hintIndex]}
-            <span className="absolute right-[-6px top-1/2 -translate-y-1/2 h-0 w-0 border-y-[6px] border-l-[6px] border-y-transparent border-l-white" />
+            <span className="absolute left-1/2 -translate-x-1/2 -bottom-1.5 h-0 w-0 rotate-180 border-x-[5px] border-b-[6px] border-x-transparent border-b-white lg:border-x-[6px] lg:border-b-[7px]" />
           </span>
         </button>
       )}
