@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
@@ -185,6 +185,28 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
   const { user } = useUserAuth();
   const { favoriteIds, toggleFavorite } = useFavorites(user?.id ?? null);
 
+  // Mobile horizontal carousel scroll tracking
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeDot, setActiveDot] = useState(0);
+  const visibleCards = filtered.slice(0, 8);
+  const dotCount = Math.max(0, visibleCards.length - 1);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 0) return;
+    const progress = el.scrollLeft / maxScroll;
+    setActiveDot(Math.round(progress * dotCount));
+  }, [dotCount]);
+
+  const scrollToDot = (dot: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    el.scrollTo({ left: (dot / dotCount) * maxScroll, behavior: "smooth" });
+  };
+
   return (
     <section id="inventory" className="bg-[var(--bg-secondary)] pt-10 pb-20 lg:pt-16 lg:pb-32">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
@@ -227,24 +249,49 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
           </div>
         </motion.div>
 
-        {/* Responsive grid — 2 cols on mobile, 3 on tablet, 4 on desktop */}
+        {/* Mobile: horizontal scroll carousel / Desktop: grid */}
         <div className="mt-8 sm:mt-12">
           <motion.div
             layout
-            className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4"
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 scrollbar-hide md:grid md:grid-cols-3 md:overflow-visible md:snap-none lg:grid-cols-4 lg:gap-4"
           >
             <AnimatePresence mode="popLayout">
-              {filtered.slice(0, 8).map((v, i) => (
-                <VehicleCard
+              {visibleCards.map((v, i) => (
+                <div
                   key={v.id}
-                  vehicle={v}
-                  index={i}
-                  isFavorited={favoriteIds.has(v.id)}
-                  onToggleFavorite={toggleFavorite}
-                />
+                  className="min-w-[78%] shrink-0 snap-center md:min-w-0"
+                >
+                  <VehicleCard
+                    vehicle={v}
+                    index={i}
+                    isFavorited={favoriteIds.has(v.id)}
+                    onToggleFavorite={toggleFavorite}
+                  />
+                </div>
               ))}
             </AnimatePresence>
           </motion.div>
+
+          {/* Mobile scroll dots indicator */}
+          {dotCount > 0 && (
+            <div className="mt-3 flex justify-center gap-1.5 md:hidden">
+              {Array.from({ length: dotCount + 1 }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => scrollToDot(i)}
+                  aria-label={`Scroll to card ${i + 1}`}
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    i === activeDot
+                      ? "w-5 bg-brand-500"
+                      : "w-1.5 bg-[var(--text-muted)]/30 hover:bg-[var(--text-muted)]/50",
+                  )}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* View All button */}
