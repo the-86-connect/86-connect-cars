@@ -170,7 +170,7 @@ export function Footer() {
               </a>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70 sm:mt-5">
-              Your trusted gateway to China for premium vehicles. We connect the world with China's top car brands and verified manufacturers.
+              Your trusted gateway to China for premium vehicles. We connect the world with China&apos;s top car brands and verified manufacturers.
             </p>
 
             {/* Social icons */}

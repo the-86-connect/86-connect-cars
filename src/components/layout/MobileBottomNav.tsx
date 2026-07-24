@@ -14,25 +14,23 @@ const navItems = [
   { icon: MessageCircle, label: "Contact", id: "contact" },
 ];
 
+const pathToSection: Record<string, string> = {
+  "/": "home",
+  "/inventory": "inventory",
+  "/brands": "brands",
+  "/account": "account",
+};
+
 export function MobileBottomNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const [activeSection, setActiveSection] = useState("home");
-  const [pillStyle, setPillStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Map<string, HTMLButtonElement | HTMLAnchorElement>>(new Map());
+  const [pillStyle, setPillStyle] = useState({ left: 0, width: 0 });
+  const [scrollSection, setScrollSection] = useState<string | null>(null);
 
-  useEffect(() => {
-    const pathToSection: Record<string, string> = {
-      "/": "home",
-      "/inventory": "inventory",
-      "/brands": "brands",
-      "/account": "account",
-    };
-    if (pathname && pathToSection[pathname]) {
-      setActiveSection(pathToSection[pathname]);
-    }
-  }, [pathname]);
+  const routeSection = pathToSection[pathname ?? "/"] ?? "home";
+  const activeSection = pathname === "/" ? (scrollSection ?? "home") : routeSection;
+  const activeId = pathname === "/account" ? "account" : activeSection;
 
   useEffect(() => {
     if (pathname !== "/" || pathname?.startsWith("/admin")) return;
@@ -40,7 +38,7 @@ export function MobileBottomNav() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveSection(entry.target.id);
+          if (entry.isIntersecting) setScrollSection(entry.target.id);
         });
       },
       { threshold: 0.3, rootMargin: "-80px 0px -80px 0px" }
@@ -53,18 +51,17 @@ export function MobileBottomNav() {
   }, [pathname]);
 
   useEffect(() => {
-    const activeId = pathname === "/account" ? "account" : activeSection;
-    const el = itemRefs.current.get(activeId);
     const container = navRef.current;
-    if (el && container) {
-      const containerRect = container.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
-      setPillStyle({
-        left: elRect.left - containerRect.left,
-        width: elRect.width,
-      });
-    }
-  }, [activeSection, pathname]);
+    if (!container) return;
+    const el = container.querySelector<HTMLElement>(`[data-nav-id="${activeId}"]`);
+    if (!el) return;
+    const containerRect = container.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    setPillStyle({
+      left: elRect.left - containerRect.left,
+      width: elRect.width,
+    });
+  }, [activeId]);
 
   if (pathname?.startsWith("/admin")) return null;
 
@@ -80,11 +77,6 @@ export function MobileBottomNav() {
     } else {
       router.push(`/#${id}`);
     }
-  };
-
-  const setItemRef = (id: string) => (el: HTMLButtonElement | HTMLAnchorElement | null) => {
-    if (el) itemRefs.current.set(id, el);
-    else itemRefs.current.delete(id);
   };
 
   return (
@@ -105,7 +97,7 @@ export function MobileBottomNav() {
           return (
             <button
               key={id}
-              ref={setItemRef(id) as React.Ref<HTMLButtonElement>}
+              data-nav-id={id}
               onClick={() => handleTabClick(id)}
               className="mobile-nav-item relative z-10 flex flex-col items-center gap-0.5 px-2 py-2 rounded-2xl transition-all duration-200"
             >
@@ -126,7 +118,7 @@ export function MobileBottomNav() {
           );
         })}
         <Link
-          ref={setItemRef("account") as React.Ref<HTMLAnchorElement>}
+          data-nav-id="account"
           href="/account"
           className={`mobile-nav-item relative z-10 flex flex-col items-center gap-0.5 px-2 py-2 rounded-2xl transition-all duration-200 ${
             pathname === "/account" ? "text-brand-500" : "text-[var(--text-muted)]"
