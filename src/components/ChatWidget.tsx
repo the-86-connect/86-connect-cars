@@ -138,6 +138,34 @@ export function ChatWidget() {
     openRef.current = open;
   }, [open]);
 
+  // Toggle body class to hide mobile nav when chat is open
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add("chat-open");
+    } else {
+      document.body.classList.remove("chat-open");
+    }
+    return () => document.body.classList.remove("chat-open");
+  }, [open]);
+
+  // Track keyboard height via visualViewport for mobile
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("visualViewport" in window) || !window.visualViewport) return;
+    const vv = window.visualViewport;
+    const onResize = () => {
+      const diff = window.innerHeight - vv.height;
+      setKeyboardOffset(diff > 100 ? diff : 0);
+    };
+    vv.addEventListener("resize", onResize);
+    vv.addEventListener("scroll", onResize);
+    return () => {
+      vv.removeEventListener("resize", onResize);
+      vv.removeEventListener("scroll", onResize);
+    };
+  }, []);
+
   useEffect(() => {
     if (!didLoad.current) {
       didLoad.current = true;
@@ -260,48 +288,67 @@ export function ChatWidget() {
 
   return (
     <>
-      <button
-        type="button"
-        aria-label={open ? "Close chat" : "Open chat assistant"}
-        onClick={() => {
-          setOpen((o) => !o);
-          if (!open) setUnreadCount(0);
-        }}
-        className="fixed bottom-20 right-5 z-50 flex items-end justify-center transition-transform hover:scale-110 active:scale-95 lg:bottom-5"
-      >
-        {open ? (
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-800 text-white shadow-lg">
+      {/* Floating button (closed state) — always at bottom */}
+      {!open && (
+        <button
+          type="button"
+          aria-label="Open chat assistant"
+          onClick={() => {
+            setOpen(true);
+            setUnreadCount(0);
+          }}
+          className="fixed bottom-20 right-5 z-50 flex items-end justify-center transition-transform hover:scale-110 active:scale-95 lg:bottom-5"
+          style={
+            keyboardOffset > 0
+              ? { bottom: `calc(${keyboardOffset}px + 5rem)` }
+              : undefined
+          }
+        >
+          <RobotIcon size={56} wave glow />
+          {unreadCount > 0 && (
+            <span
+              className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white"
+              style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}
+            >
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+          <span
+            className="pointer-events-none absolute right-16 -top-1 whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-sm font-medium text-gray-800 shadow-lg ring-1 ring-gray-200"
+            style={{ animation: "hint-pop 0.35s ease-out" }}
+            key={hintIndex}
+          >
+            {hintMessages[hintIndex]}
+            <span className="absolute right-[-6px top-1/2 -translate-y-1/2 h-0 w-0 border-y-[6px] border-l-[6px] border-y-transparent border-l-white" />
+          </span>
+        </button>
+      )}
+
+      {/* Close button — top-right on mobile, bottom-right on desktop */}
+      {open && (
+        <button
+          type="button"
+          aria-label="Close chat"
+          onClick={() => setOpen(false)}
+          className="fixed z-[60] flex items-center justify-center transition-transform hover:scale-110 active:scale-95 top-4 right-4 lg:bottom-24 lg:right-5 lg:top-auto"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-800/90 text-white shadow-lg backdrop-blur">
             <X className="h-5 w-5" />
           </span>
-        ) : (
-          <>
-            <RobotIcon size={56} wave glow />
-            {unreadCount > 0 && (
-              <span
-                className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white"
-                style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}
-              >
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-            <span
-              className="pointer-events-none absolute right-16 -top-1 whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-sm font-medium text-gray-800 shadow-lg ring-1 ring-gray-200"
-              style={{
-                animation: "hint-pop 0.35s ease-out",
-              }}
-              key={hintIndex}
-            >
-              {hintMessages[hintIndex]}
-              <span className="absolute right-[-6px top-1/2 -translate-y-1/2 h-0 w-0 border-y-[6px] border-l-[6px] border-y-transparent border-l-white" />
-            </span>
-          </>
-        )}
-      </button>
+        </button>
+      )}
 
       {open && (
         <div
-          className="fixed bottom-28 right-5 z-50 flex h-[min(520px,calc(100vh-10rem))] w-[min(360px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl lg:bottom-24 lg:h-[min(600px,calc(100vh-7rem))] lg:w-[min(400px,calc(100vw-2.5rem))]"
-          style={{ boxShadow: "0 20px 60px -15px rgba(0,0,0,0.25)" }}
+          className="fixed inset-x-0 bottom-0 z-50 flex h-[85vh] flex-col overflow-hidden rounded-t-2xl border border-gray-200 bg-white shadow-2xl lg:right-5 lg:bottom-24 lg:left-auto lg:h-[min(600px,calc(100vh-7rem))] lg:w-[min(400px,calc(100vw-2.5rem))] lg:rounded-2xl"
+          style={{
+            boxShadow: "0 20px 60px -15px rgba(0,0,0,0.25)",
+            bottom: keyboardOffset > 0 ? keyboardOffset : 0,
+            height:
+              keyboardOffset > 0
+                ? `calc(100vh - ${keyboardOffset}px - env(safe-area-inset-top, 0px) - 3.5rem)`
+                : undefined,
+          }}
         >
           {/* Header */}
           <div

@@ -71,7 +71,7 @@ export function MobileBottomNav() {
 
   return (
     <>
-    <div className="h-16 lg:hidden" aria-hidden />
+    <div className="mobile-nav-spacer h-16 lg:hidden" aria-hidden />
     <nav className="mobile-bottom-nav lg:hidden">
       <div className="mobile-bottom-nav-bar flex items-center justify-around px-2 py-2">
         {navItems.map(({ icon: Icon, label, id }) => (

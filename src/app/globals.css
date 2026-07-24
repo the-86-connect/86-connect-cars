@@ -357,6 +357,15 @@
   .mobile-bottom-nav {
     @apply fixed bottom-0 inset-x-0 z-40;
     padding: 8px 12px env(safe-area-inset-bottom, 0px);
+    transition: transform 0.25s ease-out, opacity 0.2s ease-out;
+  }
+  body.chat-open .mobile-bottom-nav {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  body.chat-open .mobile-nav-spacer {
+    display: none;
   }
   .mobile-bottom-nav-bar {
     border-radius: 24px;
