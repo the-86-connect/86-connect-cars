@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
-import { Zap, Fuel, Cog, ArrowRight, Heart } from "lucide-react";
+import { Zap, Fuel, Cog, ArrowRight, Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Badge } from "@/components/ui/Badge";
@@ -188,24 +188,36 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
   // Mobile horizontal carousel scroll tracking
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeDot, setActiveDot] = useState(0);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(true);
   const visibleCards = filtered.slice(0, 8);
   const dotCount = Math.max(0, visibleCards.length - 1);
 
-  const handleScroll = useCallback(() => {
+  const updateScrollState = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
     const maxScroll = el.scrollWidth - el.clientWidth;
-    if (maxScroll <= 0) return;
+    if (maxScroll <= 0) {
+      setCanLeft(false);
+      setCanRight(false);
+      return;
+    }
+    setCanLeft(el.scrollLeft > 4);
+    setCanRight(el.scrollLeft < maxScroll - 4);
     const progress = el.scrollLeft / maxScroll;
     setActiveDot(Math.round(progress * dotCount));
   }, [dotCount]);
 
-  const scrollToDot = (dot: number) => {
+  const scrollByCard = (dir: 1 | -1) => {
     const el = scrollRef.current;
     if (!el) return;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    el.scrollTo({ left: (dot / dotCount) * maxScroll, behavior: "smooth" });
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
   };
+
+  // Recalculate scroll state on mount and when card count changes
+  useEffect(() => {
+    updateScrollState();
+  }, [visibleCards.length, updateScrollState]);
 
   return (
     <section id="inventory" className="bg-[var(--bg-secondary)] pt-10 pb-20 lg:pt-16 lg:pb-32">
@@ -251,25 +263,80 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
 
         {/* Mobile: horizontal scroll carousel / Desktop: grid */}
         <div className="mt-8 sm:mt-12">
+          {/* Mobile carousel wrapper with fade edges + arrows */}
+          <div className="relative md:hidden">
+            {/* Left fade + arrow */}
+            <div
+              className={cn(
+                "pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-[var(--bg-secondary)] to-transparent transition-opacity duration-300",
+                canLeft ? "opacity-100" : "opacity-0",
+              )}
+            />
+            {canLeft && (
+              <button
+                onClick={() => scrollByCard(-1)}
+                aria-label="Scroll left"
+                className="absolute left-1 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--bg-card)] shadow-lg ring-1 ring-[var(--border-color)] transition-transform active:scale-90"
+              >
+                <ChevronLeft className="h-4 w-4 text-[var(--text-primary)]" />
+              </button>
+            )}
+
+            {/* Right fade + arrow */}
+            <div
+              className={cn(
+                "pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-[var(--bg-secondary)] to-transparent transition-opacity duration-300",
+                canRight ? "opacity-100" : "opacity-0",
+              )}
+            />
+            {canRight && (
+              <button
+                onClick={() => scrollByCard(1)}
+                aria-label="Scroll right"
+                className="absolute right-1 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--bg-card)] shadow-lg ring-1 ring-[var(--border-color)] transition-transform active:scale-90"
+              >
+                <ChevronRight className="h-4 w-4 text-[var(--text-primary)]" />
+              </button>
+            )}
+
+            <motion.div
+              layout
+              ref={scrollRef}
+              onScroll={updateScrollState}
+              className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 scrollbar-hide"
+            >
+              <AnimatePresence mode="popLayout">
+                {visibleCards.map((v, i) => (
+                  <div
+                    key={v.id}
+                    className="min-w-[78%] shrink-0 snap-center"
+                  >
+                    <VehicleCard
+                      vehicle={v}
+                      index={i}
+                      isFavorited={favoriteIds.has(v.id)}
+                      onToggleFavorite={toggleFavorite}
+                    />
+                  </div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          </div>
+
+          {/* Desktop grid */}
           <motion.div
             layout
-            ref={scrollRef}
-            onScroll={handleScroll}
-            className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 scrollbar-hide md:grid md:grid-cols-3 md:overflow-visible md:snap-none lg:grid-cols-4 lg:gap-4"
+            className="hidden gap-4 md:grid md:grid-cols-3 lg:grid-cols-4"
           >
             <AnimatePresence mode="popLayout">
               {visibleCards.map((v, i) => (
-                <div
+                <VehicleCard
                   key={v.id}
-                  className="min-w-[78%] shrink-0 snap-center md:min-w-0"
-                >
-                  <VehicleCard
-                    vehicle={v}
-                    index={i}
-                    isFavorited={favoriteIds.has(v.id)}
-                    onToggleFavorite={toggleFavorite}
-                  />
-                </div>
+                  vehicle={v}
+                  index={i}
+                  isFavorited={favoriteIds.has(v.id)}
+                  onToggleFavorite={toggleFavorite}
+                />
               ))}
             </AnimatePresence>
           </motion.div>
@@ -280,7 +347,12 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
               {Array.from({ length: dotCount + 1 }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => scrollToDot(i)}
+                  onClick={() => {
+                    const el = scrollRef.current;
+                    if (!el) return;
+                    const maxScroll = el.scrollWidth - el.clientWidth;
+                    el.scrollTo({ left: (i / dotCount) * maxScroll, behavior: "smooth" });
+                  }}
                   aria-label={`Scroll to card ${i + 1}`}
                   className={cn(
                     "h-1.5 rounded-full transition-all duration-300",
