@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Heart, MessageSquareQuote, LogOut, User, Package, Truck, CheckCircle2, Clock, Ship, Anchor, FileCheck, Loader } from "lucide-react";
+import { Heart, MessageSquareQuote, LogOut, User, Package, Truck, CheckCircle2, Clock, Ship, Anchor, FileCheck, Loader, ExternalLink } from "lucide-react";
 
 interface UserData { id: string; name: string; email: string; whatsapp?: string; country?: string; }
 interface Quote {
@@ -251,6 +251,18 @@ export default function AccountPage() {
                       </p>
                     )}
                     <DeliveryTracker status={q.deliveryStatus || "pending"} statusUpdatedAt={q.statusUpdatedAt} />
+                    <div className="mt-4 flex justify-end">
+                      <a
+                        href="https://www.the86connect.com/car-shipping/track"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-brand-500 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-brand-600 hover:shadow-md active:scale-95"
+                      >
+                        <Truck className="h-3.5 w-3.5" />
+                        Track Shipment
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
                   </div>
                 ))}
               </div>

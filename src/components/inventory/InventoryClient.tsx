@@ -1742,10 +1742,10 @@ export function InventoryClient({
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed inset-x-0 bottom-0 z-50 max-h-[88vh] overflow-y-auto rounded-t-3xl bg-[var(--bg-primary)] shadow-2xl lg:hidden"
+              className="fixed inset-x-0 bottom-0 z-50 max-h-[88vh] overflow-y-auto rounded-t-3xl bg-[var(--bg-primary)]/80 backdrop-blur-xl shadow-2xl lg:hidden supports-[backdrop-filter]:bg-[var(--bg-primary)]/70"
             >
               {/* Handle */}
-              <div className="sticky top-0 z-10 bg-[var(--bg-primary)] pt-3 pb-2 px-5">
+              <div className="sticky top-0 z-10 bg-[var(--bg-primary)]/60 backdrop-blur-md pt-3 pb-2 px-5 supports-[backdrop-filter]:bg-[var(--bg-primary)]/40">
                 <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-[var(--border-color)]" />
                 <div className="flex items-center justify-between">
                   <h2 className="font-display text-lg font-bold text-[var(--text-primary)]">
@@ -1807,7 +1807,7 @@ export function InventoryClient({
               </div>
 
               {/* Sticky apply button */}
-              <div className="fixed inset-x-0 bottom-0 z-10 border-t border-[var(--border-color)] bg-[var(--bg-primary)] p-4 pb-6 lg:hidden">
+              <div className="fixed inset-x-0 bottom-0 z-10 border-t border-[var(--border-color)] bg-[var(--bg-primary)]/80 backdrop-blur-xl p-4 pb-6 lg:hidden supports-[backdrop-filter]:bg-[var(--bg-primary)]/70">
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}

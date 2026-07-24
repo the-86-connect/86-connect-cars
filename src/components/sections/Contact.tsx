@@ -26,8 +26,8 @@ const contactInfo: {
   {
     icon: Mail,
     label: "Email Us",
-    value: "beijingbridgepath@gmail.com",
-    href: "mailto:beijingbridgepath@gmail.com",
+    value: "info@the86connect.com",
+    href: "mailto:info@the86connect.com",
   },
   {
     icon: MessageCircle,
@@ -64,9 +64,9 @@ function ContactInner() {
   const vehicleSlug = searchParams.get("vehicleSlug") ?? undefined;
 
   return (
-    <section id="contact" className="bg-[var(--bg-primary)] py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
+    <section id="contact" className="bg-[var(--bg-primary)] py-12 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12">
           {/* Left: heading + contact info + stats */}
           <motion.div
             variants={stagger}
@@ -87,7 +87,7 @@ function ContactInner() {
                 const Icon = item.icon;
                 const inner = (
                   <>
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-500/10 text-accent-500">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-500">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
@@ -133,7 +133,7 @@ function ContactInner() {
                     key={s.label}
                     className="glass-card flex items-center gap-2 rounded-full px-4 py-2"
                   >
-                    <Icon className="h-4 w-4 text-accent-500" />
+                    <Icon className="h-4 w-4 text-brand-500" />
                     <span className="text-xs font-semibold text-[var(--text-primary)]">{s.label}</span>
                   </div>
                 );
@@ -148,7 +148,7 @@ function ContactInner() {
             whileInView="show"
             viewport={viewportOnce}
           >
-            <div className="rounded-3xl border-2 border-brand-500/30 bg-white p-6 sm:p-8">
+            <div className="glass-card rounded-3xl border-2 border-brand-500/30 p-5 sm:p-8">
               <QuoteForm defaultBrand={brand} defaultModel={model} vehicleSlug={vehicleSlug} />
             </div>
           </motion.div>

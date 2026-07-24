@@ -43,29 +43,29 @@ function Avatar({ t }: { t: Testimonial }) {
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <div className="glass-card w-[380px] shrink-0 rounded-3xl p-6">
+    <div className="glass-card w-[300px] shrink-0 rounded-2xl p-5 sm:w-[380px] sm:rounded-3xl sm:p-6">
       <div className="flex items-center gap-3">
         <Avatar t={t} />
         <div className="min-w-0 flex-1">
-          <p className="truncate font-semibold text-[var(--text-primary)]">{t.name}</p>
+          <p className="truncate text-sm font-semibold text-[var(--text-primary)] sm:text-base">{t.name}</p>
           <p className="truncate text-xs text-[var(--text-muted)]">{t.role}</p>
         </div>
-        <span className="text-2xl leading-none" aria-hidden="true">
+        <span className="text-xl leading-none sm:text-2xl" aria-hidden="true">
           {t.flag}
         </span>
       </div>
 
-      <div className="mt-4 flex gap-0.5">
+      <div className="mt-3 flex gap-0.5 sm:mt-4">
         {Array.from({ length: 5 }).map((_, i) => (
-          <Star key={i} className="h-4 w-4 text-brand-500" fill="currentColor" />
+          <Star key={i} className="h-3.5 w-3.5 text-brand-500 sm:h-4 sm:w-4" fill="currentColor" />
         ))}
       </div>
 
-      <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-[var(--text-secondary)]">
+      <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-[var(--text-secondary)] sm:mt-4">
         &ldquo;{t.quote}&rdquo;
       </p>
 
-      <p className="mt-5 text-xs text-[var(--text-muted)]">{t.country}</p>
+      <p className="mt-4 text-xs text-[var(--text-muted)] sm:mt-5">{t.country}</p>
     </div>
   );
 }
@@ -85,13 +85,13 @@ function MarqueeRow({
           reverse ? "animate-marquee-reverse" : "animate-marquee",
         )}
       >
-        <div className="flex gap-6 pr-6">
+        <div className="flex gap-4 pr-4 sm:gap-6 sm:pr-6">
           {items.map((t) => (
             <TestimonialCard key={t.id} t={t} />
           ))}
         </div>
         {/* Duplicated set for a seamless loop (translateX -50% = one copy width). */}
-        <div className="flex gap-6 pr-6" aria-hidden="true">
+        <div className="flex gap-4 pr-4 sm:gap-6 sm:pr-6" aria-hidden="true">
           {items.map((t) => (
             <TestimonialCard key={`${t.id}-dup`} t={t} />
           ))}
@@ -107,8 +107,8 @@ function MarqueeRow({
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="bg-[var(--bg-primary)] pt-12 pb-24 lg:pt-16 lg:pb-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="testimonials" className="bg-[var(--bg-primary)] py-12 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Testimonials"
           title="Trusted Worldwide"
@@ -116,7 +116,7 @@ export function Testimonials() {
         />
       </div>
 
-      <div className="mt-16 flex flex-col gap-6">
+      <div className="mt-8 flex flex-col gap-4 sm:mt-16 sm:gap-6">
         <MarqueeRow items={rowOne} />
       </div>
     </section>

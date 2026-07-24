@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
-import { Mail, MessageCircle, MapPin, ExternalLink } from "lucide-react";
+import { Mail, MessageCircle, ExternalLink } from "lucide-react";
 import { scrollToId } from "@/lib/utils";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
@@ -114,93 +114,95 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-red-300/60 bg-gradient-to-br from-red-100 via-red-50 to-white dark:border-red-800/40 dark:bg-gradient-to-br dark:from-red-950/40 dark:via-red-900/20 dark:to-[var(--bg-primary)]">
+    <footer className="relative overflow-hidden border-t border-white/[0.08] bg-gradient-to-b from-[#111827] via-[#0d1321] to-[#080c16] text-white">
+      {/* Bright center glow radiating outward */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 80% at 50% 40%, rgba(227,30,36,0.20) 0%, rgba(227,30,36,0.08) 35%, transparent 65%), radial-gradient(ellipse 50% 60% at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 60%)",
+        }}
+      />
+      {/* Top edge red accent glow */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{
+          background: "linear-gradient(90deg, transparent, rgba(227,30,36,0.6), transparent)",
+        }}
+      />
       {/* Main footer content */}
       <motion.div
         variants={stagger}
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        className="mx-auto max-w-7xl px-6 py-10"
+        className="relative z-[1] mx-auto max-w-7xl px-4 pb-24 pt-10 sm:px-6 sm:pb-8 sm:pt-14"
       >
         {/* Top: 4 columns */}
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:gap-10">
+        <div className="grid grid-cols-2 gap-6 sm:gap-10 md:grid-cols-4 lg:gap-12">
           {/* Column 1: Brand */}
           <motion.div variants={fadeUp} className="col-span-2 md:col-span-1">
-            <a
-              href="#home"
-              onClick={(e) => handleLink(e, "home")}
-              className="group flex items-center"
-            >
-              <img
-                src="/logo-86 connect.png"
-                alt="86Connect"
-                className="h-10 w-auto"
-              />
-            </a>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-[var(--text-secondary)]">
-              The digital gateway of Beijing BridgePath International Consulting Co., Ltd.
-              Direct line connecting the world to China.
-            </p>
-
-            {/* Parent company + Social + Main site — one row */}
-            <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[var(--border-color)] pt-6">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3 sm:gap-4">
+              {/* Logo card with subtle glow */}
+              <a
+                href="#home"
+                onClick={(e) => handleLink(e, "home")}
+                className="group inline-flex shrink-0 items-center rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 transition-all hover:border-red-500/30 hover:shadow-[0_0_25px_rgba(227,30,36,0.25)] sm:px-4 sm:py-2.5"
+              >
                 <img
-                  src="/parent company logo 86connect.png"
-                  alt="Beijing BridgePath International Consulting Co., Ltd"
-                  className="h-10 w-10 shrink-0 object-contain"
+                  src="/main logo white 86.png"
+                  alt="86Connect"
+                  className="h-6 w-auto brightness-0 invert sm:h-7"
                 />
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-                    Parent Company
-                  </p>
-                  <p className="text-xs font-medium text-[var(--text-secondary)]">
-                    Beijing BridgePath Intl.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {socialIcons.map(({ icon: Icon, label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    className="glass-card flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:border-brand-500 hover:text-brand-500"
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                  </a>
-                ))}
-              </div>
-
+              </a>
+              {/* Parent company card */}
               <a
                 href="https://the86connect.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-elevated)] px-3 py-2 transition-all hover:border-brand-500 hover:bg-brand-50/50 dark:hover:bg-brand-900/10"
+                className="group inline-flex shrink-0 items-center rounded-xl border border-white/10 bg-white/[0.06] px-2.5 py-2 transition-all hover:border-red-500/30 hover:shadow-[0_0_25px_rgba(227,30,36,0.25)] sm:px-3 sm:py-2.5"
               >
-                <span className="text-xs font-medium text-[var(--text-primary)]">
-                  the86connect.com
-                </span>
-                <ExternalLink className="h-3.5 w-3.5 shrink-0 text-brand-500" />
+                <img
+                  src="/parent company logo 86connect.png"
+                  alt="Beijing BridgePath International Consulting Co., Ltd"
+                  className="h-6 w-6 object-contain brightness-0 invert sm:h-7 sm:w-7"
+                />
               </a>
+            </div>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70 sm:mt-5">
+              Your trusted gateway to China for premium vehicles. We connect the world with China's top car brands and verified manufacturers.
+            </p>
+
+            {/* Social icons */}
+            <div className="mt-5 flex items-center gap-2 sm:mt-6 sm:gap-2.5">
+              {socialIcons.map(({ icon: Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.08] text-white/70 transition-all hover:border-white/25 hover:bg-white/15 hover:text-white"
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                </a>
+              ))}
             </div>
           </motion.div>
 
           {/* Column 2: Company */}
           <motion.div variants={fadeUp}>
-            <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-[var(--text-primary)]">
+            <h3 className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/50 sm:mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(227,30,36,0.6)]" />
               Company
             </h3>
-            <ul className="mt-4 flex flex-col gap-3">
+            <ul className="flex flex-col gap-2.5 sm:gap-3">
               {companyLinks.map((link) => (
                 <li key={link.label}>
                   <a
                     href={`#${link.id}`}
                     onClick={(e) => handleLink(e, link.id)}
-                    className="text-sm text-[var(--text-secondary)] transition-colors hover:text-brand-500"
+                    className="group inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition-colors hover:text-white sm:gap-2.5 sm:font-bold"
                   >
+                    <span className="h-1 w-1 rounded-full bg-white/25 transition-colors group-hover:bg-red-500" />
                     {link.label}
                   </a>
                 </li>
@@ -210,17 +212,19 @@ export function Footer() {
 
           {/* Column 3: Services */}
           <motion.div variants={fadeUp}>
-            <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-[var(--text-primary)]">
+            <h3 className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/50 sm:mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(227,30,36,0.6)]" />
               Services
             </h3>
-            <ul className="mt-4 flex flex-col gap-3">
+            <ul className="flex flex-col gap-2.5 sm:gap-3">
               {serviceLinks.map((link) => (
                 <li key={link.label}>
                   <a
                     href={`#${link.id}`}
                     onClick={(e) => handleLink(e, link.id)}
-                    className="text-sm text-[var(--text-secondary)] transition-colors hover:text-brand-500"
+                    className="group inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition-colors hover:text-white sm:gap-2.5 sm:font-bold"
                   >
+                    <span className="h-1 w-1 rounded-full bg-white/25 transition-colors group-hover:bg-red-500" />
                     {link.label}
                   </a>
                 </li>
@@ -230,30 +234,38 @@ export function Footer() {
 
           {/* Column 4: Contact */}
           <motion.div variants={fadeUp} className="col-span-2 md:col-span-1">
-            <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-[var(--text-primary)]">
-              Contact
+            <h3 className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/50 sm:mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(227,30,36,0.6)]" />
+              Get in Touch
             </h3>
-            <ul className="mt-4 flex flex-col gap-4">
-              <li className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-                <span className="glass-card flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-brand-500">
-                  <Mail className="h-4 w-4" />
-                </span>
+            <ul className="flex flex-col gap-3 sm:gap-4">
+              <li>
                 <a
-                  href="mailto:beijingbridgepath@gmail.com"
-                  className="transition-colors hover:text-brand-500"
+                  href="mailto:info@the86connect.com"
+                  className="group inline-flex items-center gap-2.5 text-sm font-semibold text-white/70 transition-colors hover:text-white sm:gap-3 sm:font-bold"
                 >
-                  beijingbridgepath@gmail.com
+                  <Mail className="h-4 w-4 shrink-0 text-white/50 transition-colors group-hover:text-red-400" />
+                  <span className="break-all">info@the86connect.com</span>
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-                <span className="glass-card flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-brand-500">
-                  <MessageCircle className="h-4 w-4" />
-                </span>
+              <li>
                 <a
                   href="https://wa.me/8617611533296"
-                  className="transition-colors hover:text-brand-500"
+                  className="group inline-flex items-center gap-3 text-sm font-bold text-white/70 transition-colors hover:text-white"
                 >
+                  <MessageCircle className="h-4 w-4 shrink-0 text-white/50 transition-colors group-hover:text-red-400" />
                   +86 176 1153 3296
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://the86connect.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 text-sm font-bold text-white/70 transition-colors hover:text-white"
+                >
+                  <ExternalLink className="h-4 w-4 shrink-0 text-white/50 transition-colors group-hover:text-red-400" />
+                  the86connect.com
                 </a>
               </li>
             </ul>
@@ -263,32 +275,33 @@ export function Footer() {
         {/* Bottom bar */}
         <motion.div
           variants={fadeUp}
-          className="mt-14 grid gap-3 border-t border-[var(--border-color)] pt-8 sm:grid-cols-3 sm:items-center sm:gap-6"
+          className="mt-10 flex flex-col items-center gap-2 border-t border-white/[0.08] pt-6 text-center sm:mt-14 sm:flex-row sm:justify-between sm:gap-4 sm:pt-8 sm:text-left"
         >
-          <p className="text-sm text-[var(--text-muted)] sm:text-left">
-            © {new Date().getFullYear()} 86Connect. All rights reserved.
+          <p className="text-xs font-medium text-white/50 sm:text-sm">
+            © {new Date().getFullYear()}{" "}
+            <span className="font-bold text-red-500 drop-shadow-[0_0_8px_rgba(227,30,36,0.4)]">86Connect</span>. All rights reserved.
           </p>
-          <p className="text-sm text-[var(--text-muted)] text-center sm:text-center">
+          <p className="text-xs font-medium text-white/50 sm:text-sm">
             Developed by{" "}
             <a
               href="https://www.linkedin.com/in/milton-babu"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-brand-500 transition-colors hover:text-brand-600"
+              className="font-bold text-white/85 transition-colors hover:text-white"
             >
               MD MILTON BABU
             </a>
           </p>
-          <div className="flex items-center justify-center gap-6 sm:justify-end">
+          <div className="flex items-center gap-4 sm:gap-6">
             <a
               href="#"
-              className="text-sm text-[var(--text-muted)] transition-colors hover:text-brand-500"
+              className="text-xs font-medium text-white/50 transition-colors hover:text-white sm:text-sm"
             >
               Privacy Policy
             </a>
             <a
               href="#"
-              className="text-sm text-[var(--text-muted)] transition-colors hover:text-brand-500"
+              className="text-xs font-medium text-white/50 transition-colors hover:text-white sm:text-sm"
             >
               Terms of Service
             </a>

@@ -43,11 +43,25 @@ export function Hero() {
         />
       </div>
 
-      {/* Gradient overlay for text readability — stronger on mobile */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/30 to-black/60 lg:from-black/40 lg:via-transparent lg:to-black/30" />
+      {/* Dark gradient overlay */}
+      {/* Desktop: left-heavy gradient for left-aligned text; Mobile: centered/vertical for centered text */}
+      <div
+        className="absolute inset-0 z-[1] lg:hidden"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.5) 100%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 z-[1] hidden lg:block"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.45) 8%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.05) 65%, transparent 85%)",
+        }}
+      />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-28 lg:pt-40 lg:pb-32 lg:ml-12 xl:ml-16">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-24 pb-20 sm:px-6 sm:pt-32 sm:pb-28 lg:ml-12 lg:pt-40 lg:pb-32 xl:ml-16">
         <motion.div
           variants={stagger}
           initial="hidden"
@@ -57,18 +71,14 @@ export function Hero() {
           {/* Headline */}
           <motion.h1
             variants={fadeUp}
-            className="font-display text-4xl font-bold leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-[4.5rem]"
-            style={{
-              textShadow: "0 2px 24px rgba(0,0,0,0.6), 0 8px 40px rgba(0,0,0,0.4)",
-            }}
+            className="font-display text-3xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl sm:leading-[1.02] lg:text-[4.5rem]"
           >
             <span
-              className="block text-white/90"
+              className="block text-white/85"
               style={{
                 fontSize: "0.55em",
                 fontWeight: 600,
                 letterSpacing: "0.02em",
-                textShadow: "0 1px 12px rgba(0,0,0,0.6)",
               }}
             >
               Source Premium Cars
@@ -78,9 +88,6 @@ export function Hero() {
               <br />
               <span
                 className="bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 bg-clip-text text-transparent"
-                style={{
-                  textShadow: "0 2px 20px rgba(227,30,36,0.4), 0 0 40px rgba(0,0,0,0.5)",
-                }}
               >
                 to the World.
               </span>
@@ -88,25 +95,21 @@ export function Hero() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.div variants={fadeUp} className="mt-6 flex items-start gap-4">
-            <span className="mt-2 h-12 w-1 shrink-0 rounded-full bg-gradient-to-b from-brand-500 to-brand-700" />
-            <p
-              className="max-w-md text-base leading-relaxed text-white/90 sm:text-lg"
-              style={{
-                textShadow: "0 1px 10px rgba(0,0,0,0.6)",
-              }}
-            >
+          <motion.div variants={fadeUp} className="mt-5 flex flex-col items-center gap-3 sm:mt-6 sm:flex-row sm:items-start sm:gap-4 lg:items-start">
+            <span className="hidden h-12 w-1 shrink-0 rounded-full bg-gradient-to-b from-brand-400 to-brand-600 sm:block lg:block" />
+            <span className="block h-1 w-16 shrink-0 rounded-full bg-gradient-to-r from-brand-400 to-brand-600 sm:hidden" />
+            <p className="max-w-sm text-center text-sm leading-relaxed text-white/85 sm:max-w-md sm:text-left sm:text-base lg:max-w-md">
               Affordable prices. Verified suppliers. Worldwide shipping. Professional export service.
             </p>
           </motion.div>
 
           {/* Buttons */}
-          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap justify-center gap-3 sm:gap-4 lg:justify-start">
+          <motion.div variants={fadeUp} className="mt-7 flex w-full flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4 lg:justify-start">
             <MagneticButton>
               <Button
                 variant="primary"
                 size="lg"
-                className="bg-brand-500 hover:bg-brand-600 shadow-[0_8px_32px_rgba(227,30,36,0.5)] ring-2 ring-white/20"
+                className="w-full bg-brand-500 shadow-[0_4px_20px_rgba(227,30,36,0.4)] hover:bg-brand-600 sm:w-auto"
                 onClick={() => scrollToId("contact")}
               >
                 Get Free Quote <ArrowRight className="h-4 w-4" />
@@ -116,7 +119,7 @@ export function Hero() {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-2 border-white/80 bg-black/40 text-white backdrop-blur-md hover:bg-white hover:text-[var(--text-primary)] hover:border-white"
+                className="w-full border-2 border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10 sm:w-auto"
                 onClick={() => scrollToId("inventory")}
               >
                 <Compass className="h-4 w-4" /> Browse Vehicles
@@ -128,14 +131,14 @@ export function Hero() {
     </section>
 
     {/* Stats bar — separate section under hero */}
-    <section className="relative z-10 bg-[var(--bg-primary)] pt-12 pb-8 sm:pt-20">
+    <section className="relative z-10 bg-[var(--bg-primary)] pt-8 pb-6 sm:pt-16 sm:pb-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6, ease: EASE }}
         >
-          <div className="grid grid-cols-2 gap-4 rounded-2xl glass-liquid p-4 shadow-[var(--shadow-soft)] sm:gap-6 sm:rounded-3xl sm:p-8 md:grid-cols-4 md:p-10">
+          <div className="grid grid-cols-2 gap-3 rounded-2xl glass-liquid p-3 shadow-[var(--shadow-soft)] sm:gap-6 sm:rounded-3xl sm:p-8 md:grid-cols-4 md:p-10">
             {heroStats.map((stat, i) => (
               <StatBadge
                 key={stat.label}

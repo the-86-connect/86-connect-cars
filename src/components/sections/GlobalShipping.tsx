@@ -76,9 +76,9 @@ export function GlobalShipping() {
   return (
     <section
       id="shipping"
-      className="bg-[var(--bg-secondary)] pt-12 pb-24 lg:pt-16 lg:pb-32"
+      className="bg-[var(--bg-secondary)] py-12 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-28"
     >
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={stagger}
           initial="hidden"
@@ -93,7 +93,7 @@ export function GlobalShipping() {
         </motion.div>
 
         {/* Shipping methods */}
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:mt-12 sm:gap-4 sm:grid-cols-3">
           {shippingMethods.map((method) => (
             <motion.div
               key={method.title}
@@ -101,7 +101,7 @@ export function GlobalShipping() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
-              className="glass-card flex flex-col gap-3 rounded-2xl p-6"
+              className="glass-card flex flex-col gap-2 rounded-2xl p-4 sm:gap-3 sm:p-6"
             >
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/10 text-brand-500">
                 <method.icon className="h-5 w-5" />
@@ -126,13 +126,13 @@ export function GlobalShipping() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3"
+          className="mt-8 grid grid-cols-1 gap-3 sm:mt-12 sm:gap-4 md:grid-cols-3"
         >
           {deliveryRegions.map((region) => (
             <motion.div
               key={region.region}
               variants={fadeUp}
-              className="glass-card rounded-2xl p-6"
+              className="glass-card rounded-2xl p-4 sm:p-6"
             >
               <h3 className="mb-4 font-display text-lg font-bold text-[var(--text-primary)]">
                 {region.region}
@@ -181,7 +181,7 @@ export function GlobalShipping() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4"
+          className="mt-8 grid grid-cols-2 gap-3 sm:mt-12 sm:gap-4 sm:grid-cols-4"
         >
           {[
             { icon: Globe, value: "40+", label: "Countries Served" },
@@ -192,7 +192,7 @@ export function GlobalShipping() {
             <motion.div
               key={stat.label}
               variants={fadeUp}
-              className="glass-card flex flex-col items-center gap-2 rounded-2xl p-5 text-center"
+              className="glass-card flex flex-col items-center gap-1.5 rounded-2xl p-4 text-center sm:gap-2 sm:p-5"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 text-brand-500">
                 <stat.icon className="h-5 w-5" />
@@ -210,7 +210,7 @@ export function GlobalShipping() {
         </motion.div>
 
         {/* Map + Country scroller side by side */}
-        <div className="mt-6 grid items-start gap-6 lg:grid-cols-5">
+        <div className="mt-6 grid items-start gap-4 sm:gap-6 lg:grid-cols-5">
           {/* Map */}
           <motion.div
             variants={fadeUp}
@@ -230,7 +230,7 @@ export function GlobalShipping() {
             viewport={viewportOnce}
             className="lg:col-span-2"
           >
-            <div className="glass-card relative h-[330px] overflow-hidden rounded-2xl">
+            <div className="glass-card relative h-[260px] overflow-hidden rounded-2xl sm:h-[300px] lg:h-[330px]">
               {/* Top fade */}
               <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[var(--bg-secondary)] to-transparent" />
               {/* Bottom fade */}

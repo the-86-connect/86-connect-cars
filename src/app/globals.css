@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================================
    86Connect Design Tokens — Professional Light + Dark Mode
    ============================================================ */
@@ -66,7 +68,7 @@
    ============================================================ */
 :root {
   --bg-primary: #ffffff;
-  --bg-secondary: #ffffff;
+  --bg-secondary: #f8f8f6;
   --bg-card: #ffffff;
   --bg-elevated: #f4f4f2;
   --bg-navbar: rgba(255, 255, 255, 0.92);
@@ -78,12 +80,13 @@
   --scrollbar-track: #fafaf9;
   --scrollbar-thumb: #d4d2ce;
   --scrollbar-thumb-hover: #a09e9a;
-  --card-shadow: 0 1px 3px rgba(10, 10, 10, 0.04), 0 4px 16px rgba(10, 10, 10, 0.06);
-  --card-shadow-hover: 0 4px 12px rgba(10, 10, 10, 0.06), 0 12px 32px rgba(10, 10, 10, 0.08);
+  --card-shadow: 0 1px 2px rgba(10, 10, 10, 0.03), 0 4px 12px rgba(10, 10, 10, 0.05);
+  --card-shadow-hover: 0 4px 12px rgba(10, 10, 10, 0.06), 0 16px 40px rgba(10, 10, 10, 0.08);
   --input-bg: #ffffff;
   --input-border: #e0ddd8;
   --input-focus-border: #e31e24;
   --overlay-bg: rgba(10, 10, 10, 0.5);
+  --section-alt-bg: #fdfdfd;
 }
 
 /* ============================================================
@@ -203,83 +206,92 @@
     border-color: rgba(255, 255, 255, 0.08);
   }
 
-  /* ---- Liquid glass card (enhanced depth + highlights) ---- */
+  /* ---- Clean card (reference site style — solid white, subtle border, soft shadow) ---- */
   .glass-card {
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
-    -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: #ffffff;
+    border: 1px solid #f0eeeb;
     border-radius: var(--radius-2xl);
     box-shadow:
-      inset 0 1px 1px rgba(255, 255, 255, 0.7),
-      0 4px 24px rgba(0, 0, 0, 0.06),
-      0 1px 2px rgba(0, 0, 0, 0.04);
+      0 1px 2px rgba(10, 10, 10, 0.03),
+      0 4px 16px rgba(10, 10, 10, 0.04);
     transition: all 0.3s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
   }
   .glass-card:hover {
     box-shadow:
-      inset 0 1px 1px rgba(255, 255, 255, 0.8),
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.06);
+      0 4px 12px rgba(10, 10, 10, 0.05),
+      0 16px 40px rgba(10, 10, 10, 0.07);
     transform: translateY(-2px);
+    border-color: #e7e5e0;
   }
   .dark .glass-card {
-    background: rgba(26, 26, 26, 0.5);
-    backdrop-filter: blur(20px) saturate(160%) brightness(1.1);
-    -webkit-backdrop-filter: blur(20px) saturate(160%) brightness(1.1);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: #1a1a1a;
+    border-color: #2a2825;
     box-shadow:
-      inset 0 1px 1px rgba(255, 255, 255, 0.06),
-      0 4px 24px rgba(0, 0, 0, 0.3);
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 4px 16px rgba(0, 0, 0, 0.2);
   }
   .dark .glass-card:hover {
     box-shadow:
-      inset 0 1px 1px rgba(255, 255, 255, 0.1),
-      0 8px 32px rgba(0, 0, 0, 0.4);
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      0 16px 40px rgba(0, 0, 0, 0.35);
+    border-color: #3a3835;
   }
 
-  /* ---- Liquid glass button (enhanced with inner highlight) ---- */
+  /* ---- Liquid glass button ---- */
   .glass-btn {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    transition: all 0.3s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.8) inset,
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
   }
   .glass-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 2px 12px rgba(8, 126, 164, 0.15);
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 1) inset,
+      0 2px 8px rgba(0, 0, 0, 0.06),
+      0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+  .glass-btn:active {
+    transform: scale(0.95);
   }
   .dark .glass-btn {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08) inset,
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.15);
   }
   .dark .glass-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 12px rgba(8, 126, 164, 0.2);
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.12) inset,
+      0 2px 8px rgba(0, 0, 0, 0.25),
+      0 8px 24px rgba(0, 0, 0, 0.2);
   }
 
-  /* ---- Liquid glass premium (hero stats, feature highlights) ---- */
+  /* ---- Stats card / glass-liquid — clean white with red accent (reference site style) ---- */
   .glass-liquid {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
-    backdrop-filter: blur(24px) saturate(200%) brightness(1.08);
-    -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.08);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: #ffffff;
+    border: 1px solid #f0eeeb;
     border-radius: var(--radius-3xl);
     box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.8),
-      inset 0 -1px 2px rgba(0, 0, 0, 0.03),
-      0 8px 32px rgba(0, 0, 0, 0.08);
+      0 1px 2px rgba(10, 10, 10, 0.03),
+      0 4px 16px rgba(10, 10, 10, 0.04);
   }
   .dark .glass-liquid {
-    background: linear-gradient(135deg, rgba(40, 40, 40, 0.6) 0%, rgba(20, 20, 20, 0.4) 100%);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: #1a1a1a;
+    border-color: #2a2825;
     box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.08),
-      0 8px 32px rgba(0, 0, 0, 0.4);
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 4px 16px rgba(0, 0, 0, 0.2);
   }
 
   /* ---- Section divider ---- */
@@ -352,12 +364,12 @@
   }
 }
 
-/* ---- Mobile bottom nav (app-like floating 3D pill) ---- */
-@media (max-width: 767px) {
+/* ---- Mobile bottom nav (liquid glass floating pill) ---- */
+@media (max-width: 1023px) {
   .mobile-bottom-nav {
     @apply fixed bottom-0 inset-x-0 z-40;
-    padding: 8px 12px env(safe-area-inset-bottom, 0px);
-    transition: transform 0.25s ease-out, opacity 0.2s ease-out;
+    padding: 10px 14px calc(env(safe-area-inset-bottom, 0px) + 10px);
+    transition: transform 0.25s ease-out, opacity 0.25s ease-out;
   }
   body.chat-open .mobile-bottom-nav {
     transform: translateY(100%);
@@ -368,22 +380,107 @@
     display: none;
   }
   .mobile-bottom-nav-bar {
+    position: relative;
     border-radius: 24px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(24px) saturate(200%);
-    -webkit-backdrop-filter: blur(24px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(40px) saturate(250%);
+    -webkit-backdrop-filter: blur(40px) saturate(250%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     box-shadow:
-      0 -2px 20px rgba(0, 0, 0, 0.08),
-      inset 0 1px 2px rgba(255, 255, 255, 0.8),
-      inset 0 -1px 2px rgba(0, 0, 0, 0.04);
+      0 0 0 0.5px rgba(0, 0, 0, 0.04),
+      0 -1px 0 rgba(255, 255, 255, 0.6) inset,
+      0 1px 0 rgba(255, 255, 255, 0.9) inset,
+      0 2px 8px rgba(0, 0, 0, 0.04),
+      0 8px 32px rgba(0, 0, 0, 0.08),
+      0 24px 48px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+  }
+  .mobile-bottom-nav-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    border-radius: 24px 24px 0 0;
+    pointer-events: none;
+  }
+  .mobile-bottom-nav-bar::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    );
+    pointer-events: none;
   }
   .dark .mobile-bottom-nav-bar {
-    background: rgba(20, 20, 20, 0.8);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(15, 15, 15, 0.75);
+    border-color: rgba(255, 255, 255, 0.1);
     box-shadow:
-      0 -2px 20px rgba(0, 0, 0, 0.4),
-      inset 0 1px 1px rgba(255, 255, 255, 0.06);
+      0 0 0 0.5px rgba(255, 255, 255, 0.06),
+      0 -1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 1px 0 rgba(255, 255, 255, 0.1) inset,
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 24px 48px rgba(0, 0, 0, 0.3);
+  }
+  .dark .mobile-bottom-nav-bar::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+  .dark .mobile-bottom-nav-bar::after {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.12),
+      transparent
+    );
+  }
+  .mobile-nav-pill {
+    background: linear-gradient(
+      135deg,
+      rgba(227, 30, 36, 0.12) 0%,
+      rgba(227, 30, 36, 0.06) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(227, 30, 36, 0.15),
+      0 1px 3px rgba(227, 30, 36, 0.08);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .dark .mobile-nav-pill {
+    background: linear-gradient(
+      135deg,
+      rgba(227, 30, 36, 0.2) 0%,
+      rgba(227, 30, 36, 0.08) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(227, 30, 36, 0.2),
+      0 1px 4px rgba(227, 30, 36, 0.15);
+  }
+  .mobile-nav-item {
+    min-width: 0;
+    flex: 1;
+    min-height: 48px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-nav-item:active {
+    transform: scale(0.9);
   }
 }
 
@@ -453,4 +550,72 @@
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ---- Chat widget dark mode overrides ---- */
+.dark .chat-messages-area {
+  background: linear-gradient(180deg, #1a1010 0%, #1a1212 50%, #1a1010 100%) !important;
+}
+.dark .chat-input-area {
+  background: #1a1a1a !important;
+  border-color: #2a2825 !important;
+}
+.dark .chat-input {
+  background: #222 !important;
+  border-color: #333 !important;
+  color: #f0eeeb !important;
+}
+.dark .chat-input::placeholder {
+  color: #6b6966 !important;
+}
+.dark .chat-input:focus {
+  background: #252525 !important;
+  border-color: #e31e24 !important;
+}
+.dark .chat-bubble-assistant {
+  background: #222 !important;
+  color: #e0ddd8 !important;
+  border-color: #333 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+}
+.dark .chat-user-avatar {
+  background: #333 !important;
+  color: #a09e9a !important;
+}
+.dark .chat-suggestion-chip {
+  background: #222 !important;
+  border-color: #333 !important;
+  color: #c0bdb8 !important;
+}
+.dark .chat-suggestion-chip:hover {
+  border-color: #e31e24 !important;
+  color: #ff5c67 !important;
+}
+.dark .chat-typing-indicator {
+  background: #222 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  border-color: #333 !important;
+}
+.dark .chat-typing-text {
+  color: #888 !important;
+}
+.dark .chat-contact-row {
+  background: #1a1a1a !important;
+  border-color: #333 !important;
+}
+.dark .chat-contact-label {
+  color: #777 !important;
+}
+.dark .chat-copy-btn:hover {
+  background: #333 !important;
+  color: #c0bdb8 !important;
+}
+
+/* ---- Password autofill dark mode ---- */
+.dark .autofill-fix:-webkit-autofill,
+.dark .autofill-fix:-webkit-autofill:hover,
+.dark .autofill-fix:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f0eeeb !important;
+  -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+  caret-color: #f0eeeb;
 }

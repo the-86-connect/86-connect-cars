@@ -10,7 +10,7 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "motion/react";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -59,6 +59,16 @@ export function Navbar() {
     setMenuOpen(false);
   };
 
+  const openTrack = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.open(
+      "https://www.the86connect.com/car-shipping/track",
+      "_blank",
+      "noopener,noreferrer",
+    );
+    setMenuOpen(false);
+  };
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -71,16 +81,16 @@ export function Navbar() {
         className={cn(
           "transition-all duration-500",
           scrolled
-            ? "bg-[var(--bg-primary)]/95 backdrop-blur-md border-b border-[var(--border-color)]"
-            : "border-transparent bg-transparent",
+            ? "bg-[var(--bg-primary)]/80 backdrop-blur-xl border-b border-[var(--border-color)] shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_1px_12px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_0_rgba(255,255,255,0.05)_inset,0_1px_12px_rgba(0,0,0,0.3)] supports-[backdrop-filter]:bg-[var(--bg-primary)]/70"
+            : "border-b border-transparent bg-transparent",
         )}
       >
-        <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6">
           {/* Logo */}
           <Link
             href="/#home"
             onClick={(e) => handleNavClick(e, "#home")}
-            className="group flex items-center"
+            className="group relative flex h-8 w-[140px] items-center sm:h-9"
           >
             <Image
               src="/logo-86 connect.png"
@@ -88,7 +98,23 @@ export function Navbar() {
               width={140}
               height={36}
               priority
-              className="h-9 w-auto transition-opacity duration-300"
+              className={cn(
+                "absolute inset-0 h-full w-auto transition-opacity duration-300",
+                "dark:opacity-0",
+                pathname === "/" && !scrolled ? "opacity-0" : "opacity-100",
+              )}
+            />
+            <Image
+              src="/main logo white 86.png"
+              alt="86Connect"
+              width={140}
+              height={36}
+              priority
+              className={cn(
+                "absolute inset-0 h-full w-auto transition-opacity duration-300",
+                "opacity-0 dark:opacity-100",
+                pathname === "/" && !scrolled ? "!opacity-100" : "",
+              )}
             />
           </Link>
 
@@ -114,6 +140,14 @@ export function Navbar() {
                 </a>
               ),
             )}
+            <a
+              href="https://www.the86connect.com/car-shipping/track"
+              onClick={openTrack}
+              className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
+            >
+              <Search className="h-4 w-4" />
+              Track
+            </a>
           </div>
 
           {/* Desktop actions */}
@@ -152,7 +186,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl glass-btn text-[var(--text-secondary)] transition-colors hover:text-brand-500"
+              className="flex h-11 w-11 items-center justify-center rounded-xl glass-btn text-[var(--text-secondary)] transition-colors hover:text-brand-500"
               aria-label="Toggle menu"
               aria-expanded={menuOpen}
             >
@@ -172,8 +206,8 @@ export function Navbar() {
             transition={{ duration: 0.4, ease: EASE }}
             className="overflow-hidden lg:hidden"
           >
-            <div className="bg-[var(--bg-primary)]/95 backdrop-blur-md border-b border-[var(--border-color)]">
-              <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-6">
+            <div className="bg-[var(--bg-primary)]/80 backdrop-blur-xl border-b border-[var(--border-color)] supports-[backdrop-filter]:bg-[var(--bg-primary)]/70">
+              <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-5 sm:px-6">
                 {navLinks.map((link) =>
                   link.href.startsWith("/") ? (
                     <Link
@@ -195,6 +229,14 @@ export function Navbar() {
                     </a>
                   ),
                 )}
+                <a
+                  href="https://www.the86connect.com/car-shipping/track"
+                  onClick={openTrack}
+                  className="flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
+                >
+                  <Search className="h-4 w-4" />
+                  Track
+                </a>
                 {isLoggedIn ? (
                   <Link
                     href="/account"

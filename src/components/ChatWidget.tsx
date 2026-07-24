@@ -18,7 +18,7 @@ const WELCOME: Message = {
   id: "welcome",
   role: "assistant",
   content:
-    "Hello! I'm the 86Connect Cars assistant — here to help you source and export vehicles from China. Ask me about our vehicles, shipping, pricing, or the export process, and I'll answer based on our official knowledge base.",
+    "Hi! I'm 86Connect assistant. Ask me about cars, shipping, pricing, or the export process — I'll answer from our knowledge base.",
 };
 
 const SUGGESTIONS = [
@@ -110,14 +110,12 @@ export function ChatWidget() {
   const [hintIndex, setHintIndex] = useState(0);
 
   const hintMessages = [
-    "Need a car quote? 🚗",
-    "Looking for BYD cars?",
-    "Export from China? ✈️",
-    "How can I help you?",
-    "Find your dream car 🇨🇳",
-    "Car sourcing made easy",
-    "Need shipping info? 🚢",
-    "Ask me anything!",
+    "Ask me anything 🤖",
+    "Get car quotes 🚗",
+    "BYD & more 🇨🇳",
+    "Export help ✈️",
+    "Shipping info 🚢",
+    "AI assistant",
   ];
 
   useEffect(() => {
@@ -270,7 +268,7 @@ export function ChatWidget() {
           id: uid(),
           role: "assistant",
           content:
-            "I'm having trouble connecting right now. Please try again in a moment, or reach us directly via WhatsApp at +86 176 1153 3296 or email beijingbridgepath@gmail.com.",
+            "I'm having trouble connecting right now. Please try again in a moment, or reach us directly via WhatsApp at +86 176 1153 3296 or email info@the86connect.com.",
         },
       ]);
       if (!openRef.current) setUnreadCount((c) => c + 1);
@@ -297,29 +295,44 @@ export function ChatWidget() {
             setOpen(true);
             setUnreadCount(0);
           }}
-          className="fixed bottom-20 right-5 z-50 flex items-end justify-center transition-transform hover:scale-110 active:scale-95 lg:bottom-5"
+          className="fixed bottom-20 right-5 z-50 transition-transform hover:scale-110 active:scale-95 lg:bottom-5"
           style={
             keyboardOffset > 0
               ? { bottom: `calc(${keyboardOffset}px + 5rem)` }
               : undefined
           }
         >
-          <RobotIcon size={56} wave glow />
-          {unreadCount > 0 && (
+          <span className="relative block">
+            {/* Hint bubble — above the icon, one line, extends left */}
             <span
-              className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white"
-              style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}
+              className="pointer-events-none absolute block whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-center text-xs font-medium text-gray-700 shadow-md ring-1 ring-gray-200 dark:bg-zinc-800 dark:text-zinc-200 dark:ring-zinc-700"
+              style={{
+                animation: "hint-pop 0.35s ease-out",
+                bottom: "100%",
+                right: "0",
+                left: "auto",
+                transform: "none",
+                marginBottom: "8px",
+              }}
+              key={hintIndex}
             >
-              {unreadCount > 9 ? "9+" : unreadCount}
+              {hintMessages[hintIndex]}
+              {/* Arrow pointing down (toward the icon) */}
+              <span
+                className="absolute h-0 w-0 border-x-[5px] border-t-[6px] border-x-transparent border-t-white dark:border-t-zinc-800"
+                style={{ bottom: "-5px", right: "14px" }}
+              />
             </span>
-          )}
-          <span
-            className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-md ring-1 ring-gray-200 lg:text-sm lg:px-3 lg:py-1.5 lg:-top-12"
-            style={{ animation: "hint-pop 0.35s ease-out" }}
-            key={hintIndex}
-          >
-            {hintMessages[hintIndex]}
-            <span className="absolute left-1/2 -translate-x-1/2 -bottom-1.5 h-0 w-0 rotate-180 border-x-[5px] border-b-[6px] border-x-transparent border-b-white lg:border-x-[6px] lg:border-b-[7px]" />
+            {/* Robot icon */}
+            <RobotIcon size={56} wave glow />
+            {unreadCount > 0 && (
+              <span
+                className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-600 px-1 text-[10px] font-bold text-white dark:border-zinc-900"
+                style={{ animation: "robot-pulse-ring 1s ease-in-out infinite" }}
+              >
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
           </span>
         </button>
       )}
@@ -332,7 +345,7 @@ export function ChatWidget() {
           onClick={() => setOpen(false)}
           className="fixed z-[60] flex items-center justify-center transition-transform hover:scale-110 active:scale-95 top-4 right-4 lg:bottom-24 lg:right-5 lg:top-auto"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-800/90 text-white shadow-lg backdrop-blur">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white shadow-lg backdrop-blur-xl border border-white/30 dark:bg-zinc-800/80 dark:border-white/10">
             <X className="h-5 w-5" />
           </span>
         </button>
@@ -340,7 +353,7 @@ export function ChatWidget() {
 
       {open && (
         <div
-          className="fixed inset-x-0 bottom-0 z-50 flex h-[85vh] flex-col overflow-hidden rounded-t-2xl border border-gray-200 bg-white shadow-2xl lg:right-5 lg:bottom-24 lg:left-auto lg:h-[min(600px,calc(100vh-7rem))] lg:w-[min(400px,calc(100vw-2.5rem))] lg:rounded-2xl"
+          className="fixed inset-x-0 bottom-0 z-50 flex h-[85vh] flex-col overflow-hidden rounded-t-2xl border border-gray-200 bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-900 lg:right-5 lg:bottom-24 lg:left-auto lg:h-[min(600px,calc(100vh-7rem))] lg:w-[min(400px,calc(100vw-2.5rem))] lg:rounded-2xl"
           style={{
             boxShadow: "0 20px 60px -15px rgba(0,0,0,0.25)",
             bottom: keyboardOffset > 0 ? keyboardOffset : 0,
@@ -354,7 +367,7 @@ export function ChatWidget() {
           <div
             className="relative flex items-center gap-3 px-4 py-3 text-white overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, #4f46e5 0%, #6366f1 40%, #8b5cf6 100%)",
+              background: "linear-gradient(135deg, #c7161c 0%, #e31e24 40%, #ff5c67 100%)",
             }}
           >
             <div className="absolute inset-0 opacity-20" style={{
@@ -394,10 +407,10 @@ export function ChatWidget() {
           {/* Messages */}
           <div
             ref={scrollRef}
-            className="flex-1 space-y-3 overflow-y-auto p-4"
+            className="chat-messages-area flex-1 space-y-3 overflow-y-auto p-4 dark:bg-zinc-900"
             style={{
               background:
-                "linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #eef2ff 100%)",
+                "linear-gradient(180deg, #fef2f2 0%, #fff5f5 50%, #fff1f2 100%)",
             }}
           >
             {messages.map((m) => (
@@ -410,14 +423,14 @@ export function ChatWidget() {
               />
             ))}
             {loading && (
-              <div className="flex items-center gap-2 text-xs text-gray-500">
+              <div className="flex items-center gap-2 text-xs chat-typing-text">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center">
                   <RobotIcon size={30} glow />
                 </div>
-                <div className="flex items-center gap-1 rounded-full bg-white px-3 py-2 shadow-sm ring-1 ring-gray-100">
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-400 [animation-delay:0ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-400 [animation-delay:150ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-indigo-400 [animation-delay:300ms]" />
+                <div className="chat-typing-indicator flex items-center gap-1 rounded-full bg-white px-3 py-2 shadow-sm ring-1 ring-gray-100">
+                  <span className="h-2 w-2 animate-bounce rounded-full bg-red-400 [animation-delay:0ms]" />
+                  <span className="h-2 w-2 animate-bounce rounded-full bg-red-400 [animation-delay:150ms]" />
+                  <span className="h-2 w-2 animate-bounce rounded-full bg-red-400 [animation-delay:300ms]" />
                 </div>
               </div>
             )}
@@ -429,7 +442,7 @@ export function ChatWidget() {
                     key={s}
                     type="button"
                     onClick={() => send(s)}
-                    className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 shadow-sm transition-all hover:border-indigo-300 hover:text-indigo-600 hover:shadow-md active:scale-95"
+                    className="chat-suggestion-chip rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 shadow-sm transition-all hover:border-red-300 hover:text-red-600 hover:shadow-md active:scale-95"
                   >
                     {s}
                   </button>
@@ -441,7 +454,7 @@ export function ChatWidget() {
           {/* Input */}
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 border-t border-gray-200 bg-white p-3"
+            className="chat-input-area flex items-center gap-2 border-t border-gray-200 bg-white p-3"
           >
             <input
               ref={inputRef}
@@ -451,7 +464,7 @@ export function ChatWidget() {
               placeholder="Ask about vehicles, shipping, pricing..."
               maxLength={500}
               disabled={loading}
-              className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-100 disabled:text-gray-400"
+              className="chat-input flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 transition-colors focus:border-red-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-500/20 disabled:bg-gray-100 disabled:text-gray-400"
             />
             <button
               type="submit"
@@ -459,7 +472,7 @@ export function ChatWidget() {
               aria-label="Send message"
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition-all hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
               style={{
-                background: "linear-gradient(135deg, #4f46e5, #8b5cf6)",
+                background: "linear-gradient(135deg, #c7161c, #e31e24)",
               }}
             >
               <Send className="h-4 w-4" />
@@ -490,7 +503,7 @@ function MessageBubble({
   return (
     <div className={`flex items-start gap-2 ${isUser ? "flex-row-reverse" : ""}`}>
       <div
-        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+        className={`chat-user-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
           isUser
             ? "bg-gray-200 text-gray-600"
             : ""
@@ -507,11 +520,11 @@ function MessageBubble({
           className={`whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-sm leading-relaxed ${
             isUser
               ? "rounded-tr-sm text-white shadow-sm"
-              : "rounded-tl-sm bg-white text-gray-800 shadow-sm ring-1 ring-gray-100"
+              : "chat-bubble-assistant rounded-tl-sm bg-white text-gray-800 shadow-sm ring-1 ring-gray-100"
           }`}
           style={
             isUser
-              ? { background: "linear-gradient(135deg, #4f46e5, #6366f1)" }
+              ? { background: "linear-gradient(135deg, #c7161c, #e31e24)" }
               : undefined
           }
         >
@@ -549,7 +562,7 @@ function MessageBubble({
             href="/#contact"
             onClick={onClose}
             className="flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:scale-[1.02] active:scale-95"
-            style={{ background: "linear-gradient(135deg, #4f46e5, #8b5cf6)" }}
+            style={{ background: "linear-gradient(135deg, #c7161c, #e31e24)" }}
           >
             <FileText className="h-3.5 w-3.5" />
             Get a Quote
@@ -574,22 +587,22 @@ function ContactRow({
   copied: boolean;
 }) {
   return (
-    <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-2.5 py-1.5 ring-1 ring-gray-200">
-      <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">
+    <div className="chat-contact-row flex items-center gap-2 rounded-xl bg-gray-50 px-2.5 py-1.5 ring-1 ring-gray-200">
+      <span className="chat-contact-label text-[10px] font-semibold uppercase tracking-wider text-gray-500">
         {label}
       </span>
       <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-1 truncate text-xs font-medium text-indigo-600 hover:text-indigo-700 hover:underline"
+        className="flex-1 truncate text-xs font-medium text-red-600 hover:text-red-700 hover:underline"
       >
         {value}
       </a>
       <button
         type="button"
         onClick={onCopy}
-        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700"
+        className="chat-copy-btn flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700"
         aria-label={`Copy ${label}`}
         title={`Copy ${label}`}
       >
@@ -648,7 +661,7 @@ function renderFormattedText(text: string): React.ReactNode {
           href={p.value}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-700"
+          className="font-medium text-red-600 underline underline-offset-2 hover:text-red-700"
         >
           {p.value}
         </a>
@@ -717,7 +730,7 @@ function RobotIcon({
     ? "robot-wave 2.5s ease-in-out infinite, robot-float-gentle 3s ease-in-out infinite"
     : "robot-float-gentle 3s ease-in-out infinite";
   const glowStyle = glow
-    ? { filter: "drop-shadow(0 0 10px rgba(56, 189, 248, 0.6))" }
+    ? { filter: "drop-shadow(0 0 10px rgba(227, 30, 36, 0.5))" }
     : undefined;
 
   return (

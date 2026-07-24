@@ -31,7 +31,7 @@ function getYouTubeThumbUrls(id: string): string[] {
   ];
 }
 
-function VideoThumb({ item }: { item: MediaItem }) {
+function VideoThumb({ item, small }: { item: MediaItem; small?: boolean }) {
   const ytId = extractYouTubeId(item.src);
   const thumbUrls = ytId ? getYouTubeThumbUrls(ytId) : [item.thumbnail || item.src];
   const [imgSrc, setImgSrc] = useState(thumbUrls[0]);
@@ -46,6 +46,16 @@ function VideoThumb({ item }: { item: MediaItem }) {
     }
   }, [imgSrc, thumbUrls]);
 
+  const playBtnSize = small
+    ? "h-10 w-10 sm:h-12 sm:w-12"
+    : "h-12 w-12 sm:h-14 sm:w-14";
+  const playIconSize = small
+    ? "ml-0.5 h-4 w-4 sm:ml-1 sm:h-5 sm:w-5"
+    : "ml-0.5 h-5 w-5 sm:h-6 sm:w-6";
+  const errorIconSize = small
+    ? "h-8 w-8 sm:h-10 sm:w-10"
+    : "h-12 w-12 sm:h-16 sm:w-16";
+
   return (
     <>
       {!errored ? (
@@ -59,12 +69,12 @@ function VideoThumb({ item }: { item: MediaItem }) {
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900">
-          <Video className="h-12 w-12 text-white/30 sm:h-16 sm:w-16" />
+          <Video className={`${errorIconSize} text-white/30`} />
         </div>
       )}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-500/90 text-white shadow-lg transition-transform duration-300 group-hover:scale-110 sm:h-14 sm:w-14">
-          <svg className="ml-0.5 h-5 w-5 sm:h-6 sm:w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <div className={`flex ${playBtnSize} items-center justify-center rounded-full bg-brand-500/90 text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}>
+          <svg className={playIconSize} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </div>
       </div>
     </>
@@ -180,7 +190,7 @@ export function GalleryClient() {
           ) : (
             <motion.div
               layout
-              className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+              className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-4"
             >
               <AnimatePresence mode="popLayout">
                 {filteredItems.length === 0 ? (
@@ -199,10 +209,10 @@ export function GalleryClient() {
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.4, ease: EASE, delay: i * 0.05 }}
                       onClick={() => setSelectedItem(item)}
-                      className="glass-card group relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-zinc-900 transition-all duration-300 sm:rounded-3xl"
+                      className="glass-card group relative aspect-square w-full overflow-hidden rounded-xl bg-zinc-900 transition-all duration-300 sm:rounded-2xl sm:aspect-[4/3]"
                     >
                       {item.type === "video" ? (
-                        <VideoThumb item={item} />
+                        <VideoThumb item={item} small />
                       ) : (
                         <img
                           src={item.thumbnail}
@@ -213,19 +223,19 @@ export function GalleryClient() {
 
                       <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.45)_25%,transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-                      <div className="absolute left-3 top-3 sm:left-4 sm:top-4">
-                        <div className="flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md sm:gap-2 sm:px-4 sm:py-2 sm:text-sm">
+                      <div className="absolute left-2 top-2 sm:left-3 sm:top-3">
+                        <div className="flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-md sm:gap-1.5 sm:px-3 sm:py-1.5 sm:text-xs">
                           {item.type === "photo" ? (
-                            <ImageIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            <ImageIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                           ) : (
-                            <Video className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            <Video className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                           )}
                           {item.type === "photo" ? "Photo" : "Video"}
                         </div>
                       </div>
 
-                      <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:p-6">
-                        <p className="text-sm font-semibold text-white sm:text-lg">{item.title}</p>
+                      <div className="absolute bottom-0 left-0 right-0 p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:p-4">
+                        <p className="text-xs font-bold text-white sm:text-sm">{item.title}</p>
                       </div>
                     </motion.button>
                   ))

@@ -25,8 +25,8 @@ const iconMap: Record<string, LucideIcon> = {
 
 export function WhyChooseUs() {
   return (
-    <section id="why-us" className="bg-[var(--bg-primary)] py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="why-us" className="bg-[var(--bg-primary)] py-12 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={stagger}
           initial="hidden"
@@ -45,7 +45,7 @@ export function WhyChooseUs() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          className="mt-8 grid grid-cols-1 gap-4 sm:mt-12 sm:gap-5 md:grid-cols-2 md:mt-16 lg:grid-cols-3 lg:gap-6"
         >
           {features.map((feature) => {
             const Icon = iconMap[feature.icon] ?? BadgeCheck;
@@ -55,7 +55,7 @@ export function WhyChooseUs() {
                 variants={fadeUp}
                 whileHover={{ y: -8 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="glass-card group relative overflow-hidden rounded-3xl p-8"
+                className="glass-card group relative overflow-hidden rounded-2xl p-5 sm:rounded-3xl sm:p-8"
               >
                 {/* Hover accent line */}
                 <div className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-gradient-to-r from-brand-500 to-brand-300 transition-transform duration-500 group-hover:scale-x-100" />

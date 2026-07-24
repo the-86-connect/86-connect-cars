@@ -117,7 +117,7 @@ const organizationJsonLd = {
   logo: `${SITE_URL}/logo-86connect.png`,
   description:
     "Professional China car export service connecting global buyers with verified Chinese vehicle suppliers. Worldwide shipping, full export documentation.",
-  email: "b*************************",
+  email: "i***@****************",
   telephone: "+86-176-1153-3296",
   address: {
     "@type": "PostalAddress",
@@ -128,7 +128,7 @@ const organizationJsonLd = {
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "sales",
-    email: "b*************************",
+    email: "i***@****************",
     telephone: "+86-176-1153-3296",
     availableLanguage: ["English", "Chinese"],
   },

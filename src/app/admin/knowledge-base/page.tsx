@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  Upload, FileText, Trash2, RefreshCw, Database, HardDrive, AlertCircle, CheckCircle2, X,
+  Upload, FileText, Trash2, RefreshCw, Database, HardDrive, AlertCircle, CheckCircle2, X, MessageCircle,
 } from "lucide-react";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 
@@ -40,6 +40,8 @@ export default function AdminKnowledgeBase() {
   const [deleteTarget, setDeleteTarget] = useState<KbDoc | null>(null);
   const [replaceTarget, setReplaceTarget] = useState<KbDoc | null>(null);
   const [titleInput, setTitleInput] = useState("");
+  const [chatbotEnabled, setChatbotEnabled] = useState(true);
+  const [togglingBot, setTogglingBot] = useState(false);
 
   const uploadInputRef = useRef<HTMLInputElement>(null);
   const replaceInputRef = useRef<HTMLInputElement>(null);
@@ -47,15 +49,18 @@ export default function AdminKnowledgeBase() {
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
-      const [docsRes, statsRes] = await Promise.all([
+      const [docsRes, statsRes, settingsRes] = await Promise.all([
         fetch("/api/admin/kb/documents"),
         fetch("/api/admin/kb/stats"),
+        fetch("/api/site-settings"),
       ]);
       const docsData = await docsRes.json();
       const statsData = await statsRes.json();
+      const settingsData = await settingsRes.json().catch(() => ({ chatbotEnabled: true }));
       if (!docsRes.ok || !statsRes.ok) throw new Error(docsData.error || statsData.error || "Failed");
       setDocs(Array.isArray(docsData) ? docsData : []);
       setStats(statsData);
+      setChatbotEnabled(!!settingsData.chatbotEnabled);
       setError("");
     } catch {
       setDocs([]);
@@ -149,6 +154,30 @@ export default function AdminKnowledgeBase() {
     }
   };
 
+  const handleToggleChatbot = async () => {
+    setTogglingBot(true);
+    setError(null);
+    const next = !chatbotEnabled;
+    setChatbotEnabled(next);
+    try {
+      const res = await fetch("/api/admin/site-settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chatbotEnabled: next }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Update failed");
+      }
+      setSuccess(next ? "Chatbot enabled — visitors will see the chat widget." : "Chatbot disabled — chat widget hidden from visitors.");
+    } catch (e) {
+      setChatbotEnabled(!next);
+      setError(e instanceof Error ? e.message : "Failed to toggle chatbot");
+    } finally {
+      setTogglingBot(false);
+    }
+  };
+
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleString("en-US", {
       year: "numeric", month: "short", day: "numeric",
@@ -235,6 +264,37 @@ export default function AdminKnowledgeBase() {
           />
         </div>
       )}
+
+      {/* Chatbot visibility toggle */}
+      <div className="flex items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-5">
+        <div className="flex items-center gap-3">
+          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${chatbotEnabled ? "bg-emerald-50" : "bg-gray-100"}`}>
+            <MessageCircle className={`h-5 w-5 ${chatbotEnabled ? "text-emerald-600" : "text-gray-400"}`} />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Frontend Chatbot</p>
+            <p className="text-xs text-gray-500">
+              {chatbotEnabled ? "Visible to all visitors on public pages." : "Hidden — visitors will not see the chat widget."}
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={handleToggleChatbot}
+          disabled={togglingBot}
+          role="switch"
+          aria-checked={chatbotEnabled}
+          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            chatbotEnabled ? "bg-emerald-500 focus:ring-emerald-500" : "bg-gray-300 focus:ring-gray-400"
+          } ${togglingBot ? "opacity-60" : ""}`}
+        >
+          <span
+            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              chatbotEnabled ? "translate-x-6" : "translate-x-1"
+            }`}
+          />
+        </button>
+      </div>
 
       {/* Storage explainer */}
       <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">

@@ -63,7 +63,7 @@ function VehicleCard({
     >
       <Link href={`/inventory/${vehicle.slug}`} className="glass-card group relative block overflow-hidden rounded-2xl">
       {/* Image / Gradient area */}
-      <div className="relative h-36 overflow-hidden rounded-t-2xl bg-[var(--bg-elevated)]">
+      <div className="relative h-32 overflow-hidden rounded-t-2xl bg-[var(--bg-elevated)] sm:h-36">
         {/* Favorite button */}
         <button
           type="button"
@@ -135,7 +135,7 @@ function VehicleCard({
       </div>
 
       {/* Card body */}
-      <div className="flex flex-col gap-2 p-4">
+      <div className="flex flex-col gap-1.5 p-3 sm:gap-2 sm:p-4">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-wider text-brand-500">
             {vehicle.brand}
@@ -186,8 +186,8 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
   const { favoriteIds, toggleFavorite } = useFavorites(user?.id ?? null);
 
   return (
-    <section id="inventory" className="bg-[var(--bg-secondary)] pt-12 pb-24 lg:pt-16 lg:pb-32">
-      <div className="mx-auto max-w-[1400px] px-2">
+    <section id="inventory" className="bg-[var(--bg-secondary)] pt-10 pb-20 lg:pt-16 lg:pb-32">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={stagger}
           initial="hidden"
@@ -231,7 +231,7 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
         <div className="mt-8 sm:mt-12">
           <motion.div
             layout
-            className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4"
           >
             <AnimatePresence mode="popLayout">
               {filtered.slice(0, 8).map((v, i) => (

@@ -1360,8 +1360,5 @@ export const navLinks = [
   { label: "Inventory", href: "/inventory" },
   { label: "Brands", href: "/brands" },
   { label: "About", href: "/about" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Why Us", href: "#why-us" },
-  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];

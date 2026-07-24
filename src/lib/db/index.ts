@@ -584,3 +584,25 @@ export async function getKbStorageBytes(): Promise<number> {
   if (error) return 0;
   return Number(data) || 0;
 }
+
+// ── Site settings (single row) ──
+
+export const siteSettings = {
+  get: async () => {
+    const client = supabase();
+    if (!client) return { chatbotEnabled: true };
+    const { data, error } = await client.from("site_settings").select("*").eq("id", "default").maybeSingle();
+    if (error || !data) return { chatbotEnabled: true };
+    return { chatbotEnabled: data.chatbot_enabled as boolean };
+  },
+  update: async (patch: { chatbotEnabled?: boolean }) => {
+    const client = supabase();
+    if (!client) throw new Error("Supabase not configured");
+    const { error } = await client
+      .from("site_settings")
+      .update({ ...toSnake(patch), updated_at: new Date().toISOString() })
+      .eq("id", "default");
+    if (error) throw error;
+    return siteSettings.get();
+  },
+};

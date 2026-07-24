@@ -11,9 +11,9 @@ import { scrollToId } from "@/lib/utils";
 
 export function FAQ() {
   return (
-    <section id="faq" className="py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
+    <section id="faq" className="bg-[var(--bg-secondary)] py-12 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12">
           {/* Left: heading + contact prompt */}
           <motion.div
             variants={fadeUp}
@@ -29,13 +29,13 @@ export function FAQ() {
               subtitle="Everything you need to know about sourcing and exporting vehicles from China with 86Connect."
             />
 
-            <div className="glass-card mt-auto rounded-3xl p-6 sm:p-8">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-500/10 text-accent-500">
-                  <MessageCircle className="h-6 w-6" />
+            <div className="glass-card mt-6 rounded-2xl p-5 sm:mt-auto sm:rounded-3xl sm:p-8">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/10 text-brand-500 sm:h-12 sm:w-12 sm:rounded-2xl">
+                  <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-display text-lg font-semibold text-[var(--text-primary)]">
+                  <h3 className="font-display text-base font-semibold text-[var(--text-primary)] sm:text-lg">
                     Still have questions?
                   </h3>
                   <p className="mt-1 text-sm leading-relaxed text-[var(--text-secondary)]">
@@ -45,7 +45,7 @@ export function FAQ() {
                   <Button
                     variant="primary"
                     size="md"
-                    className="mt-5"
+                    className="mt-4 w-full sm:mt-5 sm:w-auto"
                     onClick={() => scrollToId("contact")}
                   >
                     Contact Us

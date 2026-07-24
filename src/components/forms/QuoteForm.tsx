@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const inputClass =
-  "w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-3 text-sm text-[var(--text-primary)] outline-none backdrop-blur-md transition-all placeholder:text-[var(--text-muted)] focus:border-accent-400 focus:ring-2 focus:ring-accent-100";
+  "w-full rounded-xl border border-[var(--border-color)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--text-primary)] outline-none backdrop-blur-md transition-all placeholder:text-[var(--text-muted)] focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20";
 
 const budgetOptions = [
   "$5,000 - $15,000",
@@ -115,9 +115,9 @@ export function QuoteForm({
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, ease: EASE, delay: 0.1 }}
-              className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-50"
+              className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-50 text-brand-500 dark:bg-brand-900/30 dark:text-brand-400"
             >
-              <CheckCircle2 className="h-10 w-10 text-brand-500" />
+              <CheckCircle2 className="h-10 w-10" />
             </motion.div>
             <h3 className="mt-6 font-display text-2xl font-bold text-[var(--text-primary)]">
               Request Submitted!
@@ -138,15 +138,15 @@ export function QuoteForm({
             className="flex flex-col gap-5"
           >
             {vehicleSlug && defaultBrand && defaultModel && (
-              <div className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50/60 px-4 py-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/10">
-                  <Car className="h-5 w-5 text-brand-600" />
+              <div className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50/60 px-4 py-3 dark:border-brand-800/40 dark:bg-brand-900/20">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
+                  <Car className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-500">
                     Selected Vehicle
                   </p>
-                  <p className="truncate text-sm font-bold text-brand-900">
+                  <p className="truncate text-sm font-bold text-brand-900 dark:text-brand-300">
                     {defaultBrand} {defaultModel}
                   </p>
                 </div>
@@ -275,7 +275,7 @@ export function QuoteForm({
 
             <div className="mt-2 block w-full">
               {submitError && (
-                <p className="mb-3 rounded-lg bg-red-50 px-4 py-2.5 text-sm text-brand-500">
+                <p className="mb-3 rounded-lg bg-red-50 px-4 py-2.5 text-sm text-brand-600 dark:bg-red-900/20 dark:text-red-400">
                   {submitError}
                 </p>
               )}

@@ -38,7 +38,7 @@ export function SectionHeading({
       )}
       <motion.h2
         variants={fadeUp}
-        className="font-display text-3xl font-bold tracking-tight text-[var(--text-primary)] sm:text-4xl lg:text-5xl lg:leading-[1.1]"
+        className="font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-4xl lg:text-5xl lg:leading-[1.1]"
       >
         {title}
       </motion.h2>
@@ -46,7 +46,7 @@ export function SectionHeading({
         <motion.p
           variants={fadeUp}
           className={cn(
-            "text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg",
+            "text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base lg:text-lg",
             center && "max-w-2xl",
           )}
         >
