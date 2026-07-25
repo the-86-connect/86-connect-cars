@@ -17,7 +17,7 @@ async function ensureSeeded() {
     const rows = await testimonialTable.list();
     if (rows.length === 0) {
       for (const t of staticTestimonials) {
-        await testimonialTable.create(t);
+        await testimonialTable.create(t as unknown as Record<string, unknown>);
       }
     }
   } catch (error) {

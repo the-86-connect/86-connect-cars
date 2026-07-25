@@ -17,7 +17,7 @@ async function ensureSeeded() {
     const rows = await faqTable.list();
     if (rows.length === 0) {
       for (const f of staticFaqs) {
-        await faqTable.create(f);
+        await faqTable.create(f as unknown as Record<string, unknown>);
       }
     }
   } catch (error) {
