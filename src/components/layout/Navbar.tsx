@@ -207,14 +207,14 @@ export function Navbar() {
             className="overflow-hidden lg:hidden"
           >
             <div className="bg-[var(--bg-primary)]/80 backdrop-blur-xl border-b border-[var(--border-color)] supports-[backdrop-filter]:bg-[var(--bg-primary)]/70">
-              <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-5 sm:px-6">
+              <div className="mx-auto flex max-w-md flex-col items-center gap-1 px-4 py-6 sm:px-6">
                 {navLinks.map((link) =>
                   link.href.startsWith("/") ? (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={() => setMenuOpen(false)}
-                      className="rounded-xl px-4 py-3 text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
+                      className="w-full rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
                     >
                       {link.label}
                     </Link>
@@ -223,7 +223,7 @@ export function Navbar() {
                       key={link.href}
                       href={link.href}
                       onClick={(e) => handleNavClick(e, link.href)}
-                      className="rounded-xl px-4 py-3 text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
+                      className="w-full rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
                     >
                       {link.label}
                     </a>
@@ -232,16 +232,17 @@ export function Navbar() {
                 <a
                   href="https://www.the86connect.com/car-shipping/track"
                   onClick={openTrack}
-                  className="flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
                 >
                   <Search className="h-4 w-4" />
                   Track
                 </a>
+                <div className="my-1 h-px w-full bg-[var(--border-color)]" />
                 {isLoggedIn ? (
                   <Link
                     href="/account"
                     onClick={() => setMenuOpen(false)}
-                    className="rounded-xl px-4 py-3 text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
+                    className="w-full rounded-xl px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
                   >
                     My Account
                   </Link>
@@ -249,7 +250,7 @@ export function Navbar() {
                   <Link
                     href="/account/login"
                     onClick={() => setMenuOpen(false)}
-                    className="mt-2 block rounded-xl border border-[var(--border-color)] px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
+                    className="mt-1 block w-full rounded-xl border border-[var(--border-color)] px-4 py-3 text-center text-base font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
                   >
                     Sign In
                   </Link>

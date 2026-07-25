@@ -374,7 +374,7 @@ export function FeaturedVehicles({ vehicles }: { vehicles: Vehicle[] }) {
           viewport={viewportOnce}
           className="mt-10 flex justify-center sm:mt-12"
         >
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="primary" size="lg" asChild>
             <Link href="/inventory">
               Browse All Vehicles <ArrowRight className="h-4 w-4" />
             </Link>
