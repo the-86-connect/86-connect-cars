@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { NextRequest, NextResponse } from "next/server";
 
 // ponytail: fail-fast when actually used in production, not at module load time.
 // Vercel builds with NODE_ENV=production but doesn't need SESSION_SECRET
@@ -22,6 +23,21 @@ export function hashPassword(password: string): string {
 
 export function verifyPassword(password: string, hash: string): boolean {
   return hashPassword(password) === hash;
+}
+
+/**
+ * Admin route guard. Returns a 401 NextResponse if the request lacks a valid
+ * admin-session cookie, otherwise returns null and the route may proceed.
+ * Usage:
+ *   const auth = requireAdmin(req);
+ *   if (auth) return auth;
+ */
+export function requireAdmin(req: NextRequest): NextResponse | null {
+  const token = req.cookies.get("admin-session")?.value;
+  if (!token || !verifySessionToken(token)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return null;
 }
 
 export function createSessionToken(id: string, email: string): string {

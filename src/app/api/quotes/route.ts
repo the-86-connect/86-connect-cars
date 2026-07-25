@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { quotes } from "@/lib/db";
 import { rateLimitForm } from "@/lib/rate-limit";
+import { requireAdmin } from "@/lib/auth";
 import { sendQuoteConfirmationEmail, sendQuoteNotificationEmail } from "@/lib/email";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const data = await quotes.list();
     return NextResponse.json(data);
@@ -104,6 +107,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const body = await req.json();
     const { id, deliveryStatus, ...updates } = body;

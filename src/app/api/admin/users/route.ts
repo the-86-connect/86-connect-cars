@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { users } from "@/lib/db";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
-import { hashPassword } from "@/lib/auth";
+import { hashPassword, requireAdmin } from "@/lib/auth";
 
 // GET /api/admin/users — list all registered users with their quote counts
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const supabase = getSupabaseAdmin();
     if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 500 });
@@ -56,6 +58,8 @@ export async function GET() {
 
 // POST /api/admin/users — admin creates a new user
 export async function POST(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { name, email, password, whatsapp, country } = await req.json();
     if (!name || !email || !password) {

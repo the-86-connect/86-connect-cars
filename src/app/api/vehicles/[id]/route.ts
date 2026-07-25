@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { vehicles } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 /** Revalidate all public pages that display vehicles. */
 function revalidateVehiclePages() {
@@ -11,9 +12,11 @@ function revalidateVehiclePages() {
 }
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     const vehicle = await vehicles.find(id);
@@ -39,6 +42,8 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     const body = await req.json();
@@ -61,9 +66,11 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     await vehicles.delete(id);

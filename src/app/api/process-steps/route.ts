@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { processSteps } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -17,6 +18,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const body = await req.json();
     await processSteps.create(body);
@@ -27,6 +30,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const body = await req.json();
     const { id, ...updates } = body;

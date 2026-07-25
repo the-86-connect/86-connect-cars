@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth";
 
 async function notifyMainAdminDelete(quoteId: string, hard: boolean): Promise<void> {
   const adminApiUrl = process.env.MAIN_ADMIN_CAR_QUOTE_API;
@@ -23,6 +24,8 @@ async function notifyMainAdminDelete(quoteId: string, hard: boolean): Promise<vo
 // DELETE /api/admin/users/[id]            — delete user + their quotes + favorites (cascade)
 // DELETE /api/admin/users/[id]?dataOnly=1 — delete only the user's quotes + favorites, keep the account
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     const dataOnly = req.nextUrl.searchParams.get("dataOnly") === "1";

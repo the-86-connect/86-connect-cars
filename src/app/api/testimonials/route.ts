@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { testimonials } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -11,6 +12,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const body = await req.json();
     const id = body.id || `testimonial-${Date.now()}`;
@@ -23,6 +26,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const body = await req.json();
     const { id, ...updates } = body;

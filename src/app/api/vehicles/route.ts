@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { vehicles } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 /** Revalidate all public pages that display vehicles. */
 function revalidateVehiclePages() {
@@ -42,6 +43,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const body = await req.json();
     const id = body.id || body.slug || `vehicle-${Date.now()}`;

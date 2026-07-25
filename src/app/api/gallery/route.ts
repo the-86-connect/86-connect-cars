@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { gallery } from "@/lib/db";
 import { normalizeGalleryPayload } from "@/lib/gallery.server";
+import { requireAdmin } from "@/lib/auth";
 
 /** Revalidate public pages that show the gallery. */
 function revalidateGalleryPages() {
@@ -22,6 +23,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const body = await req.json();
     const normalized = normalizeGalleryPayload(body);

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { brands as brandTable } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 function revalidateBrandPages() {
   revalidatePath("/");
@@ -20,6 +21,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     const body = await req.json();
@@ -47,7 +50,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     await brandTable.delete(id);

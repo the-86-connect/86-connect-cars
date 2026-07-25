@@ -1,9 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { quotes, users } from "@/lib/db";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth";
 
 // GET /api/admin/purge — count soft-deleted records + database stats
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const [softDeletedQuotes, softDeletedUsers] = await Promise.all([
       quotes.countSoftDeleted(),
@@ -43,7 +46,9 @@ export async function GET() {
 }
 
 // POST /api/admin/purge — hard-delete ALL soft-deleted records
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     await Promise.all([
       quotes.purgeAllSoftDeleted(),

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { gallery } from "@/lib/db";
 import { normalizeGalleryPayload } from "@/lib/gallery.server";
+import { requireAdmin } from "@/lib/auth";
 
 function revalidateGalleryPages() {
   revalidatePath("/");
@@ -28,6 +29,8 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     const body = await req.json();
@@ -45,9 +48,11 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const auth = requireAdmin(req);
+  if (auth) return auth;
   try {
     const { id } = await params;
     await gallery.delete(id);
