@@ -14,13 +14,13 @@ const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/vehicles", label: "Vehicles", icon: Car },
   { href: "/admin/brands", label: "Brands", icon: Tag },
+  { href: "/admin/quotes", label: "Quotes", icon: MessageSquareQuote },
   { href: "/admin/gallery", label: "Gallery", icon: Images },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/testimonials", label: "Testimonials", icon: Star },
   { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
   { href: "/admin/features", label: "Features", icon: ListChecks },
   { href: "/admin/process-steps", label: "Process Steps", icon: FileText },
-  { href: "/admin/quotes", label: "Quotes", icon: MessageSquareQuote },
   { href: "/admin/knowledge-base", label: "Knowledge Base", icon: BrainCircuit },
 ];
 
