@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 type LegalType = "privacy" | "terms";
 
@@ -248,9 +246,7 @@ export function PrivacyTermsContent({ type }: { type: LegalType }) {
   const data = content[type];
 
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen bg-[var(--bg-secondary)] pt-24 pb-20 lg:pt-32 lg:pb-32">
+    <main className="min-h-screen bg-[var(--bg-secondary)] pt-24 pb-20 lg:pt-32 lg:pb-32">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-10 text-center sm:mb-14">
@@ -300,7 +296,5 @@ export function PrivacyTermsContent({ type }: { type: LegalType }) {
           </div>
         </div>
       </main>
-      <Footer />
-    </>
   );
 }
