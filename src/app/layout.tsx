@@ -61,9 +61,11 @@ export const metadata: Metadata = {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+      { url: "/favicon 86 Connect Official 1_32x32.ico", sizes: "32x32", type: "image/x-icon" },
+      { url: "/favicon 86 Connect Official 1_16x16.ico", sizes: "16x16", type: "image/x-icon" },
     ],
     shortcut: "/favicon.ico",
-    apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   appleWebApp: {
     capable: true,
