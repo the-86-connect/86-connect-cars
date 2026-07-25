@@ -430,7 +430,7 @@ const doc = new Document({
           spacing: { after: 100 },
           children: [
             new TextRun(
-              "We accept bank transfers (T/T), letters of credit (L/C), and PayPal for deposits. A 30% deposit secures your vehicle, with the balance due before shipping. All transactions are transparent and documented.",
+              "We accept bank transfers (T/T). A 30% deposit secures your vehicle, with the balance due before shipping. All transactions are transparent and documented.",
             ),
           ],
         }),
@@ -499,7 +499,7 @@ const doc = new Document({
           spacing: { after: 200 },
           children: [
             new TextRun(
-              "We accept bank transfers (T/T), letters of credit (L/C), and PayPal for deposits. A 30% deposit secures your vehicle, with the balance due before shipping. All transactions are transparent and documented.",
+              "We accept bank transfers (T/T). A 30% deposit secures your vehicle, with the balance due before shipping. All transactions are transparent and documented.",
             ),
           ],
         }),

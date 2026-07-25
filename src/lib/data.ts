@@ -1194,7 +1194,7 @@ export const faqs: FAQItem[] = [
     id: "2",
     question: "What payment methods do you accept?",
     answer:
-      "We accept bank transfers (T/T), letters of credit (L/C), and PayPal for deposits. A 30% deposit secures your vehicle, with the balance due before shipping. All transactions are transparent and documented.",
+      "We accept bank transfers (T/T). A 30% deposit secures your vehicle, with the balance due before shipping. All transactions are transparent and documented.",
   },
   {
     id: "3",

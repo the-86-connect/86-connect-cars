@@ -24,13 +24,6 @@ const shippingMethods = [
       "20ft & 40ft containers. Secure, weatherproof, ideal for multiple vehicles.",
     time: "45-65 days",
   },
-  {
-    icon: Clock,
-    title: "Express Options",
-    description:
-      "Priority handling and direct routes for time-sensitive shipments.",
-    time: "20-30 days",
-  },
 ];
 
 const deliveryRegions = [
@@ -93,7 +86,7 @@ export function GlobalShipping() {
         </motion.div>
 
         {/* Shipping methods */}
-        <div className="mt-8 grid grid-cols-1 gap-3 sm:mt-12 sm:gap-4 sm:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:mt-12 sm:gap-4 sm:grid-cols-2">
           {shippingMethods.map((method) => (
             <motion.div
               key={method.title}
@@ -187,7 +180,7 @@ export function GlobalShipping() {
             { icon: Globe, value: "40+", label: "Countries Served" },
             { icon: Ship, value: "500+", label: "Vehicles Shipped" },
             { icon: Package, value: "100%", label: "Customs Cleared" },
-            { icon: Clock, value: "15-45", label: "Days Delivery" },
+            { icon: Clock, value: "40-60", label: "Days Delivery" },
           ].map((stat) => (
             <motion.div
               key={stat.label}
