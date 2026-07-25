@@ -3,13 +3,8 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { testimonials } from "@/lib/data";
 import type { Testimonial } from "@/types";
 import { cn } from "@/lib/utils";
-
-/** Split testimonials into two halves for the opposite-direction rows. */
-const half = Math.ceil(testimonials.length / 2);
-const rowOne = testimonials.slice(0, half);
 
 function Avatar({ t }: { t: Testimonial }) {
   const [errored, setErrored] = useState(false);
@@ -105,7 +100,12 @@ function MarqueeRow({
   );
 }
 
-export function Testimonials() {
+export function Testimonials({ items }: { items: Testimonial[] }) {
+  if (items.length === 0) return null;
+
+  const half = Math.ceil(items.length / 2);
+  const rowOne = items.slice(0, half);
+
   return (
     <section id="testimonials" className="bg-[var(--bg-primary)] py-12 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

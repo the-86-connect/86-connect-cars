@@ -5,7 +5,8 @@ import { FeaturedVehicles } from "@/components/sections/FeaturedVehicles";
 import { getVehicles } from "@/lib/vehicles.server";
 import { getBrands, resolveLogo } from "@/lib/brands.server";
 import type { BrandCategory } from "@/lib/brands";
-import { faqs } from "@/lib/data";
+import { getTestimonials } from "@/lib/testimonials.server";
+import { getFaqs } from "@/lib/faqs.server";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 const RecentlyViewed = dynamic(() => import("@/components/sections/RecentlyViewed").then(m => ({ default: m.RecentlyViewed })));
@@ -41,30 +42,35 @@ export const metadata: Metadata = {
 
 export const revalidate = 0;
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: f.answer,
-    },
-  })),
-};
-
 export default async function Home() {
-  const [vehicles, brandRows] = await Promise.all([getVehicles(), getBrands()]);
+  const [vehicles, brandRows, testimonialData, faqData] = await Promise.all([
+    getVehicles(),
+    getBrands(),
+    getTestimonials(),
+    getFaqs(),
+  ]);
   const brands = brandRows.map((b) => ({
     name: b.name,
     logo: resolveLogo(b.logo),
     category: b.category as BrandCategory,
   }));
 
+  const faqJsonLd = faqData.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqData.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.answer,
+      },
+    })),
+  } : null;
+
   return (
     <>
-      <JsonLd data={faqJsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
       <Hero />
       <FeaturedVehicles vehicles={vehicles} />
       <RecentlyViewed />
@@ -74,8 +80,8 @@ export default async function Home() {
       <About />
       <Brands vehicles={vehicles} brands={brands} />
       <WhyChooseUs />
-      <Testimonials />
-      <FAQ />
+      <Testimonials items={testimonialData} />
+      <FAQ items={faqData} />
       <Contact />
     </>
   );

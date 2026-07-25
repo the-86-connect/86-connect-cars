@@ -5,11 +5,13 @@ import { MessageCircle } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
-import { faqs } from "@/lib/data";
+import type { FAQItem } from "@/types";
 import { fadeUp, viewportOnce } from "@/lib/motion";
 import { scrollToId } from "@/lib/utils";
 
-export function FAQ() {
+export function FAQ({ items }: { items: FAQItem[] }) {
+  if (items.length === 0) return null;
+
   return (
     <section id="faq" className="bg-[var(--bg-secondary)] py-12 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -62,7 +64,7 @@ export function FAQ() {
             whileInView="show"
             viewport={viewportOnce}
           >
-            <Accordion items={faqs} />
+            <Accordion items={items} />
           </motion.div>
         </div>
       </div>
