@@ -100,8 +100,8 @@ function MarqueeRow({
   );
 }
 
-export function Testimonials({ items }: { items: Testimonial[] }) {
-  if (items.length === 0) return null;
+export function Testimonials({ items, enabled = true }: { items: Testimonial[]; enabled?: boolean }) {
+  if (!enabled || items.length === 0) return null;
 
   const half = Math.ceil(items.length / 2);
   const rowOne = items.slice(0, half);

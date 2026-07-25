@@ -16,7 +16,7 @@ export async function GET() {
     });
   } catch {
     return NextResponse.json(
-      { chatbotEnabled: true },
+      { chatbotEnabled: true, testimonialsEnabled: true },
       {
         headers: {
           "Cache-Control": "no-store, no-cache, must-revalidate",

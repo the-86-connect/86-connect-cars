@@ -7,6 +7,7 @@ import { getBrands, resolveLogo } from "@/lib/brands.server";
 import type { BrandCategory } from "@/lib/brands";
 import { getTestimonials } from "@/lib/testimonials.server";
 import { getFaqs } from "@/lib/faqs.server";
+import { siteSettings } from "@/lib/db";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 const RecentlyViewed = dynamic(() => import("@/components/sections/RecentlyViewed").then(m => ({ default: m.RecentlyViewed })));
@@ -43,11 +44,12 @@ export const metadata: Metadata = {
 export const revalidate = 0;
 
 export default async function Home() {
-  const [vehicles, brandRows, testimonialData, faqData] = await Promise.all([
+  const [vehicles, brandRows, testimonialData, faqData, settings] = await Promise.all([
     getVehicles(),
     getBrands(),
     getTestimonials(),
     getFaqs(),
+    siteSettings.get(),
   ]);
   const brands = brandRows.map((b) => ({
     name: b.name,
@@ -80,7 +82,7 @@ export default async function Home() {
       <About />
       <Brands vehicles={vehicles} brands={brands} />
       <WhyChooseUs />
-      <Testimonials items={testimonialData} />
+      <Testimonials items={testimonialData} enabled={settings.testimonialsEnabled !== false} />
       <FAQ items={faqData} />
       <Contact />
     </>

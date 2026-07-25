@@ -590,12 +590,15 @@ export async function getKbStorageBytes(): Promise<number> {
 export const siteSettings = {
   get: async () => {
     const client = supabase();
-    if (!client) return { chatbotEnabled: true };
+    if (!client) return { chatbotEnabled: true, testimonialsEnabled: true };
     const { data, error } = await client.from("site_settings").select("*").eq("id", "default").maybeSingle();
-    if (error || !data) return { chatbotEnabled: true };
-    return { chatbotEnabled: data.chatbot_enabled as boolean };
+    if (error || !data) return { chatbotEnabled: true, testimonialsEnabled: true };
+    return {
+      chatbotEnabled: data.chatbot_enabled as boolean,
+      testimonialsEnabled: (data.testimonials_enabled ?? true) as boolean,
+    };
   },
-  update: async (patch: { chatbotEnabled?: boolean }) => {
+  update: async (patch: { chatbotEnabled?: boolean; testimonialsEnabled?: boolean }) => {
     const client = supabase();
     if (!client) throw new Error("Supabase not configured");
     const { error } = await client
