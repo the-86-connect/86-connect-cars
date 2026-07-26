@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { HashScrollHandler } from "@/components/layout/HashScrollHandler";
 import { ChatWidgetHost } from "@/components/layout/ChatWidgetHost";
+import { ConsultPopup } from "@/components/ui/ConsultPopup";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -183,6 +184,7 @@ export default function RootLayout({
         <Footer />
         <MobileBottomNav />
         <ChatWidgetHost />
+        <ConsultPopup />
       </body>
     </html>
   );

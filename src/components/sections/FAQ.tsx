@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { MessageCircle } from "lucide-react";
+import { CalendarClock, MessageCircle } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
@@ -41,17 +41,29 @@ export function FAQ({ items }: { items: FAQItem[] }) {
                     Still have questions?
                   </h3>
                   <p className="mt-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-                    Our team is ready to help you source the perfect vehicle. Reach
-                    out and get a response within 24 hours.
+                    Get a free 30-minute consultation with our export specialist. We'll walk you through sourcing, pricing, and shipping — no obligation.
                   </p>
-                  <Button
-                    variant="primary"
-                    size="md"
-                    className="mt-4 w-full sm:mt-5 sm:w-auto"
-                    onClick={() => scrollToId("contact")}
-                  >
-                    Contact Us
-                  </Button>
+                  <div className="mt-4 flex flex-col gap-2 sm:mt-5 sm:flex-row">
+                    <a
+                      href="https://www.the86connect.com/book-consultation"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="primary" size="md" className="w-full sm:w-auto">
+                        <CalendarClock className="h-4 w-4" />
+                        Book Free Consultation
+                      </Button>
+                    </a>
+                    <Button
+                      variant="outline"
+                      size="md"
+                      className="w-full sm:w-auto"
+                      onClick={() => scrollToId("contact")}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Contact Us
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
