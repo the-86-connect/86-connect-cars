@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { CalendarClock, MessageCircle } from "lucide-react";
+import { CalendarClock, MessageCircle, ShieldCheck, Zap, Truck, Award } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
@@ -27,9 +27,36 @@ export function FAQ({ items }: { items: FAQItem[] }) {
             <SectionHeading
               center={false}
               eyebrow="FAQ"
-              title="Frequently Asked Questions"
+              title="Answers to Common Questions"
               subtitle="Everything you need to know about sourcing and exporting vehicles from China with 86Connect."
             />
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              {[
+                { icon: Zap, label: "24h Quote", value: "Fast response" },
+                { icon: Truck, label: "Global Shipping", value: "50+ countries" },
+                { icon: ShieldCheck, label: "Quality Check", value: "150-point inspection" },
+                { icon: Award, label: "Trusted", value: "500+ vehicles delivered" },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.label}
+                    className="glass-card flex items-center gap-3 rounded-2xl p-3"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-500/10 text-brand-500">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-[var(--text-primary)]">
+                        {item.label}
+                      </p>
+                      <p className="text-xs text-[var(--text-muted)]">{item.value}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
             <div className="glass-card mt-6 rounded-2xl p-5 sm:mt-auto sm:rounded-3xl sm:p-8">
               <div className="flex items-start gap-3 sm:gap-4">

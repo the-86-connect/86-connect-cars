@@ -11,6 +11,7 @@ import {
   Clock,
   BadgeCheck,
   ShieldCheck,
+  CheckCircle2,
   type LucideIcon,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -67,19 +68,19 @@ function ContactInner() {
     <section id="contact" className="bg-[var(--bg-primary)] py-12 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12">
-          {/* Left: heading + contact info + stats */}
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewportOnce}
-            className="flex flex-col"
-          >
+            {/* Left: heading + contact info + stats */}
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={viewportOnce}
+              className="flex flex-col"
+            >
             <SectionHeading
               center={false}
               eyebrow="Get Started"
-              title="Request Your Free Quote"
-              subtitle="Tell us what you're looking for and we'll find the perfect vehicle at the right price. Get a response within 24 hours."
+              title="Let's Find Your Perfect Vehicle"
+              subtitle="Tell us what you're looking for and we'll source the best cars at the right price. Free quote, no obligation."
             />
 
             <div className="mt-8 flex flex-col gap-3">
@@ -139,19 +140,40 @@ function ContactInner() {
                 );
               })}
             </motion.div>
+
+            <motion.div variants={fadeUp} className="mt-8">
+              <h4 className="text-sm font-bold text-[var(--text-primary)]">
+                What you get with your free quote
+              </h4>
+              <div className="mt-3 grid gap-2.5">
+                {[
+                  "Personalized vehicle recommendations from our experts",
+                  "Transparent pricing with all fees included — no surprises",
+                  "Shipping timeline and cost estimates to your country",
+                  "Quality inspection reports before shipment",
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500/10 text-brand-500">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                    </div>
+                    <p className="text-sm text-[var(--text-secondary)]">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Right: quote form in a solid card */}
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewportOnce}
-          >
-            <div className="glass-card rounded-3xl border-2 border-brand-500/30 p-5 sm:p-8">
-              <QuoteForm defaultBrand={brand} defaultModel={model} vehicleSlug={vehicleSlug} />
-            </div>
-          </motion.div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={viewportOnce}
+            >
+              <div className="glass-card rounded-3xl border-2 border-brand-500/30 p-5 sm:p-8">
+                <QuoteForm defaultBrand={brand} defaultModel={model} vehicleSlug={vehicleSlug} />
+              </div>
+            </motion.div>
         </div>
       </div>
     </section>

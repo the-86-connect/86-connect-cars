@@ -137,6 +137,19 @@ export function QuoteForm({
             noValidate
             className="flex flex-col gap-5"
           >
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
+                <Car className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-display text-xl font-bold tracking-tight text-[var(--text-primary)] sm:text-2xl">
+                  Get Your Free Quote
+                </h3>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  Tell us what you&apos;re looking for — we&apos;ll get back to you within 24 hours.
+                </p>
+              </div>
+            </div>
             {vehicleSlug && defaultBrand && defaultModel && (
               <div className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50/60 px-4 py-3 dark:border-brand-800/40 dark:bg-brand-900/20">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
