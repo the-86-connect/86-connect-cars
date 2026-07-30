@@ -21,14 +21,12 @@ import {
   ChevronDown,
   CheckCircle2,
   MessageCircle,
-  X,
   Heart,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Vehicle } from "@/types";
 import { cn, formatPrice } from "@/lib/utils";
 import { fadeUp, stagger, viewportOnce, EASE } from "@/lib/motion";
-import { vehicles } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/GlassCard";
@@ -224,9 +222,14 @@ function colorToHex(name: string): string {
   return "#9ca3af";
 }
 
-export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
+export function VehicleDetailClient({
+  vehicle,
+  similarVehicles = [],
+}: {
+  vehicle: Vehicle;
+  similarVehicles?: Vehicle[];
+}) {
   const [activeImg, setActiveImg] = useState(0);
-  const [showWeChat, setShowWeChat] = useState(false);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
@@ -676,22 +679,6 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => setShowWeChat(true)}
-                  className="border-[#07C160] text-[#07C160] hover:bg-[#07C160] hover:text-white"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-3.04-5.91-6.785-6.124h-.277zm-2.229 2.957c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z" />
-                  </svg>
-                  WeChat
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
                   onClick={() => router.push("/inventory")}
                 >
                   <ArrowLeft className="h-5 w-5" />
@@ -771,13 +758,7 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
 
       {/* ── Similar Vehicles ── */}
       {(() => {
-        const similar = vehicles
-          .filter(
-            (v) =>
-              v.id !== vehicle.id &&
-              (v.brand === vehicle.brand || v.bodyType === vehicle.bodyType),
-          )
-          .slice(0, 4);
+        const similar = similarVehicles;
         if (similar.length === 0) return null;
         return (
           <section className="py-16 lg:py-20">
@@ -864,65 +845,6 @@ export function VehicleDetailClient({ vehicle }: { vehicle: Vehicle }) {
           </Card>
         </div>
       </section>
-
-      {/* WeChat QR popup */}
-      <AnimatePresence>
-        {showWeChat && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
-            onClick={() => setShowWeChat(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.25, ease: EASE }}
-              className="glass-card relative w-full max-w-sm rounded-3xl p-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                onClick={() => setShowWeChat(false)}
-                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--bg-elevated)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-                aria-label="Close"
-              >
-                <X className="h-4 w-4" />
-              </button>
-              <div className="flex flex-col items-center gap-4 text-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-500/10 text-green-500">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-6 w-6"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-3.04-5.91-6.785-6.124h-.277zm-2.229 2.957c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z" />
-                  </svg>
-                </div>
-                <h3 className="font-display text-lg font-bold text-[var(--text-primary)]">
-                  Scan to add us on WeChat
-                </h3>
-                <p className="text-xs text-[var(--text-muted)]">
-                  Open WeChat, tap the + icon, choose Scan, and point your
-                  camera at the QR code below.
-                </p>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/wechat-qr.png"
-                  alt="86Connect WeChat QR code"
-                  className="h-56 w-56 rounded-2xl border border-[var(--border-color)] object-contain"
-                />
-                <p className="text-xs font-medium text-[var(--text-muted)]">
-                  WeChat ID: 86Connect
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

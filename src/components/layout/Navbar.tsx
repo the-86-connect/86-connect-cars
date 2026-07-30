@@ -69,6 +69,12 @@ export function Navbar() {
     setMenuOpen(false);
   };
 
+  // Homepage hero sits behind the navbar before scroll — use white text in light mode.
+  // ponytail: dark mode already has a light text-primary, so no override needed there.
+  const heroText = pathname === "/" && !scrolled
+    ? "text-white dark:text-[var(--text-primary)]"
+    : "text-[var(--text-primary)]";
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -125,7 +131,10 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-brand-500",
+                    heroText,
+                  )}
                 >
                   {link.label}
                 </Link>
@@ -134,7 +143,10 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-brand-500",
+                    heroText,
+                  )}
                 >
                   {link.label}
                 </a>
@@ -143,7 +155,10 @@ export function Navbar() {
             <a
               href="https://www.the86connect.com/car-shipping/track"
               onClick={openTrack}
-              className="flex items-center gap-1.5 text-sm font-medium text-[var(--text-primary)] transition-colors hover:text-brand-500"
+              className={cn(
+                "flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-brand-500",
+                heroText,
+              )}
             >
               <Search className="h-4 w-4" />
               Track
@@ -164,7 +179,12 @@ export function Navbar() {
             ) : (
               <Link
                 href="/account/login"
-                className="rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition-colors hover:border-brand-500 hover:text-brand-500"
+                className={cn(
+                  "rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:border-brand-500 hover:text-brand-500",
+                  pathname === "/" && !scrolled
+                    ? "border-white/40 text-white"
+                    : "border-[var(--border-color)] text-[var(--text-primary)]",
+                )}
               >
                 Sign In
               </Link>

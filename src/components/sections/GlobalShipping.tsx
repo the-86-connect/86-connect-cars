@@ -7,6 +7,7 @@ import { shippingRoutes } from "@/lib/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { WorldMap } from "@/components/ui/WorldMap";
 import { Button } from "@/components/ui/Button";
+import { Flag } from "@/components/ui/Flag";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
 const shippingMethods = [
@@ -139,9 +140,9 @@ export function GlobalShipping() {
                     {region.countries.map((country) => (
                       <span
                         key={country.name}
-                        className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-elevated)] px-2.5 py-1 text-xs text-[var(--text-secondary)]"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-elevated)] px-2.5 py-1 text-xs text-[var(--text-secondary)]"
                       >
-                        <span>{country.flag}</span>
+                        <Flag country={country.name} className="h-3.5 w-5" />
                         {country.name}
                       </span>
                     ))}
@@ -236,7 +237,7 @@ export function GlobalShipping() {
                     className="flex items-center justify-between rounded-lg px-3 py-2 transition-colors hover:bg-[var(--bg-elevated)]"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-base">{route.flag}</span>
+                      <Flag country={route.country} className="h-3.5 w-5" />
                       <span className="text-xs font-medium text-[var(--text-primary)]">
                         {route.country}
                       </span>

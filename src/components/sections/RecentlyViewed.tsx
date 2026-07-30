@@ -1,19 +1,37 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
-import { vehicles } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
+import type { Vehicle } from "@/types";
 
 export function RecentlyViewed() {
   const { slugs } = useRecentlyViewed();
+  const [recentVehicles, setRecentVehicles] = useState<Vehicle[]>([]);
 
-  const recentVehicles = slugs
-    .map((slug) => vehicles.find((v) => v.slug === slug))
-    .filter(Boolean) as typeof vehicles;
+  // Resolve localStorage slugs against real DB vehicles via public API.
+  // Tracking itself stays browser-local (localStorage) — no DB writes.
+  useEffect(() => {
+    if (slugs.length === 0) return;
+    let cancelled = false;
+    fetch("/api/vehicles")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((all: Vehicle[]) => {
+        if (cancelled) return;
+        const bySlug = new Map(all.map((v) => [v.slug, v]));
+        const resolved = slugs
+          .map((s) => bySlug.get(s))
+          .filter((v): v is Vehicle => Boolean(v));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setRecentVehicles(resolved);
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [slugs]);
 
   if (recentVehicles.length === 0) return null;
 

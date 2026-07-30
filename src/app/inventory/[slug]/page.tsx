@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { formatPrice } from "@/lib/utils";
 import { VehicleDetailClient } from "@/components/inventory/VehicleDetailClient";
-import { getVehicles, getVehicleBySlug } from "@/lib/vehicles.server";
+import { getVehicles, getVehicleBySlug, getSimilarVehicles } from "@/lib/vehicles.server";
 import type { Vehicle } from "@/types";
 import { JsonLd } from "@/components/seo/JsonLd";
 
@@ -182,11 +182,13 @@ export default async function VehicleDetailPage({ params }: Props) {
     notFound();
   }
 
+  const similarVehicles = await getSimilarVehicles(vehicle, 4);
+
   return (
     <>
       <JsonLd data={buildVehicleJsonLd(vehicle)} />
       <JsonLd data={buildBreadcrumbJsonLd(vehicle)} />
-      <VehicleDetailClient vehicle={vehicle} />
+      <VehicleDetailClient vehicle={vehicle} similarVehicles={similarVehicles} />
     </>
   );
 }

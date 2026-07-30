@@ -112,7 +112,7 @@ export function ChatWidget() {
   const hintMessages = [
     "Ask me anything 🤖",
     "Get car quotes 🚗",
-    "BYD & more 🇨🇳",
+    "BYD & more (CN)",
     "Export help ✈️",
     "Shipping info 🚢",
     "AI assistant",

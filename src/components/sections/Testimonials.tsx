@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Flag } from "@/components/ui/Flag";
 import type { Testimonial } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -45,9 +46,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
           <p className="truncate text-sm font-semibold text-[var(--text-primary)] sm:text-base">{t.name}</p>
           <p className="truncate text-xs text-[var(--text-muted)]">{t.role}</p>
         </div>
-        <span className="text-xl leading-none sm:text-2xl" aria-hidden="true">
-          {t.flag}
-        </span>
+        <Flag country={t.country} className="h-5 w-7 sm:h-6 sm:w-8" />
       </div>
 
       <div className="mt-3 flex gap-0.5 sm:mt-4">

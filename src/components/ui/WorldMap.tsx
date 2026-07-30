@@ -1,6 +1,7 @@
 "use client";
 
 import { shippingRoutes } from "@/lib/data";
+import { Flag } from "@/components/ui/Flag";
 
 /**
  * Real world map image with animated SVG shipping route overlays.
@@ -174,10 +175,10 @@ export function WorldMap() {
         {shippingRoutes.map((route) => (
           <span
             key={route.country}
-            className="absolute -translate-x-1/2 text-lg"
+            className="absolute -translate-x-1/2"
             style={{ left: `${route.x}%`, top: `${route.y + 3}%` }}
           >
-            {route.flag}
+            <Flag country={route.country} className="h-4 w-6" />
           </span>
         ))}
       </div>
