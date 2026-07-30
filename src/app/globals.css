@@ -123,7 +123,10 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* ponytail: do NOT set scroll-behavior: smooth here — it conflicts with
+       Next.js scroll restoration and silently breaks hash navigation (#contact).
+       Smooth scrolling is handled per-call via scrollTo({ behavior: "smooth" })
+       in scrollToId() and HashScrollHandler. */
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;

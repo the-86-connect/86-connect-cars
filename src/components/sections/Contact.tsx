@@ -51,10 +51,18 @@ const stats: { label: string; icon: LucideIcon }[] = [
 ];
 
 export function Contact() {
+  // ponytail: id="contact" lives OUTSIDE the <Suspense> boundary so the anchor
+  // target always exists in the DOM — even while ContactInner is suspending on
+  // useSearchParams(). This makes scrollToId("contact") and #contact hash links
+  // work reliably instead of failing silently when the section hasn't resolved yet.
   return (
-    <Suspense fallback={null}>
-      <ContactInner />
-    </Suspense>
+    <section id="contact" className="scroll-mt-24 bg-[var(--bg-primary)] py-12 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <Suspense fallback={null}>
+          <ContactInner />
+        </Suspense>
+      </div>
+    </section>
   );
 }
 
@@ -65,9 +73,7 @@ function ContactInner() {
   const vehicleSlug = searchParams.get("vehicleSlug") ?? undefined;
 
   return (
-    <section id="contact" className="bg-[var(--bg-primary)] py-12 sm:py-20 lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12">
+    <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12">
             {/* Left: heading + contact info + stats */}
             <motion.div
               variants={stagger}
@@ -175,7 +181,5 @@ function ContactInner() {
               </div>
             </motion.div>
         </div>
-      </div>
-    </section>
   );
 }

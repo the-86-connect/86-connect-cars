@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/Hero";
 import { FeaturedVehicles } from "@/components/sections/FeaturedVehicles";
+import { Contact } from "@/components/sections/Contact";
 import { getVehicles } from "@/lib/vehicles.server";
 import { getBrands, resolveLogo } from "@/lib/brands.server";
 import type { BrandCategory } from "@/lib/brands";
@@ -19,7 +20,6 @@ const Brands = dynamic(() => import("@/components/sections/Brands").then(m => ({
 const WhyChooseUs = dynamic(() => import("@/components/sections/WhyChooseUs").then(m => ({ default: m.WhyChooseUs })));
 const Testimonials = dynamic(() => import("@/components/sections/Testimonials").then(m => ({ default: m.Testimonials })));
 const FAQ = dynamic(() => import("@/components/sections/FAQ").then(m => ({ default: m.FAQ })));
-const Contact = dynamic(() => import("@/components/sections/Contact").then(m => ({ default: m.Contact })));
 
 export const metadata: Metadata = {
   title: { absolute: "China Car Export | Buy & Import Cars from China Worldwide | 86Connect" },

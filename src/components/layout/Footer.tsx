@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Mail, MessageCircle, ExternalLink } from "lucide-react";
 import { scrollToId } from "@/lib/utils";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
@@ -106,11 +106,18 @@ const serviceLinks = [
 export function Footer() {
   // Admin has its own layout — hide the public footer there.
   const pathname = usePathname();
+  const router = useRouter();
   if (pathname?.startsWith("/admin")) return null;
 
+  // ponytail: anchor links (#home, #faq, #contact, …) only exist on the homepage route.
+  // On any other route, navigate to /#id so the user lands on the homepage section.
   const handleLink = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    scrollToId(id);
+    if (pathname === "/") {
+      scrollToId(id);
+    } else {
+      router.push(`/#${id}`);
+    }
   };
 
   return (

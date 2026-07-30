@@ -167,6 +167,7 @@ export default function RootLayout({
       lang="en"
       className={`${manrope.variable} ${playfair.variable} h-full antialiased`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <head>
         <script
