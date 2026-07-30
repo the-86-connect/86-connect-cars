@@ -68,7 +68,7 @@ export function FAQ({ items }: { items: FAQItem[] }) {
                     Still have questions?
                   </h3>
                   <p className="mt-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-                    Get a free 30-minute consultation with our export specialist. We'll walk you through sourcing, pricing, and shipping — no obligation.
+                    Get a free 30-minute consultation with our export specialist. We&rsquo;ll walk you through sourcing, pricing, and shipping — no obligation.
                   </p>
                   <div className="mt-4 flex flex-col gap-2 sm:mt-5 sm:flex-row">
                     <a

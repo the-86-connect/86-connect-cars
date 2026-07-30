@@ -18,18 +18,16 @@ export function ConsultPopup() {
   useEffect(() => {
     if (isAdminOrAccount) return;
 
-    let showTimer: ReturnType<typeof setTimeout>;
     let hideTimer: ReturnType<typeof setTimeout>;
-    let intervalTimer: ReturnType<typeof setInterval>;
 
     const show = () => {
       setVisible(true);
       hideTimer = setTimeout(() => setVisible(false), VISIBLE_MS);
     };
 
-    showTimer = setTimeout(show, FIRST_DELAY_MS);
+    const showTimer = setTimeout(show, FIRST_DELAY_MS);
 
-    intervalTimer = setInterval(() => {
+    const intervalTimer = setInterval(() => {
       clearTimeout(hideTimer);
       show();
     }, REAPPEAR_INTERVAL_MS);
