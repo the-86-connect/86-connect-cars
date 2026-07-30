@@ -101,6 +101,12 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   robots: { index: true, follow: true },
+  // Google Search Console URL-prefix verification: paste your token into
+  // NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION (e.g. "google-site-verification=...").
+  // Renders <meta name="google-site-verification"> only when set; harmless otherwise.
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export const viewport: Viewport = {
