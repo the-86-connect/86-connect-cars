@@ -21,8 +21,7 @@ const navItems = [
   { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
   { href: "/admin/features", label: "Features", icon: ListChecks },
   { href: "/admin/process-steps", label: "Process Steps", icon: FileText },
-  // HIDDEN: Knowledge Base tab — say "turn on knowledge base" to re-enable
-  // { href: "/admin/knowledge-base", label: "Knowledge Base", icon: BrainCircuit },
+  { href: "/admin/knowledge-base", label: "Knowledge Base", icon: BrainCircuit },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
