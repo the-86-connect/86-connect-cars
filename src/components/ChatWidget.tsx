@@ -268,7 +268,7 @@ export function ChatWidget() {
           id: uid(),
           role: "assistant",
           content:
-            "I'm having trouble connecting right now. Please try again in a moment, or reach us directly via WhatsApp at +86 176 1153 3296 or email info@the86connect.com.",
+            "I'm having trouble connecting right now. Please try again in a moment, or reach us directly via WhatsApp at +86 176 1153 3296 or email eightysixconnect@outlook.com.",
         },
       ]);
       if (!openRef.current) setUnreadCount((c) => c + 1);

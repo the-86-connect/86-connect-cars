@@ -100,7 +100,7 @@ const content: Record<LegalType, { title: string; updated: string; sections: { h
         heading: "12. Contact Us",
         body: [
           "If you have any questions or concerns about this Privacy Policy or our data practices, please contact us:",
-          "\u2022 Email: info@the86connect.com",
+          "\u2022 Email: eightysixconnect@outlook.com",
           "\u2022 WhatsApp: +86 176 1153 3296",
           "\u2022 Website: cars.the86connect.com",
         ],
@@ -233,7 +233,7 @@ const content: Record<LegalType, { title: string; updated: string; sections: { h
         heading: "15. Contact Us",
         body: [
           "If you have any questions about these Terms of Service, please contact us:",
-          "\u2022 Email: info@the86connect.com",
+          "\u2022 Email: eightysixconnect@outlook.com",
           "\u2022 WhatsApp: +86 176 1153 3296",
           "\u2022 Website: cars.the86connect.com",
         ],

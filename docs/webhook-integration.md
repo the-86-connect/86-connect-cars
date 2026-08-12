@@ -76,7 +76,7 @@ On the Main Admin Panel side, the same value lives in `CARS_APP_WEBHOOK_SECRET` 
 2. A new quote row is inserted into Supabase with a generated ID `quote-{timestamp}-{4-char-random}`.
 3. Three side-effects fire concurrently via `Promise.allSettled` (fire-and-forget — one failing doesn't block the others):
    - `sendQuoteConfirmationEmail` → to the user
-   - `sendQuoteNotificationEmail` → to admin (currently `beijingbridgepath@gmail.com` per memory, switching to `info@the86connect.com`)
+   - `sendQuoteNotificationEmail` → to admin (currently `eightysixconnect@outlook.com` per memory, switching to `info@the86connect.com`)
    - `forwardToMainAdmin` → webhook to main admin panel
 
 **Webhook payload (Cars App → Main Admin):**

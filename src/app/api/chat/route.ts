@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     if (!getKbProviderInfo().configured) {
       return NextResponse.json({
         answer:
-          "Our AI assistant is being set up. For immediate help, contact us via WhatsApp at +86 176 1153 3296 or email info@the86connect.com.",
+          "Our AI assistant is being set up. For immediate help, contact us via WhatsApp at +86 176 1153 3296 or email eightysixconnect@outlook.com.",
         sources: [],
       });
     }

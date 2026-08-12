@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 // ── Resend email client (lazy — only init when API key is present) ──
 // From: cars@the86connect.com (verified domain)
-// Admin notifications go to: beijingbridgepath@gmail.com
+// Admin notifications go to: eightysixconnect@outlook.com
 
 let _resend: Resend | null = null;
 function getResend(): Resend | null {
@@ -13,11 +13,11 @@ function getResend(): Resend | null {
   return _resend;
 }
 const FROM = process.env.EMAIL_FROM ?? "cars@the86connect.com";
-const ADMIN_EMAIL = process.env.NOTIFY_EMAIL ?? "beijingbridgepath@gmail.com";
+const ADMIN_EMAIL = process.env.NOTIFY_EMAIL ?? "eightysixconnect@outlook.com";
 
 // Contact info used in email footers
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cars.the86connect.com";
-const SUPPORT_EMAIL = "info@the86connect.com";
+const SUPPORT_EMAIL = "eightysixconnect@outlook.com";
 const SUPPORT_WHATSAPP = "+86 176 1153 3296";
 
 export type QuoteEmailData = {

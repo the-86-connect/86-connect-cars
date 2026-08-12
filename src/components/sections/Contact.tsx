@@ -27,8 +27,8 @@ const contactInfo: {
   {
     icon: Mail,
     label: "Email Us",
-    value: "info@the86connect.com",
-    href: "mailto:info@the86connect.com",
+    value: "eightysixconnect@outlook.com",
+    href: "mailto:eightysixconnect@outlook.com",
   },
   {
     icon: MessageCircle,

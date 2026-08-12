@@ -4,40 +4,23 @@ import { randomUUID } from "crypto";
 import { kbDocuments, kbChunks } from "@/lib/db";
 
 // ── Provider selection ──────────────────────────────────────────────────
-// GLM (Zhipu) is primary; OpenAI is fallback.
-// Both use OpenAI-compatible REST APIs — plain fetch, no SDK needed.
+// GLM (Zhipu) only — no OpenAI fallback.
+// Plain OpenAI-compatible REST via fetch — no SDK needed.
 
-export type KbProvider = "glm" | "openai";
+export type KbProvider = "glm";
 
 const GLM_BASE = "https://open.bigmodel.cn/api/paas/v4";
-const OPENAI_BASE = "https://api.openai.com/v1";
 
 function resolveProvider(): KbProvider {
-  const pref = process.env.KB_PROVIDER?.toLowerCase() ?? "auto";
-  const hasGlm = !!process.env.ZHIPU_API_KEY;
-  const hasOai = !!process.env.OPENAI_API_KEY;
-
-  if (pref === "glm") return "glm";
-  if (pref === "openai") return "openai";
-
-  // auto mode: prefer GLM if key set, else OpenAI
-  return hasGlm ? "glm" : (hasOai ? "openai" : "glm");
+  const pref = process.env.KB_PROVIDER?.toLowerCase() ?? "glm";
+  if (pref === "openai") {
+    // ponytail: user explicitly disabled OpenAI fallback. Silently treat as GLM.
+    return "glm";
+  }
+  return "glm";
 }
 
-function getProviderConfig(provider: KbProvider) {
-  if (provider === "openai") {
-    const key = process.env.OPENAI_API_KEY;
-    if (!key) throw new Error("OPENAI_API_KEY not set");
-    return {
-      baseUrl: OPENAI_BASE,
-      key,
-      embedModel: "text-embedding-3-small",
-      chatModel: "gpt-4o-mini",
-      dims: 1536,
-      label: "OpenAI",
-    };
-  }
-  // glm
+function getProviderConfig(_provider: KbProvider) {
   const key = process.env.ZHIPU_API_KEY;
   if (!key) throw new Error("ZHIPU_API_KEY not set");
   return {
@@ -128,7 +111,7 @@ WHEN THE ANSWER IS NOT IN CONTEXT (out of scope):
 
 CONTACT INFORMATION (use these exact details — only when relevant):
 - WhatsApp: +86 176 1153 3296
-- Email: beijingbridgepath@gmail.com
+- Email: eightysixconnect@outlook.com
 - Website: https://cars.the86connect.com
 - Only share contact info when the user asks for it, or when you need to direct them to the team. Do not put contact info in every reply.
 
@@ -262,7 +245,7 @@ export async function askQuestion(question: string): Promise<{
 
   if (matches.length === 0) {
     return {
-      answer: "I don't have information about that yet. Please contact our team via WhatsApp at +86 176 1153 3296 or email beijingbridgepath@gmail.com for assistance.",
+      answer: "I don't have information about that yet. Please contact our team via WhatsApp at +86 176 1153 3296 or email eightysixconnect@outlook.com for assistance.",
       sources: [],
     };
   }

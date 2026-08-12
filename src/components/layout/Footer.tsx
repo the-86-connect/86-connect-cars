@@ -248,11 +248,11 @@ export function Footer() {
             <ul className="flex flex-col gap-3 sm:gap-4">
               <li>
                 <a
-                  href="mailto:info@the86connect.com"
+                  href="mailto:eightysixconnect@outlook.com"
                   className="group inline-flex items-center gap-2.5 text-sm font-semibold text-white/70 transition-colors hover:text-white sm:gap-3 sm:font-bold"
                 >
                   <Mail className="h-4 w-4 shrink-0 text-white/50 transition-colors group-hover:text-red-400" />
-                  <span className="break-all">info@the86connect.com</span>
+                  <span className="break-all">eightysixconnect@outlook.com</span>
                 </a>
               </li>
               <li>
