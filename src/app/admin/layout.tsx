@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import NotificationBell from "@/components/admin/NotificationBell";
 
+// Admin sidebar navigation items - Knowledge Base tab is always visible
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/vehicles", label: "Vehicles", icon: Car },
