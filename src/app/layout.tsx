@@ -191,6 +191,7 @@ export default function RootLayout({
         <Footer />
         <MobileBottomNav />
         <ChatWidgetHost />
+        <WhatsAppFloat />
         <ConsultPopup />
       </body>
     </html>
