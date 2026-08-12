@@ -622,3 +622,13 @@
   -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
   caret-color: #f0eeeb;
 }
+
+/* ---- WhatsApp floating button wave ---- */
+@keyframes whatsapp-wave {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(16deg); }
+  20% { transform: rotate(-6deg); }
+  30% { transform: rotate(16deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+}
