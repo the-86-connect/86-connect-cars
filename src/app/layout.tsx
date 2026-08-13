@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { HashScrollHandler } from "@/components/layout/HashScrollHandler";
-import { ChatWidgetHost } from "@/components/layout/ChatWidgetHost";
+import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
 import { ConsultPopup } from "@/components/ui/ConsultPopup";
 
 const manrope = Manrope({
@@ -190,7 +190,6 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <MobileBottomNav />
-        <ChatWidgetHost />
         <WhatsAppFloat />
         <ConsultPopup />
       </body>

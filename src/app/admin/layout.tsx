@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Car, MessageSquareQuote, HelpCircle,
   Star, ListChecks, FileText, LogOut, Menu, X, Images, Tag, Users,
-  ExternalLink, Truck, BrainCircuit,
+  ExternalLink, Truck,
 } from "lucide-react";
 import NotificationBell from "@/components/admin/NotificationBell";
 
@@ -22,7 +22,7 @@ const navItems = [
   { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
   { href: "/admin/features", label: "Features", icon: ListChecks },
   { href: "/admin/process-steps", label: "Process Steps", icon: FileText },
-  { href: "/admin/knowledge-base", label: "Knowledge Base", icon: BrainCircuit },
+  // Knowledge Base tab hidden (chatbot removed from frontend)
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
