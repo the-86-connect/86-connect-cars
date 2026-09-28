@@ -69,3 +69,6 @@ firebase-adminsdk*.json
 
 # TRAE workspace planning docs (local only)
 .trae/
+# local-only client docs — offers/pricing, do NOT commit or ship to production
+docs/MOTORBIKE_EXPANSION_OFFER.md
+docs/motorbike-offer.html

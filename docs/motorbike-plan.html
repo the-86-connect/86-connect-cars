@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Motorbike Expansion — Technical Plan | 86Connect Cars</title>
+<style>
+  :root{
+    --ink:#0f1419;
+    --muted:#5b6672;
+    --line:#e5e9ee;
+    --paper:#ffffff;
+    --bg:#f4f6f8;
+    --accent:#e8442a;
+    --accent-soft:#fdeeea;
+    --good:#127a4d;
+    --code-bg:#10161d;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.6;
+    font-size:16px;
+  }
+  .sheet{
+    max-width:920px;
+    margin:32px auto;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 12px 40px rgba(15,20,25,.07);
+  }
+  header.hero{
+    padding:38px 44px 34px;
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(232,68,42,.16) 0%, rgba(232,68,42,0) 55%),
+      linear-gradient(180deg,#10161d 0%,#1b2530 100%);
+    color:#fff;
+    position:relative;
+  }
+  .brand{
+    display:flex;align-items:center;gap:12px;
+    font-weight:700;letter-spacing:.4px;font-size:15px;
+    opacity:.92;
+  }
+  .brand .dot{
+    width:26px;height:26px;border-radius:8px;
+    background:var(--accent);
+    display:grid;place-items:center;font-size:14px;font-weight:800;color:#fff;
+  }
+  header.hero h1{
+    margin:20px 0 6px;
+    font-size:34px;line-height:1.15;letter-spacing:-.4px;
+  }
+  header.hero .sub{color:#c7d0d9;margin:0;font-size:15px}
+  .meta{
+    padding:18px 44px;border-bottom:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:10px 34px;font-size:14px;color:var(--muted);
+  }
+  .meta b{color:var(--ink)}
+  main{padding:8px 44px 40px}
+  section{padding:26px 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:0}
+  h2{
+    font-size:13px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--accent);margin:0 0 14px;
+  }
+  h3{font-size:17px;margin:18px 0 8px}
+  p{margin:0 0 12px}
+  ul,ol{margin:0 0 12px;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--accent);font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin:8px 0 14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600}
+  code{
+    font-family:Consolas,'Courier New',monospace;
+    font-size:13px;background:var(--accent-soft);
+    color:#8a2413;border-radius:5px;padding:1px 6px;white-space:nowrap;
+  }
+  pre{
+    background:var(--code-bg);color:#d7e2ec;border-radius:12px;
+    padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.55;
+    font-family:Consolas,'Courier New',monospace;margin:10px 0 14px;
+  }
+  pre code{background:none;color:inherit;padding:0;white-space:pre}
+  pre .c{color:#7d8b99}
+  pre .k{color:#7dd3a8}
+  .note{
+    border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:10px;padding:14px 18px;background:#fbfcfd;margin:14px 0;
+    font-size:14.5px;
+  }
+  .note.good{border-left-color:var(--good)}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#fbfcfd}
+  .card h4{margin:0 0 8px;font-size:15px}
+  .card ul{margin:0;padding-left:18px;font-size:13.5px;color:#333c46}
+  .checklist{list-style:none;padding-left:0}
+  .checklist li{padding-left:28px;position:relative}
+  .checklist li::before{
+    content:"✓";position:absolute;left:0;top:0;
+    color:var(--good);font-weight:800;
+  }
+  footer{
+    padding:22px 44px 34px;background:#fbfcfd;border-top:1px solid var(--line);
+    font-size:13px;color:var(--muted);
+    display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:space-between;align-items:center;
+  }
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  footer a:hover{text-decoration:underline}
+  @media (max-width:680px){
+    .sheet{margin:0;border-radius:0;border-left:0;border-right:0}
+    header.hero,main,.meta,footer{padding-left:22px;padding-right:22px}
+    header.hero h1{font-size:26px}
+    .two-col{grid-template-columns:1fr}
+    table{font-size:13px}
+    th,td{padding:8px 8px}
+  }
+  @media print{
+    body{background:#fff;font-size:12.5px}
+    .sheet{margin:0;border:0;box-shadow:none;max-width:none}
+    header.hero{background:#10161d !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    section{page-break-inside:avoid}
+    pre{page-break-inside:avoid}
+    footer{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="hero">
+    <div class="brand"><span class="dot">86</span> 86CONNECT CARS</div>
+    <h1>Motorbike Expansion — Technical Plan</h1>
+    <p class="sub">Separate sections model: cars and motorbikes on one system, two clean storefronts.</p>
+  </header>
+
+  <div class="meta">
+    <div><b>Product:</b> 86Connect Cars</div>
+    <div><b>Stack:</b> Next.js 16 App Router + Supabase Postgres</div>
+    <div><b>Date:</b> 29 September 2026</div>
+    <div><b>Status:</b> Approved approach</div>
+  </div>
+
+  <main>
+
+    <section>
+      <h2>1 · Decision summary</h2>
+      <p>Do <b>not</b> build a parallel <code>motorcycles</code> system. Add <b>one discriminator column</b> (<code>vehicle_type</code>) to the existing data model, then expose cars and bikes through <b>separate routes, sections, and admin pages</b> that <b>reuse the same components</b>.</p>
+      <ul>
+        <li>Same database, same API, same admin form, same quote/WhatsApp flow.</li>
+        <li>Different URLs, different homepage sections, different nav entries.</li>
+        <li>One code path → half the maintenance, no duplicated 2,000-line inventory component.</li>
+      </ul>
+      <div class="note">
+        <b>Rejected alternative:</b> a second <code>motorcycles</code> table + parallel pages. It duplicates the catalogue UI, detail page, admin CRUD, and API routes — roughly 2× the work for identical behaviour.
+      </div>
+    </section>
+
+    <section>
+      <h2>2 · What already exists (verified)</h2>
+      <table>
+        <thead><tr><th>Area</th><th>File</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Hero CTAs</td><td><code>src/components/sections/Hero.tsx</code></td><td>"Browse Vehicles" scrolls to <code>#inventory</code> (in-page), not a route</td></tr>
+          <tr><td>Featured section</td><td><code>FeaturedVehicles.tsx</code></td><td><code>id="inventory"</code>, title "Featured Vehicles", fuel/body chips</td></tr>
+          <tr><td>Brand section (home)</td><td><code>Brands.tsx</code></td><td>all brands + counts, links <code>/inventory?brand=&lt;name&gt;</code></td></tr>
+          <tr><td>Brand page</td><td><code>src/app/brands/</code> + <code>BrandsClient.tsx</code></td><td>category tabs chinese/foreign/trucks; no per-brand route</td></tr>
+          <tr><td>Car inventory</td><td><code>src/app/inventory/</code> + <code>InventoryClient.tsx</code></td><td>brand/fuel/body/year/drivetrain/transmission/seats/color/price/sort + URL sync</td></tr>
+          <tr><td>Car detail</td><td><code>src/app/inventory/[slug]/</code> + <code>VehicleDetailClient.tsx</code></td><td>WhatsApp + Request Quote → <code>/?vehicleSlug=…#contact</code></td></tr>
+          <tr><td>Quote flow</td><td><code>QuoteForm.tsx</code> → <code>api/quotes</code></td><td>writes <code>quotes</code> table</td></tr>
+          <tr><td>Quote → main admin</td><td><code>forwardToMainAdmin()</code> in <code>api/quotes/route.ts</code></td><td>webhook POST to <code>MAIN_ADMIN_CAR_QUOTE_API</code> (admin.the86connect.com) with <code>submissionType: "car-quote"</code>; <code>vehicleLink</code> hardcoded to <code>/inventory/&lt;slug&gt;</code>; PATCH webhook syncs <code>delivery_status</code> back; DELETE syncs both ways</td></tr>
+          <tr><td>Email system</td><td><code>src/lib/email.ts</code> (Resend)</td><td>user confirmation + admin notification (<code>eightysixconnect@outlook.com</code>); vehicle links hardcoded <code>/inventory/&lt;slug&gt;</code></td></tr>
+          <tr><td>Order tracking</td><td><code>quotes.delivery_status</code> + account page</td><td>main admin updates status via PATCH webhook; users track submissions from their account page</td></tr>
+          <tr><td>Brand registry</td><td><code>src/lib/brands.ts</code>, <code>brands.server.ts</code></td><td>3 categories only; auto-seeds <code>brands</code> table</td></tr>
+          <tr><td>Admin</td><td><code>src/app/admin/**</code></td><td>vehicles, brands, quotes, users, gallery, testimonials, faqs, features, process-steps, knowledge-base, dashboard</td></tr>
+          <tr><td>Sitemap</td><td><code>src/app/sitemap.ts</code></td><td><code>/</code>, <code>/inventory</code>, <code>/brands</code>, <code>/gallery</code>, <code>/about</code>, <code>/inventory/&lt;slug&gt;</code></td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        <b>Clarification on "features page":</b> there is <b>no <code>/features</code> route</b>. The homepage "Featured Vehicles" section (<code>FeaturedVehicles.tsx</code>, anchor <code>#inventory</code>) is what you see. The admin "Features" page manages a <i>site-features</i> list used by the static "Why Choose Us" section — it does not show cars.
+      </div>
+    </section>
+
+    <section>
+      <h2>3 · Target public structure</h2>
+      <table>
+        <thead><tr><th>Concept</th><th>Cars</th><th>Bikes</th></tr></thead>
+        <tbody>
+          <tr><td>Catalogue</td><td><code>/cars</code></td><td><code>/bikes</code></td></tr>
+          <tr><td>Product detail</td><td><code>/cars/[slug]</code></td><td><code>/bikes/[slug]</code></td></tr>
+          <tr><td>Brand listing page</td><td><code>/cars/brands</code></td><td><code>/bikes/brands</code></td></tr>
+          <tr><td>Homepage featured section</td><td>"Featured Cars"</td><td>"Featured Bikes"</td></tr>
+          <tr><td>Homepage brand section</td><td>"Car Brands"</td><td>"Bike Brands"</td></tr>
+        </tbody>
+      </table>
+      <p><b>Redirects (preserve existing SEO, no broken links):</b></p>
+      <ul>
+        <li><code>/inventory</code> → <code>/cars</code> (301)</li>
+        <li><code>/inventory/[slug]</code> → <code>/cars/[slug]</code> (301)</li>
+        <li><code>/brands</code> → <code>/cars/brands</code> (301)</li>
+      </ul>
+      <p>Slugs stay globally unique (one <code>vehicles</code> table), so <code>/cars/[slug]</code> and <code>/bikes/[slug]</code> never collide.</p>
+    </section>
+
+    <section>
+      <h2>4 · Data model</h2>
+      <h3>Migration <code>supabase/migrations/00010_add_vehicle_type.sql</code></h3>
+      <pre><code><span class="c">-- 1. Vehicles: car | motorbike</span>
+ALTER TABLE vehicles ADD COLUMN IF NOT EXISTS vehicle_type TEXT NOT NULL DEFAULT 'car';
+ALTER TABLE vehicles DROP CONSTRAINT IF EXISTS vehicles_vehicle_type_check;
+ALTER TABLE vehicles ADD CONSTRAINT vehicles_vehicle_type_check
+  CHECK (vehicle_type IN ('car', 'motorbike'));
+CREATE INDEX IF NOT EXISTS idx_vehicles_vehicle_type ON vehicles(vehicle_type);
+
+<span class="c">-- 2. Brands: car | motorbike (a brand can exist once per type, e.g. Honda)</span>
+ALTER TABLE brands ADD COLUMN IF NOT EXISTS vehicle_type TEXT NOT NULL DEFAULT 'car';
+ALTER TABLE brands DROP CONSTRAINT IF EXISTS brands_vehicle_type_check;
+ALTER TABLE brands ADD CONSTRAINT brands_vehicle_type_check
+  CHECK (vehicle_type IN ('car', 'motorbike'));
+ALTER TABLE brands DROP CONSTRAINT IF EXISTS brands_name_key;
+ALTER TABLE brands ADD CONSTRAINT brands_name_type_key UNIQUE (name, vehicle_type);
+ALTER TABLE brands DROP CONSTRAINT IF EXISTS brands_category_check;
+ALTER TABLE brands ADD CONSTRAINT brands_category_check
+  CHECK (category IN ('chinese', 'foreign', 'trucks', 'bikes'));
+CREATE INDEX IF NOT EXISTS idx_brands_vehicle_type ON brands(vehicle_type);
+
+<span class="c">-- 3. Quotes: remember which line the enquiry came from (drives admin panel,</span>
+<span class="c">--    email wording, and correct /cars|/bikes links in webhook + emails)</span>
+ALTER TABLE quotes ADD COLUMN IF NOT EXISTS vehicle_type TEXT NOT NULL DEFAULT 'car';
+CREATE INDEX IF NOT EXISTS idx_quotes_vehicle_type ON quotes(vehicle_type);</code></pre>
+      <ul>
+        <li><code>DEFAULT 'car'</code> → every existing row is untouched (zero-downtime).</li>
+        <li>Brands become type-scoped, so "Car Brands" and "Bike Brands" are two clean lists.</li>
+      </ul>
+      <h3>Types &amp; query layer</h3>
+      <ul>
+        <li><code>src/types/index.ts</code>: add <code>VehicleType</code>; extend <code>BodyType</code> with Scooter, Sport, Cruiser, Dirt Bike, Electric Bike, Three-Wheeler.</li>
+        <li>Bike spec fields (<code>engineType</code>, <code>fuelCapacity</code>, <code>abs</code>, …) go into the existing JSONB <code>specs</code> — no DB change.</li>
+        <li><code>src/lib/db/index.ts</code>: add <code>vehicles.listByType(type)</code> and <code>brands.listByType(type)</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5 · Component reuse strategy</h2>
+      <p>Generalize, do not duplicate. Each component gains <b>one prop</b> (<code>vehicleType</code>, and where it links, <code>basePath</code>).</p>
+      <table>
+        <thead><tr><th>Component</th><th>Change</th><th>Reused by</th></tr></thead>
+        <tbody>
+          <tr><td><code>InventoryClient.tsx</code></td><td>add <code>vehicleType</code> + <code>basePath</code> props; filter brand list to that type; links use <code>basePath</code></td><td><code>/cars</code>, <code>/bikes</code></td></tr>
+          <tr><td><code>VehicleDetailClient.tsx</code></td><td>add <code>vehicleType</code> prop (labels, WhatsApp text, spec headings)</td><td><code>/cars/[slug]</code>, <code>/bikes/[slug]</code></td></tr>
+          <tr><td><code>BrandsClient.tsx</code></td><td>add <code>vehicleType</code> + <code>basePath</code>; category tabs adapt per type</td><td><code>/cars/brands</code>, <code>/bikes/brands</code></td></tr>
+          <tr><td><code>FeaturedVehicles.tsx</code></td><td>add <code>title</code> + <code>vehicleType</code> props</td><td>homepage "Featured Cars" &amp; "Featured Bikes"</td></tr>
+          <tr><td><code>Brands.tsx</code> (section)</td><td>add <code>title</code> + <code>vehicleType</code> props</td><td>homepage "Car Brands" &amp; "Bike Brands"</td></tr>
+          <tr><td><code>VehicleCard</code></td><td>unchanged — already generic</td><td>both</td></tr>
+        </tbody>
+      </table>
+      <div class="note good">
+        <b>Rule:</b> a new page is a thin server component that fetches type-filtered data and renders the shared client. No copy-paste of UI.
+      </div>
+    </section>
+
+    <section>
+      <h2>6 · Homepage changes</h2>
+      <p>Add two sections, reusing components:</p>
+      <pre><code>Hero
+FeaturedVehicles  title="Featured Cars"  vehicleType="car"       (existing, retitled)
+FeaturedVehicles  title="Featured Bikes" vehicleType="motorbike" (new instance)
+...
+Brands            title="Car Brands"     vehicleType="car"       (existing, retitled)
+Brands            title="Bike Brands"    vehicleType="motorbike" (new instance)</code></pre>
+      <ul>
+        <li>Data: add <code>getVehiclesByType("motorbike")</code> and <code>getBrandsByType("motorbike")</code> to the <code>Promise.all</code> in <code>page.tsx</code>.</li>
+        <li>Keep distinct anchors (<code>#featured-cars</code>, <code>#featured-bikes</code>) so nav can scroll to each.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7 · Inventory + brand pages</h2>
+      <ul>
+        <li><b><code>/cars</code> and <code>/bikes</code></b> — thin server pages: fetch type-filtered data, render <code>&lt;InventoryClient vehicleType={type} basePath="/cars|/bikes" … /&gt;</code>.</li>
+        <li><b>Brand filter</b> — pills derive options from the vehicles passed in → automatically show only brands that have cars (or bikes).</li>
+        <li>Brand links inside a catalogue point to <code>/cars?brand=&lt;name&gt;</code> / <code>/bikes?brand=&lt;name&gt;</code> (driven by <code>basePath</code>).</li>
+        <li><b>Brand pages</b> — <code>/cars/brands</code>, <code>/bikes/brands</code>: same <code>BrandsClient</code> with type-aware category tabs (car: Chinese/Foreign/Trucks; bike: e.g. Chinese/Japanese/European).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8 · Detail page, WhatsApp, quote</h2>
+      <ul>
+        <li><code>/cars/[slug]</code> and <code>/bikes/[slug]</code> both render <code>VehicleDetailClient</code> with the type prop.</li>
+        <li><b>WhatsApp</b> button: reuse <code>https://wa.me/8617611533296</code> as-is.</li>
+        <li><b>Request Quote</b>: reuse the existing <code>/?vehicleSlug=…#contact</code> flow — the Contact section already pre-fills brand/model/slug from search params.</li>
+        <li><b>SEO / structured data</b>: emit <code>@type: "Car"</code> for cars, <code>@type: "Motorcycle"</code> for bikes; breadcrumbs per section.</li>
+      </ul>
+      <h3>Quotes, main admin panel, emails &amp; tracking</h3>
+      <ul>
+        <li><b>Main admin panel (admin.the86connect.com)</b>: every quote is forwarded by <code>forwardToMainAdmin()</code> in <code>api/quotes/route.ts</code>. For bikes: persist <code>quotes.vehicle_type</code> and send it in the webhook payload; build <code>vehicleLink</code> from the vehicle's type (<code>/cars/&lt;slug&gt;</code> vs <code>/bikes/&lt;slug&gt;</code>) instead of today's hardcoded <code>/inventory/&lt;slug&gt;</code>; use <code>submissionType: "motorbike-quote"</code> for bikes plus a <code>vehicleType</code> field (pending main-panel confirmation, §14).</li>
+        <li><b>Email system (Resend, <code>src/lib/email.ts</code>)</b>: confirmation and admin-notification emails link to the right catalogue (<code>/cars/…</code> vs <code>/bikes/…</code>) and say "motorbike" when the quote is for a bike.</li>
+        <li><b>Order tracking: unchanged.</b> Same <code>quotes</code> table, same PATCH webhook (main admin updates <code>delivery_status</code>), same account-page tracking. Bike orders are tracked exactly like car orders once <code>vehicle_type</code> is stored.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>9 · Admin changes</h2>
+      <table>
+        <thead><tr><th>Admin page</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td><code>/admin/vehicles</code></td><td>Car management — same component, fixed <code>vehicleType="car"</code></td></tr>
+          <tr><td><code>/admin/bikes</code> (new)</td><td>Bike management — same list component, fixed <code>motorbike</code> (own sidebar entry)</td></tr>
+          <tr><td><code>VehicleForm.tsx</code></td><td>add "Vehicle Type" field (or fixed by route) + bike spec fields</td></tr>
+          <tr><td><code>/admin/brands</code></td><td>add a <b>Cars / Bikes</b> tab; category options per type</td></tr>
+          <tr><td><code>/admin</code> dashboard</td><td>add a "Bikes" stat card + include bikes in distribution</td></tr>
+          <tr><td><code>/admin/quotes</code></td><td>show a Car/Bike badge per quote + type filter (reads <code>quotes.vehicle_type</code>); forwarded webhook + emails already handled in §8</td></tr>
+          <tr><td><code>api/vehicles</code> (GET)</td><td>support <code>?type=car|motorbike</code>; POST/PUT persist <code>vehicle_type</code></td></tr>
+          <tr><td><code>api/brands</code></td><td>persist <code>vehicle_type</code>; validate category list</td></tr>
+          <tr><td>Admin sidebar</td><td>add "Bikes" nav item</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>10 · Navigation, footer, sitemap</h2>
+      <ul>
+        <li><b><code>src/lib/data.ts</code> (<code>navLinks</code>)</b>: add <code>Cars</code> → <code>/cars</code>, <code>Bikes</code> → <code>/bikes</code> (keep Brands → <code>/cars/brands</code>).</li>
+        <li><b><code>MobileBottomNav.tsx</code></b>: add Bikes tab.</li>
+        <li><b><code>Footer.tsx</code></b>: update link arrays to the new paths.</li>
+        <li><b><code>Hero.tsx</code></b>: repoint "Browse Vehicles" → <code>/cars</code> (route, not just anchor), add a second CTA "Browse Bikes" → <code>/bikes</code>.</li>
+        <li><b><code>sitemap.ts</code></b>: emit <code>/cars</code>, <code>/bikes</code>, <code>/cars/brands</code>, <code>/bikes/brands</code>, and split vehicle slugs into <code>/cars/&lt;slug&gt;</code> / <code>/bikes/&lt;slug&gt;</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>11 · Build order (safe, incremental)</h2>
+      <ol>
+        <li><b>Migration + types + query layer</b> — append-only, nothing breaks.</li>
+        <li><b>Generalize components</b> — add props with defaults so existing <code>/inventory</code> still works.</li>
+        <li><b>Add <code>/cars</code> and <code>/bikes</code></b> routes (thin pages over the generalized components).</li>
+        <li><b>Admin</b> — <code>/admin/bikes</code>, form field, brand tabs, dashboard card.</li>
+        <li><b>Homepage</b> — retitle existing sections; add the two bike sections.</li>
+        <li><b>Nav / footer / hero / sitemap.</b></li>
+        <li><b>Add redirects</b> <code>/inventory → /cars</code>, <code>/brands → /cars/brands</code>.</li>
+        <li><b>QA + deploy.</b></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>12 · Verification checklist</h2>
+      <ul class="checklist">
+        <li><code>npx tsc --noEmit</code> and <code>npm run lint</code> clean.</li>
+        <li><code>npm run build</code> passes (all new routes build).</li>
+        <li>Migration applied on a Supabase branch; <code>SELECT count(*) FROM vehicles WHERE vehicle_type='car'</code> unchanged.</li>
+        <li>Add a bike in <code>/admin/bikes</code> → appears on <code>/bikes</code> + homepage Featured Bikes, never on <code>/cars</code>.</li>
+        <li>Brand filter on <code>/bikes</code> shows only bike brands; clicking a brand → <code>/bikes?brand=&lt;name&gt;</code> filtered correctly.</li>
+        <li><code>/cars/brands</code> and <code>/bikes/brands</code> show separate brand lists.</li>
+        <li>Bike detail page: WhatsApp opens with bike text; Request Quote pre-fills the Contact form; JSON-LD is <code>Motorcycle</code>.</li>
+        <li>Old URLs <code>/inventory</code>, <code>/inventory/&lt;slug&gt;</code>, <code>/brands</code> 301-redirect correctly.</li>
+        <li>Sitemap contains the new paths.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>13 · Files touched</h2>
+      <div class="two-col">
+        <div class="card">
+          <h4>New</h4>
+          <ul>
+            <li><code>supabase/migrations/00010_add_vehicle_type.sql</code></li>
+            <li><code>src/app/cars/page.tsx</code> · <code>[slug]/page.tsx</code> · <code>brands/page.tsx</code></li>
+            <li><code>src/app/bikes/page.tsx</code> · <code>[slug]/page.tsx</code> · <code>brands/page.tsx</code></li>
+            <li><code>src/app/admin/bikes/page.tsx</code></li>
+            <li>Redirect entries in <code>next.config.ts</code></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Edited</h4>
+          <ul>
+            <li>Types &amp; data: <code>types/index.ts</code>, <code>lib/db/index.ts</code>, <code>lib/vehicles.server.ts</code>, <code>lib/brands.ts</code>, <code>lib/brands.server.ts</code>, <code>lib/data.ts</code></li>
+            <li>Components: <code>InventoryClient</code>, <code>VehicleDetailClient</code>, <code>BrandsClient</code>, <code>FeaturedVehicles</code>, <code>Brands</code>, <code>Hero</code>, <code>VehicleForm</code></li>
+            <li>Pages &amp; admin: <code>page.tsx</code>, <code>admin/layout.tsx</code>, <code>admin/brands</code>, <code>admin/page.tsx</code></li>
+            <li>API: <code>api/vehicles</code>, <code>api/brands</code>, <code>api/quotes</code></li>
+            <li>Quotes &amp; email: <code>lib/email.ts</code>, <code>api/quotes/route.ts</code>, <code>admin/quotes</code></li>
+            <li>SEO &amp; nav: <code>sitemap.ts</code>, <code>Navbar</code>, <code>MobileBottomNav</code>, <code>Footer</code>, <code>next.config.ts</code></li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:12px"><b>Unchanged:</b> uploads (Cloudinary), auth, RLS, WhatsApp number, order-tracking flow (PATCH/DELETE webhooks keep their shape — the payload only gains <code>vehicleType</code> and correct links).</p>
+    </section>
+
+    <section>
+      <h2>14 · Open decisions</h2>
+      <ol>
+        <li><b>URL scheme</b> — recommended <code>/cars</code> + <code>/bikes</code> (with 301s from <code>/inventory</code>). Alternative: keep <code>/inventory</code> for cars and add only <code>/bikes</code>.</li>
+        <li><b>Brand pages</b> — recommended nested <code>/cars/brands</code> + <code>/bikes/brands</code>. Alternative: flat <code>/car-brands</code> + <code>/bike-brands</code>.</li>
+        <li><b>Bike brand categories</b> — decide the grouping shown on <code>/bikes/brands</code> (e.g. Chinese / Japanese / European).</li>
+        <li><b>Main admin panel compatibility</b> — the quote-forwarding webhook (<code>MAIN_ADMIN_CAR_QUOTE_API</code>) targets the separate admin.the86connect.com system. Confirm whether it accepts a <code>vehicleType</code> field and/or a <code>"motorbike-quote"</code> submission type so bike enquiries are labelled correctly there. Safe default: keep the existing payload shape and add <code>vehicleType</code> as a new field.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <div>86Connect Cars · Technical plan for the motorbike expansion</div>
+    <div>
+      <a href="motorbike-offer.html">View the offer &rarr;</a>
+      &nbsp;·&nbsp;
+      <a href="MOTORBIKE_EXPANSION_PLAN.md">Markdown source &rarr;</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
