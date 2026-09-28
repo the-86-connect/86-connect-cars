@@ -218,9 +218,6 @@ CREATE INDEX IF NOT EXISTS idx_quotes_vehicle_type ON quotes(vehicle_type);`}
             </thead>
             <tbody>
               {[
-                ["AI chatbot for bikes", "Reuse the existing /api/chat (Zhipu). Admin gets a Bikes knowledge-base folder; the chat context adds bike inventory (name, engine size, price) alongside cars."],
-                ["Compare bikes", "Client-side only: two bike slugs in the URL, values read from the vehicles already fetched — no new table."],
-                ["EMI calculator", "Pure front-end math on the bike price (rate + months inputs). No API, no storage."],
                 ["Export spec sheet (PDF)", "Print stylesheet on the bike detail page — same window.print() approach as this proposal. No PDF library."],
                 ["WhatsApp per product", "Already exists in VehicleDetailClient — just switch the message text to the bike name."],
               ].map(([f, h]) => (
@@ -232,7 +229,10 @@ CREATE INDEX IF NOT EXISTS idx_quotes_vehicle_type ON quotes(vehicle_type);`}
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-sm text-[#5b6672]">All of these reuse existing code or plain front-end logic — nothing new to host, nothing new to maintain.</p>
+        <p className="mt-3 text-sm text-[#5b6672]">
+          Both reuse existing code or plain front-end logic — nothing new to host, nothing new to maintain.
+          <b> AI chatbot training for bikes and the bike comparison + EMI calculator are out of this budget</b> and would be quoted separately as new work.
+        </p>
       </section>
 
       {/* Bottom nav */}

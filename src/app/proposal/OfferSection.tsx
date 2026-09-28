@@ -34,7 +34,6 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
           <li>Admin panel: <b>add, edit, and delete motorbikes</b>, exactly like cars.</li>
           <li><b>Bike enquiries reach you the same way car quotes do</b> — every motorbike quote arrives in your main admin panel (admin.the86connect.com), sends the email notifications, and gets order tracking, automatically.</li>
           <li>Search-engine setup so motorbikes show up on Google.</li>
-          <li><b>AI chatbot answers motorbike questions</b> — the assistant already on your site learns your bikes, so buyers get instant replies about engine size, price, and shipping.</li>
         </ul>
       </section>
 
@@ -43,10 +42,8 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
         <p className="mb-4">Bundled at no extra cost:</p>
         <div className="grid md:grid-cols-3 gap-4">
           {[
-            { t: "AI chatbot for bikes", d: "Buyers ask about engine size, price, or shipping and get an instant answer — using the chatbot already on your site, now trained on your motorbikes." },
             { t: "Homepage motorbike showcase", d: "Your new product line is visible the moment customers land." },
             { t: "WhatsApp on each product", d: "Buyers reach you in one tap — more leads, less friction." },
-            { t: "Compare bikes + EMI calculator", d: "Buyers compare two bikes side by side and see the monthly payment instantly." },
             { t: "Engine-size & brand filters", d: "Buyers find the right bike fast, so more conversions." },
             { t: "Export spec sheet (PDF)", d: "One click turns any bike into a clean PDF datasheet you can send to buyers." },
           ].map((c) => (
@@ -56,6 +53,9 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
             </div>
           ))}
         </div>
+        <p className="mt-4 text-sm text-[#5b6672]">
+          <b>Not included in this budget:</b> AI chatbot training for bikes, and the bike comparison + EMI calculator. These can be quoted separately as new work.
+        </p>
       </section>
 
       <section>
@@ -73,7 +73,7 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
                 ["1", "Database update — motorbikes become a product type (your existing cars untouched)."],
                 ["2–3", "Separate Cars and Bikes inventory pages + motorbike detail pages."],
                 ["4", "Admin — add / edit / delete motorbikes; bike quotes wired into your main admin panel, emails, and tracking."],
-                ["5", "Homepage showcase, WhatsApp on each product, AI chatbot, compare + EMI calculator, PDF spec sheet, filters, SEO."],
+                ["5", "Homepage showcase, WhatsApp on each product, PDF spec sheet, filters, SEO."],
                 ["6", "Testing — add real bikes, check every page on phone and desktop."],
                 ["7", "Go live on production and hand over."],
               ].map(([d, w]) => (
@@ -101,9 +101,7 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
               {[
                 ["Motorbike catalogue + detail pages", "$120"],
                 ["Admin add / edit / delete for bikes", "$100"],
-                ["AI chatbot trained on your bikes", "$80"],
                 ["Homepage showcase + WhatsApp on each product", "$70"],
-                ["Compare bikes + EMI calculator", "$60"],
                 ["SEO + engine-size & brand filters", "$60"],
                 ["Export spec sheet (PDF)", "$50"],
               ].map(([i, v]) => (
@@ -114,7 +112,7 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
               ))}
               <tr className="border-t-2 border-[#0f1419] font-bold">
                 <td className="px-4 py-3">Total value</td>
-                <td className="px-4 py-3 text-right text-[#5b6672] line-through">$540</td>
+                <td className="px-4 py-3 text-right text-[#5b6672] line-through">$400</td>
               </tr>
               <tr className="bg-[#fdeeea] font-extrabold text-[#e8442a] text-lg">
                 <td className="px-4 py-3">Your price today</td>
