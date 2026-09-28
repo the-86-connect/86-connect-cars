@@ -12,9 +12,11 @@ export function ProposalContent() {
   const [err, setErr] = useState("");
   const [tab, setTab] = useState<"offer" | "plan">("offer");
 
-  // Auto-unlock if sessionStorage still has the flag from earlier in the same browser
+  // Auto-unlock from the shared ?k= link, or if this browser was already unlocked this session
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem("proposal_unlocked") === "1") {
+    const key = new URLSearchParams(window.location.search).get("k");
+    if (key === GATE_PASSWORD || sessionStorage.getItem("proposal_unlocked") === "1") {
+      sessionStorage.setItem("proposal_unlocked", "1");
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setUnlocked(true);
     }
