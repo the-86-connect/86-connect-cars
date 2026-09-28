@@ -206,8 +206,37 @@ CREATE INDEX IF NOT EXISTS idx_quotes_vehicle_type ON quotes(vehicle_type);`}
         </ul>
       </section>
 
+      <section>
+        <h2 className="text-[11px] uppercase tracking-[1px] text-[#e8442a] font-bold mb-3">10 · Bonus features — build notes</h2>
+        <div className="overflow-hidden rounded-xl border border-[#e5e9ee]">
+          <table className="w-full text-[13px]">
+            <thead className="bg-[#fbfcfd]">
+              <tr className="text-[10px] uppercase tracking-wider text-[#5b6672]">
+                <th className="text-left px-3 py-2 font-semibold">Feature</th>
+                <th className="text-left px-3 py-2 font-semibold">How it is built</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ["AI chatbot for bikes", "Reuse the existing /api/chat (Zhipu). Admin gets a Bikes knowledge-base folder; the chat context adds bike inventory (name, engine size, price) alongside cars."],
+                ["Compare bikes", "Client-side only: two bike slugs in the URL, values read from the vehicles already fetched — no new table."],
+                ["EMI calculator", "Pure front-end math on the bike price (rate + months inputs). No API, no storage."],
+                ["Export spec sheet (PDF)", "Print stylesheet on the bike detail page — same window.print() approach as this proposal. No PDF library."],
+                ["WhatsApp per product", "Already exists in VehicleDetailClient — just switch the message text to the bike name."],
+              ].map(([f, h]) => (
+                <tr key={f} className="border-t border-[#e5e9ee]">
+                  <td className="px-3 py-2 font-semibold w-44">{f}</td>
+                  <td className="px-3 py-2 text-[#333c46]">{h}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-sm text-[#5b6672]">All of these reuse existing code or plain front-end logic — nothing new to host, nothing new to maintain.</p>
+      </section>
+
       {/* Bottom nav */}
-      <div className="pt-4 flex flex-wrap gap-3 border-t border-[#e5e9ee]">
+      <div className="pt-4 flex flex-wrap gap-3 border-t border-[#e5e9ee] print:hidden">
         <button
           onClick={onSwitchOffer}
           className="inline-flex items-center gap-2 rounded-lg bg-[#e8442a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#c53922] transition-colors"

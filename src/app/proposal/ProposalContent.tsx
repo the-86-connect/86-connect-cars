@@ -82,10 +82,18 @@ export function ProposalContent() {
 
   return (
     <div className="mx-auto max-w-5xl">
+      {/* Print-only header — the screen header is hidden when printing */}
+      <div className="hidden print:block mb-6">
+        <div className="text-[11px] font-bold tracking-[2px] text-[#e8442a]">86CONNECT CARS</div>
+        <h1 className="mt-1 text-xl font-bold text-[#0f1419]">
+          {tab === "offer" ? "Motorbike Expansion — Offer" : "Motorbike Expansion — Technical Plan"}
+        </h1>
+      </div>
+
       {/* Header */}
-      <div className="overflow-hidden rounded-2xl border border-[#e5e9ee] bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-[#e5e9ee] bg-white shadow-sm print:rounded-none print:border-0 print:shadow-none">
         <div
-          className="px-6 py-8 text-white relative"
+          className="px-6 py-8 text-white relative print:hidden"
           style={{
             background:
               "radial-gradient(120% 140% at 100% 0%, rgba(232,68,42,.22) 0%, rgba(232,68,42,0) 55%), linear-gradient(180deg,#10161d 0%,#1b2530 100%)",
@@ -142,7 +150,7 @@ export function ProposalContent() {
         </div>
       </div>
 
-      <p className="mt-4 text-center text-xs text-[#5b6672]">
+      <p className="mt-4 text-center text-xs text-[#5b6672] print:hidden">
         Confidential — shared privately with the owner of 86Connect Cars.
       </p>
     </div>

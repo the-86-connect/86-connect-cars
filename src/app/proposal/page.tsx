@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ProposalPage() {
   return (
-    <main className="min-h-screen bg-[#f4f6f8] py-12 px-4">
+    <main className="min-h-screen bg-[#f4f6f8] py-12 px-4 print:bg-white print:py-0 print:px-0">
       <ProposalContent />
     </main>
   );
