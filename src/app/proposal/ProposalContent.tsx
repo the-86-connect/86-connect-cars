@@ -15,6 +15,7 @@ export function ProposalContent() {
   // Auto-unlock if sessionStorage still has the flag from earlier in the same browser
   useEffect(() => {
     if (typeof window !== "undefined" && sessionStorage.getItem("proposal_unlocked") === "1") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUnlocked(true);
     }
   }, []);

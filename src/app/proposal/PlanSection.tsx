@@ -107,7 +107,7 @@ ALTER TABLE brands ADD CONSTRAINT brands_category_check
 ALTER TABLE quotes ADD COLUMN IF NOT EXISTS vehicle_type TEXT NOT NULL DEFAULT 'car';
 CREATE INDEX IF NOT EXISTS idx_quotes_vehicle_type ON quotes(vehicle_type);`}
         </pre>
-        <p className="mt-3 text-sm text-[#5b6672]"><b>Zero-downtime:</b> every existing row keeps its <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">DEFAULT 'car'</code> untouched.</p>
+        <p className="mt-3 text-sm text-[#5b6672]"><b>Zero-downtime:</b> every existing row keeps its <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">DEFAULT &apos;car&apos;</code> untouched.</p>
       </section>
 
       <section>
@@ -143,8 +143,8 @@ CREATE INDEX IF NOT EXISTS idx_quotes_vehicle_type ON quotes(vehicle_type);`}
       <section>
         <h2 className="text-[11px] uppercase tracking-[1px] text-[#e8442a] font-bold mb-3">6 · Quotes, main admin panel, emails &amp; tracking</h2>
         <ul className="space-y-3 pl-5 list-disc marker:text-[#e8442a]">
-          <li><b>Main admin panel (admin.the86connect.com):</b> persist <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">quotes.vehicle_type</code>, send it in the webhook payload, build <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">vehicleLink</code> from the vehicle's type (<code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">/cars/&lt;slug&gt;</code> vs <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">/bikes/&lt;slug&gt;</code>), use <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">submissionType: "motorbike-quote"</code> for bikes plus a <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">vehicleType</code> field.</li>
-          <li><b>Email system (Resend, src/lib/email.ts):</b> confirmation and admin-notification emails link to the right catalogue and say "motorbike" when the quote is for a bike.</li>
+          <li><b>Main admin panel (admin.the86connect.com):</b> persist <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">quotes.vehicle_type</code>, send it in the webhook payload, build <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">vehicleLink</code> from the vehicle&apos;s type (<code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">/cars/&lt;slug&gt;</code> vs <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">/bikes/&lt;slug&gt;</code>), use <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">submissionType: &quot;motorbike-quote&quot;</code> for bikes plus a <code className="rounded bg-[#fdeeea] px-1 font-mono text-[12px]">vehicleType</code> field.</li>
+          <li><b>Email system (Resend, src/lib/email.ts):</b> confirmation and admin-notification emails link to the right catalogue and say &quot;motorbike&quot; when the quote is for a bike.</li>
           <li><b>Order tracking: unchanged.</b> Same quotes table, same PATCH webhook, same account-page tracking. Bike orders tracked exactly like car orders once vehicle_type is stored.</li>
         </ul>
       </section>
