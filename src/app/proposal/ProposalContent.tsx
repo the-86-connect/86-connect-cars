@@ -94,6 +94,12 @@ export function ProposalContent() {
           <div className="flex items-center gap-2 mb-3">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#e8442a] text-sm font-extrabold text-white">86</span>
             <span className="font-bold tracking-wide opacity-90">86CONNECT CARS</span>
+            <button
+              onClick={() => window.print()}
+              className="ml-auto rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white/20 transition-colors print:hidden"
+            >
+              🖨️ Save as PDF
+            </button>
           </div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight mt-3">Motorbike Expansion — Offer &amp; Plan</h1>
           <p className="text-sm md:text-base text-[#c7d0d9] mt-1">
@@ -102,7 +108,7 @@ export function ProposalContent() {
         </div>
 
         {/* Tab toggle — visible, always there */}
-        <div className="flex border-b border-[#e5e9ee] bg-[#fbfcfd]">
+        <div className="flex border-b border-[#e5e9ee] bg-[#fbfcfd] print:hidden">
           <button
             onClick={() => setTab("offer")}
             className={`flex-1 md:flex-none px-6 py-3 text-sm font-semibold transition-colors border-b-2 ${
@@ -111,7 +117,7 @@ export function ProposalContent() {
                 : "text-[#5b6672] border-transparent hover:text-[#0f1419]"
             }`}
           >
-            💼 Offer — $200 · 7 days
+            💼 Offer
           </button>
           <button
             onClick={() => setTab("plan")}

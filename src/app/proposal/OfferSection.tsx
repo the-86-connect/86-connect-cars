@@ -4,21 +4,13 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
   return (
     <div className="space-y-8 text-[15px] leading-relaxed text-[#0f1419]">
       {/* Nav buttons — always visible at top */}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 print:hidden">
         <button
           onClick={onSwitchPlan}
           className="inline-flex items-center gap-2 rounded-lg bg-[#e8442a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#c53922] transition-colors"
         >
           📐 Read the technical plan →
         </button>
-        <a
-          href="/contact"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg border border-[#e5e9ee] bg-white px-4 py-2.5 text-sm font-semibold text-[#0f1419] hover:border-[#e8442a] hover:text-[#e8442a] transition-colors"
-        >
-          💬 WhatsApp Milton
-        </a>
       </div>
 
       <section>
@@ -149,31 +141,25 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="pt-6 border-t border-[#0f1419]">
             <div className="text-xs text-[#5b6672] mb-1">Owner — 86Connect</div>
+            <div className="py-3 text-[#0f1419]">_______</div>
             <div className="text-xs text-[#5b6672]">Signature &amp; date</div>
           </div>
           <div className="pt-6 border-t border-[#0f1419]">
             <div className="text-xs text-[#5b6672] mb-1">Developer — Milton</div>
+            <div className="py-3 text-[#0f1419]">_______</div>
             <div className="text-xs text-[#5b6672]">Signature &amp; date</div>
           </div>
         </div>
       </section>
 
       {/* Bottom nav */}
-      <div className="pt-4 flex flex-wrap gap-3 border-t border-[#e5e9ee]">
+      <div className="pt-4 flex flex-wrap gap-3 border-t border-[#e5e9ee] print:hidden">
         <button
           onClick={onSwitchPlan}
           className="inline-flex items-center gap-2 rounded-lg bg-[#e8442a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#c53922] transition-colors"
         >
           📐 Read the technical plan →
         </button>
-        <a
-          href="/contact"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg border border-[#e5e9ee] bg-white px-4 py-2.5 text-sm font-semibold text-[#0f1419] hover:border-[#e8442a] hover:text-[#e8442a] transition-colors"
-        >
-          💬 WhatsApp Milton
-        </a>
       </div>
     </div>
   );

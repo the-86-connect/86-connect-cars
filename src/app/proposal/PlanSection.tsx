@@ -4,7 +4,7 @@ export function PlanSection({ onSwitchOffer }: { onSwitchOffer: () => void }) {
   return (
     <div className="space-y-8 text-[14.5px] leading-relaxed text-[#0f1419]">
       {/* Nav buttons — always visible at top */}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 print:hidden">
         <button
           onClick={onSwitchOffer}
           className="inline-flex items-center gap-2 rounded-lg bg-[#e8442a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#c53922] transition-colors"
