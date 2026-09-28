@@ -108,30 +108,30 @@ export function ProposalContent() {
         </div>
 
         {/* Tab toggle — visible, always there */}
-        <div className="flex border-b border-[#e5e9ee] bg-[#fbfcfd] print:hidden">
+        <div className="flex items-center gap-2 border-b border-[#e5e9ee] bg-[#eef1f5] px-4 py-3 print:hidden">
           <button
             onClick={() => setTab("offer")}
-            className={`flex-1 md:flex-none px-6 py-3 text-sm font-semibold transition-colors border-b-2 ${
+            className={`flex-1 md:flex-none cursor-pointer rounded-lg border-2 px-5 py-2.5 text-sm font-bold shadow-sm transition-all active:scale-[.98] ${
               tab === "offer"
-                ? "text-[#e8442a] border-[#e8442a]"
-                : "text-[#5b6672] border-transparent hover:text-[#0f1419]"
+                ? "border-[#e8442a] bg-[#e8442a] text-white"
+                : "border-[#cfd6de] bg-white text-[#333c46] hover:border-[#e8442a] hover:text-[#e8442a]"
             }`}
           >
             💼 Offer
           </button>
           <button
             onClick={() => setTab("plan")}
-            className={`flex-1 md:flex-none px-6 py-3 text-sm font-semibold transition-colors border-b-2 ${
+            className={`flex-1 md:flex-none cursor-pointer rounded-lg border-2 px-5 py-2.5 text-sm font-bold shadow-sm transition-all active:scale-[.98] ${
               tab === "plan"
-                ? "text-[#e8442a] border-[#e8442a]"
-                : "text-[#5b6672] border-transparent hover:text-[#0f1419]"
+                ? "border-[#e8442a] bg-[#e8442a] text-white"
+                : "border-[#cfd6de] bg-white text-[#333c46] hover:border-[#e8442a] hover:text-[#e8442a]"
             }`}
           >
             📐 Technical Plan
           </button>
           <button
             onClick={logout}
-            className="ml-auto px-4 py-3 text-xs text-[#5b6672] hover:text-[#e8442a] transition-colors"
+            className="ml-auto cursor-pointer rounded-lg px-3 py-2 text-xs font-semibold text-[#5b6672] transition-colors hover:bg-white hover:text-[#e8442a]"
           >
             🔒 Lock
           </button>
