@@ -116,7 +116,7 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
               </tr>
               <tr className="bg-[#fdeeea] font-extrabold text-[#e8442a] text-lg">
                 <td className="px-4 py-3">Your price today</td>
-                <td className="px-4 py-3 text-right">$200</td>
+                <td className="px-4 py-3 text-right">$150</td>
               </tr>
             </tbody>
           </table>
@@ -125,7 +125,7 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
 
       <section>
         <h2 className="text-[11px] uppercase tracking-[1px] text-[#e8442a] font-bold mb-3">6 · Price &amp; scope</h2>
-        <p className="mb-4"><b>Total: $200</b>, one-time and fixed — no hidden costs.</p>
+        <p className="mb-4"><b>Total: $150</b>, one-time and fixed — no hidden costs.</p>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="rounded-xl border border-[#bfe6d2] bg-[#f2fbf6] p-5">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#127a4d]">Free · maintenance</span>
@@ -142,7 +142,7 @@ export function OfferSection({ onSwitchPlan }: { onSwitchPlan: () => void }) {
 
       <section>
         <h2 className="text-[11px] uppercase tracking-[1px] text-[#e8442a] font-bold mb-3">7 · Acceptance</h2>
-        <p className="mb-4">Sign below to approve the $200 motorbike expansion.</p>
+        <p className="mb-4">Sign below to approve the $150 motorbike expansion.</p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="pt-6 border-t border-[#0f1419]">
             <div className="text-xs text-[#5b6672] mb-1">Owner — 86Connect</div>
