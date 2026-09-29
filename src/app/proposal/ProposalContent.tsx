@@ -1,84 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { OfferSection } from "./OfferSection";
 import { PlanSection } from "./PlanSection";
 
-const GATE_PASSWORD = "86connect-bikes-2026";
-
 export function ProposalContent() {
-  const [unlocked, setUnlocked] = useState(false);
-  const [pwd, setPwd] = useState("");
-  const [err, setErr] = useState("");
   const [tab, setTab] = useState<"offer" | "plan">("offer");
-
-  // Auto-unlock from the shared ?k= link, or if this browser was already unlocked this session
-  useEffect(() => {
-    const key = new URLSearchParams(window.location.search).get("k");
-    if (key === GATE_PASSWORD || sessionStorage.getItem("proposal_unlocked") === "1") {
-      sessionStorage.setItem("proposal_unlocked", "1");
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUnlocked(true);
-    }
-  }, []);
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pwd.trim() === GATE_PASSWORD) {
-      setUnlocked(true);
-      sessionStorage.setItem("proposal_unlocked", "1");
-      setErr("");
-    } else {
-      setErr("Incorrect password");
-    }
-  };
-
-  const logout = () => {
-    setUnlocked(false);
-    sessionStorage.removeItem("proposal_unlocked");
-  };
-
-  if (!unlocked) {
-    return (
-      <div className="mx-auto max-w-md">
-        <div className="rounded-2xl border border-[#e5e9ee] bg-white p-8 shadow-sm">
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[#e8442a] text-sm font-extrabold text-white">86</span>
-              <span className="font-bold tracking-wide text-[#0f1419]">86CONNECT</span>
-            </div>
-            <h1 className="text-xl font-bold text-[#0f1419]">Motorbike Expansion — Confidential</h1>
-            <p className="text-sm text-[#5b6672] mt-2">
-              This proposal is shared privately. Enter the access password below to view the offer and technical plan.
-            </p>
-          </div>
-          <form onSubmit={submit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[#5b6672] mb-2">Access password</label>
-              <input
-                type="password"
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
-                placeholder="Enter password"
-                className="w-full rounded-lg border border-[#e5e9ee] bg-white px-4 py-3 text-sm text-[#0f1419] placeholder:text-[#b7bfc8] focus:border-[#e8442a] focus:outline-none focus:ring-2 focus:ring-[#e8442a]/20"
-                autoFocus
-              />
-              {err && <p className="mt-2 text-sm text-[#e8442a]">{err}</p>}
-            </div>
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-[#e8442a] px-5 py-3 text-sm font-semibold text-white hover:bg-[#c53922] transition-colors"
-            >
-              View proposal
-            </button>
-          </form>
-          <p className="mt-5 text-xs text-[#5b6672]">
-            If you need the password, contact Milton — md.milton@qq.com
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -137,12 +64,6 @@ export function ProposalContent() {
           >
             📐 Technical Plan
           </button>
-          <button
-            onClick={logout}
-            className="ml-auto cursor-pointer rounded-lg px-3 py-2 text-xs font-semibold text-[#5b6672] transition-colors hover:bg-white hover:text-[#e8442a]"
-          >
-            🔒 Lock
-          </button>
         </div>
 
         <div className="p-6">
@@ -151,7 +72,7 @@ export function ProposalContent() {
       </div>
 
       <p className="mt-4 text-center text-xs text-[#5b6672] print:hidden">
-        Confidential — shared privately with the owner of 86Connect Cars.
+        Shared privately with the owner of 86Connect Cars.
       </p>
     </div>
   );
